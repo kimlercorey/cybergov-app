@@ -1,0 +1,20 @@
+<pre ng-if="CONFIG.showTemplateLabels" style="line-height:90%">
+ *    ┌─┐┌─┐┌─┐┌┬┐┬┌─┐┌┐┌  ┌┬┐┌─┐┌┬┐┌─┐┬  ┌─┐┌┬┐┌─┐  ┬  ┬┬┌─┐┬ ┬
+ *    └─┐├┤ │   │ ││ ││││   │ ├┤ │││├─┘│  ├─┤ │ ├┤───└┐┌┘│├┤ │││
+ *    └─┘└─┘└─┘ ┴ ┴└─┘┘└┘   ┴ └─┘┴ ┴┴  ┴─┘┴ ┴ ┴ └─┘   └┘ ┴└─┘└┴┘
+<hr>
+</pre>
+
+
+<section>
+  <h2>{{section.title}}</h2>
+  <div ng-bind-html="section.content.extended"></div>
+  
+  <ul>
+    <li ng-repeat="article in section.articles">
+      <h3>{{article.title}}</h3>
+      <div ng-bind-html="article.content.brief"></div>
+    </li>
+  </ul>
+</section>
+<hr>

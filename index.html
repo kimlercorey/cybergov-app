@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cyber.gov</title>
+  <link rel="stylesheet" href="styles/cyber.gov.min.css">
+</head>
+
+<body ng-controller="ui">
+
+  <div class="off-canvas-wrapper">
+    <div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
+
+      <div class="off-canvas-content" data-off-canvas-content>
+
+        <div class="row expanded">
+
+          <div class="small-24 medium-expand columns small-order-2 medium-order-1 padding-none max-global">
+
+            <header id="header-alerts-container" class="row expanded row-header header-alerts-container closed" data-toggler=".closed">
+
+              <div ng-include="'views/header-alerts.html'" class="small-24 large-6 columns small-order-1 large-order-2 header-alerts"></div>
+
+              <div class="small-24 large-18 columns small-order-2 large-order-1 padding-none header-alerts-adjacent">
+
+                <div class="row">
+                  <div class="small-24 columns padding-none official-website">
+                    <a href="#main-content" target="_self" class="show-on-focus">Skip to main content</a>
+                    <div class="tagline">An official website of the United States government</div>
+                  </div>
+                </div>
+
+                <div class="row row-grow">
+
+                  <div class="columns shrink header-top header-button header-button-menu">
+                    <button type="button" data-toggle="offCanvasLeft" title="Open Navigation Menu">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </button>
+                  </div>
+
+                  <div class="columns header-top header-main padding-bottom-none">
+
+                    <div class="row header-bar">
+                      <h1 class="small-24 large-8 columns"><a ui-sref="home">cyber.gov</a></h1>
+                      <h2 class="small-24 large-16 columns" ui-view="tagline"></h2>
+                    </div>
+
+                    <div ui-view="headerContent"></div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </header>
+
+            <div id="main-content" class="row">
+
+              <div class="columns shrink column-border show-for-medium"></div>
+
+              <article ui-view class="columns columns-content"></article>
+
+              <aside ui-view="relatedContent" class="small-24 medium-6 xlarge-8 columns content-sidebar"></aside>
+
+            </div>
+
+          </div>
+
+          <div ng-include="'views/button-nav.html'" class="small-24 medium-expand columns small-order-1 medium-order-2 header-top header-button header-button-icons max-global-diff"></div>
+
+        </div>
+
+      </div>
+
+      <div ng-include="'views/main-nav.html'" class="off-canvas position-left navbar" id="offCanvasLeft" data-off-canvas></div>
+
+      <div ng-include="'views/sidebar-questions.html'" class="off-canvas position-right sidebar" id="offCanvasRight" data-off-canvas data-position="right"></div>
+
+    </div>
+  </div>
+
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/angular.min.js"></script>
+  <script src="scripts/angular-ui-router.min.js"></script>
+  <script src="scripts/angular-animate.min.js"></script>
+  <script src="scripts/json-formatter.min.js"></script>
+  <script src="scripts/ipsum.min.js"></script>
+  <script src="scripts/foundation.min.js"></script>
+  <script src="scripts/18fpro.min.js"></script>
+  <script src="scripts/particle.min.js"></script>
+  <script src="scripts/cyber.gov.min.js"></script>
+
+</body>
+</html>

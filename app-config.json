@@ -1,0 +1,13 @@
+{
+  "showTemplateLabels":false,
+  "showJSON":false,
+  "showMessages":true,
+  "statesPath":"content/states.json",
+  "contentPath":"/api/v1/",
+  "viewPath":"views/",
+  "contentFileSuffix":".json",
+  "trustedHTML":["brief","extended","micro"],
+  "collectionsDefinition":"/api/v1/collections",
+  "collectionsStateObjects":["collections","sections","articles"],
+  "cleaningObjects":["content","more"]
+}

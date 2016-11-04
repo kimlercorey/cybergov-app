@@ -1,0 +1,58 @@
+{
+  "cyber-strategy.elements-of-federal-ciso-strategy": {
+    "url": "/elements-of-federal-ciso-strategy",
+    "templateUrl": "section-basic.html",
+    "controller": "content",
+    "params": {
+      "contentFile": "580bf6a14dc24563190bda23",
+      "contentType":"sections"
+    }
+  },
+
+  "cyber-strategy": {
+    "abstract": true,
+    "url": "/cyber-strategy",
+    "template": "<div ui-view autoscroll='false'/>"
+  },
+
+  "cyber-strategy.overview": {
+    "state":"cyber-strategy.overview",
+    "url": "/overview",
+    "templateUrl": "section-basic.html",
+    "controller":"content",
+    "params": {
+      "contentFile": "580bf6a14dc24563190bda23",
+      "contentType": "sections"
+    }
+  },
+
+
+  "cyber-strategy.letter-from-the-federal-ciso": {
+    "url": "/letter-from-the-federal-ciso",
+    "templateUrl": "section-basic.html",
+    "controller": "content",
+    "params": {
+      "contentFile": "580bf566073cc11219b15e57",
+      "contentType":"sections"
+    }
+  },
+  "get-helps": {
+    "abstract": true,
+    "url": "/get-helps",
+    "template": "<div ui-view autoscroll='false'/>"
+  },
+  "get-helps.incident-reporting":{
+  "state":"incident-reporting",
+  "url": "/incident-reporting",
+  "controller": "content",
+  "templateUrl": "section-basic.html",
+  "params": {
+    "contentFile": "58110ad31492c28bafbbcc38",
+    "contentType": "sections"
+  },
+  "name": "get-helps.incident-reporting",
+  "subs": [],
+  "$$hashKey": "object:55"
+}
+
+}

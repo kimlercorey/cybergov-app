@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360" id="icon-paper-airplane">
+  <defs>
+    <style>
+      .path-primary { fill: #fff; }
+    </style>
+  </defs>
+  <title>Paper Airplane</title>
+  <path id="airplane" class="path-primary nt" d="M113.89,262.53,232.44,155.85,218.18,311.7Zm-10.46,58.72V275.69l42,19.8Zm119-178.38L97.83,254.94,38.77,227.11Zm30.54-32L0,226.88,87.07,268v82.49l76-46.61,69.22,32.66Z"/>
+  <animate id="airplane-throw" xlink:href="#airplane" begin="indefinite" fill="freeze" attributeName="d" dur="500ms" to="M304.91,69.6l46.95-42.24-5.65,61.71Zm-4.14,23.25v-18l16.63,7.84Zm47.14-70.63L298.56,66.6l-23.39-11ZM360,9.55,259.82,55.49,294.3,71.75v32.67L324.4,86l27.41,12.93Z"/>
+</svg>
