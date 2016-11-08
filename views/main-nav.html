@@ -1,7 +1,7 @@
 <nav>
   <ul class="vertical menu" data-accordion-menu="">
     <li ng-repeat="state in appConfig.settings.states">
-      <a href="interior.html">{{state.name}}</a>
+      <a>{{state.name}}</a>
       <ul class="vertical menu nested">
         <li ng-repeat="substate in state.subs">
           <a ui-sref="{{substate.name}}">{{substate.name}}</a>

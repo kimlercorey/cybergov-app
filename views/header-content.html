@@ -1,0 +1,19 @@
+
+<pre ng-if="CONFIG.showTemplateLabels" style="line-height:90%">
+ *    ┬ ┬┌─┐┌─┐┌┬┐┌─┐┬─┐   ┬┌┐┌┌┬┐┌─┐┬─┐┬┌─┐┬─┐
+ *    ├─┤├┤ ├─┤ ││├┤ ├┬┘───││││ │ ├┤ ├┬┘││ │├┬┘
+ *    ┴ ┴└─┘┴ ┴─┴┘└─┘┴└─   ┴┘└┘ ┴ └─┘┴└─┴└─┘┴└─
+ <hr>
+ <json-formatter json="content" open="1"></json-formatter>
+</pre>
+
+<div class="row">
+
+  <div class="small-24 medium-6 xxlarge-4 columns align-middle" ng-include="'images/icons/help-hand.svg'" aria-hidden="true"></div>
+
+  <div class="small-24 medium-18 xxlarge-20 columns align-middle">
+    <h2>{{content.title}}</h2>
+    <p ng-bind-html="content.content.micro"></p>
+  </div>
+
+</div>

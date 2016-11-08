@@ -1,0 +1,17 @@
+<pre ng-if="CONFIG.showTemplateLabels" style="line-height:90%">
+   *    ┌─┐┬┌┐┌┌─┐┬  ┌─┐  ┌─┐┌─┐┌─┐┌┬┐┬┌─┐┌┐┌
+   *    └─┐│││││ ┬│  ├┤   └─┐├┤ │   │ ││ ││││
+   *    └─┘┴┘└┘└─┘┴─┘└─┘  └─┘└─┘└─┘ ┴ ┴└─┘┘└┘
+   <json-formatter json="content" open="1"></json-formatter>
+  <hr>
+</pre>
+
+<section ng-if="!loaded">
+  <div class="loader">Loading...</div>
+</section>
+
+<section ng-if="loaded" id="{{content._id[" $oid"]}}"="">
+  <h2>{{content.title}}</h2>
+  <p ng-bind-html="content.content.micro"></p>
+  <content-block ng-repeat="article in content.articles" obj="article" type="'articles'"></content-block>
+</section>

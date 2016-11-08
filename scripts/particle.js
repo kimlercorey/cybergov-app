@@ -17,118 +17,86 @@ PARTICLE.config(function($provide, $stateProvider,$urlRouterProvider,CONFIG) {
       return $urlRouterProvider;
   });
 
-  $urlRouterProvider.otherwise('/');
-
-  $stateProvider
-
-    // HOME ===================================================================
-    .state('home', {
-      url: '/',
-      views: {
-        '': {
-          templateUrl: 'views/home/main.html',
-          controller: 'fake'
-        },
-        'tagline': {
-          templateUrl: 'views/home/tagline.html',
-          controller: 'fake'
-        },
-        'headerContent': {
-          templateUrl: 'views/home/header-content.html',
-          controller: 'fake'
-        },
-        'relatedContent': {
-          template: '',
-          controller: 'fake'
-        }
-      }
-    })
-
-    // INTERIOR TEST ==========================================================
-    .state('interiorTest', {
-      url: '/interior-test',
-      views: {
-        '': {
-          templateUrl: 'views/interior-test/main.html',
-          controller: 'fake'
-        },
-        'tagline': {
-          templateUrl: '',
-          controller: 'fake'
-        },
-        'headerContent': {
-          templateUrl: 'views/interior-test/header-content.html',
-          controller: 'fake'
-        },
-        'relatedContent': {
-          template: 'views/interior-test/related-content.html',
-          controller: 'fake'
-        }
-      }
-    });
 
 });
 
 
 PARTICLE.run(function($stateProvider,$urlRouterProvider,$state,$location,CONFIG,MESSAGES,ERRORS,STATES,dataIo,appConfig) {
 
-  var cleanObject = function(obj) {
-    for (var property in obj) {
-      if (obj.hasOwnProperty(property)) {
-        if(CONFIG.cleaningObjects.inArray(property)) {
-          delete obj[property];
-        } else {
-          if (typeof obj[property] == "object") {
-            cleanObject(obj[property]);
-          }
-        }
-      }
-    }
-    return obj;
-  };
 
- var returnStateFromObject = function(obj,type,parentName,arrayOfStates) {
+
+   $stateProvider
+
+     // HOME ===================================================================
+     .state('home', {
+       url: '/',
+       views: {
+         '': {
+           templateUrl: 'views/home/main.html',
+         },
+         'tagline': {
+           templateUrl: 'views/home/tagline.html',
+         },
+         'headerContent': {
+           templateUrl: 'views/home/header-content.html',
+         },
+         'relatedContent': {
+           template: '',
+         }
+       }
+     })
+
+  var madeStates = [];
+
+  var returnStateFromObject = function(obj,type,parentName,arrayOfStates) {
 
   if (typeof obj == "object") {
 
-	var slug = "";
-	var stateProperties = {};
-	var singleType = type;
+    var slug = "";
+  	var stateProperties = {};
+  	var singleType = type;
 
-	if (parentName != null) {
-	 slug = parentName + "." + obj.slug;
-	} else {
-	 slug = "" + obj.slug;
-	}
+  	if (parentName != null) {
+  	 slug = parentName + "." + obj.slug;
+  	} else {
+  	 slug = "" + obj.slug;
+  	}
 
-	if (singleType.charAt(singleType.length - 1) == 's') {
-		singleType= singleType.substr(0, singleType.length - 1);
-	}
+  	if (singleType.charAt(singleType.length - 1) == 's') {
+  		singleType= singleType.substr(0, singleType.length - 1);
+  	}
 
-	//Setting the template/ui-view
 	  stateProperties.params = {};
+    stateProperties.params[type] = {}
 	if (type=="collections") {
-	  //stateProperties.abstract = true;
-	  //stateProperties.template = "<div ui-view autoscroll='false'/>"
-	  console.log("collections");
-	  stateProperties.templateUrl= CONFIG.viewPath+ singleType + "-basic.html"
-	  stateProperties.controller = "collection";
-	  stateProperties.params.collection = CONFIG.contentPath + type + "/" + obj["_id"];
-	  stateProperties.params.contentType = type;
-	  /*stateProperties.params.contentFile = CONFIG.contentPath + type + "/" + obj["_id"];
-	  stateProperties.params.contentType = type;
-	  stateProperties.params.state = slug;*/
-	} else {
-	  stateProperties.templateUrl= CONFIG.viewPath+ singleType + "-basic.html"
+	  stateProperties.templateUrl= CONFIG.viewPath + "sections.html"
 	  stateProperties.controller = "content";
-	  stateProperties.params.contentFile = CONFIG.contentPath + type + "/" + obj["_id"];
-	  stateProperties.params.contentType = type;
+    stateProperties.views = {
+      '': {
+        templateUrl: CONFIG.viewPath + 'sections.html',
+        controller: 'content',
+      },
+      'headerContent': {
+          templateUrl: CONFIG.viewPath +'header-content.html',
+          controller: 'content'
+      },
+      'relatedContent': {
+        templateUrl: CONFIG.viewPath+ 'related-content.html',
+        controller: 'content'
+      }
+    };
+    stateProperties.params.contentFile = CONFIG.contentPath + type + "/" + obj["_id"] + CONFIG.contentFileSuffix;
+	} else {
+	  stateProperties.templateUrl= CONFIG.viewPath+ type + ".html"
+	  // stateProperties.controller = "content";
+//     stateProperties.params.contentFile = CONFIG.contentPath + type + "/" + obj["_id"] + CONFIG.contentFileSuffix;
+//     stateProperties.params.contentType = type;
 	  stateProperties.params.state = slug;
 	}
 
 	stateProperties.name 	= slug;
 	stateProperties.url	= "/" + obj.slug;
-        $stateProvider.state(slug, stateProperties);
+  $stateProvider.state(slug, stateProperties);
 	stateProperties.subs = [];
 	return stateProperties;
    } else {
@@ -160,17 +128,25 @@ PARTICLE.run(function($stateProvider,$urlRouterProvider,$state,$location,CONFIG,
     }
  }
 
-  var madeStates = [];
+
 
   dataIo.getFile({
     file:CONFIG.collectionsDefinition
   }).then(function(_data){
-    STATES = cleanObject(_data.data);
-    STATES.collections.sort(dynamicSort('sortOrder'));
-    makeCollectionIntoStates(STATES,null,madeStates);
-    console.log("madeStates",madeStates);
+    _data.data.sort(dynamicSort('sortOrder'));
+    var objs = {};
+    objs.collections = _data.data
+    makeCollectionIntoStates(objs,null,madeStates);
     appConfig.settings.states = madeStates;
- $state.go($location.path().replaceAll("/","."));
+    console.log(appConfig.settings.states);
+    console.log($location.path())
+    if ($location.path() != "/" && $location.path() != "") {
+    $state.go($location.path().replaceAll("/","."));
+    } else {
+      $state.go("home")
+    }
+    $urlRouterProvider.otherwise('/');
+
   }).catch(function (_data) {
     ERRORS.push("Error loading colleciton config file: " + formatDate(new Date()));
   });
@@ -179,13 +155,6 @@ PARTICLE.run(function($stateProvider,$urlRouterProvider,$state,$location,CONFIG,
 });
 
 
-  PARTICLE.controller("collection",function($scope,$stateParams,$state,$sce,dataIo,CONFIG,MESSAGES,ERRORS,STATES) {
-	console.log("collection: $stateParams",$stateParams);
-  });
-
-  PARTICLE.controller("fake",function($scope,$stateParams,$state,$sce,dataIo,CONFIG,MESSAGES,ERRORS,STATES) {
-  console.log("fake: $stateParams",$stateParams);
-  });
 
 /**
  ------------------------------------------------------------------------------------------------------------------------
@@ -195,28 +164,15 @@ PARTICLE.run(function($stateProvider,$urlRouterProvider,$state,$location,CONFIG,
  ------------------------------------------------------------------------------------------------------------------------
  **/
   PARTICLE.controller("content",function($scope,$stateParams,$state,$sce,dataIo,CONFIG,MESSAGES,ERRORS,STATES) {
-	console.log("content: $stateParams",$stateParams);
 
-    var parseContent = function(obj) {
-      for (var property in obj) {
-        if (obj.hasOwnProperty(property)) {
-          if (typeof obj[property] == "object") {
-            parseContent(obj[property]);
-          } else {
-            if(CONFIG.trustedHTML.inArray(property)) {
-              obj[property] = $sce.trustAsHtml(obj[property]);
-            }
-          }
-        }
-      }
-      return obj;
-    };
 
-    console.log($stateParams.contentFile);
     dataIo.getFile({
       file:$stateParams.contentFile
     }).then(function(_data){
-      $scope[Object.keys(_data.data)[0]] = parseContent(_data.data[Object.keys(_data.data)[0]]);
+
+      //$scope[$stateParams.contentType] = parseContent(_data.data);
+      $scope.content = dataIo.parseContent(_data.data);      
+
     }).catch(function (_data) {
       $scope.content = _data;
     });
@@ -234,7 +190,8 @@ PARTICLE.run(function($stateProvider,$urlRouterProvider,$state,$location,CONFIG,
  ------------------------------------------------------------------------------------------------------------------------
  **/
 
-  PARTICLE.controller("ui",function($scope, $datasource,$timeout,dataIo,$q,CONFIG,MESSAGES,ERRORS,STATES,appConfig) {
+  PARTICLE.controller("ui",function($stateProvider,$urlRouterProvider,$state,$scope, $datasource,$timeout,dataIo,$q,CONFIG,MESSAGES,ERRORS,STATES,appConfig) {
+
     $scope.appConfig = appConfig;
     $scope.CONFIG   = CONFIG;
     $scope.MESSAGES = MESSAGES;
@@ -243,6 +200,28 @@ PARTICLE.run(function($stateProvider,$urlRouterProvider,$state,$location,CONFIG,
     $scope.ui = [];
 
     $scope.STATES= STATES;
+    $scope.gotoState = function(state){
+      $state.go(state)
+    };
+    
+    dataIo.getFile({
+      file:CONFIG.contentPath + "articles.json"
+    }).then(function(_data){
+      console.log(_data.data)
+      //$scope[$stateParams.contentType] = parseContent(_data.data);
+      //$scope.content = parseContent(_data.data);
+      
+    }).catch(function (_data) {
+      $scope.content = _data;
+    });
+
+    $scope.sushi = [
+       { name: 'Cali Roll', fish: 'Crab', tastiness: 2 },
+       { name: 'Philly', fish: 'Tuna', tastiness: 4 },
+       { name: 'Tiger', fish: 'Eel', tastiness: 7 },
+       { name: 'Rainbow', fish: 'Variety', tastiness: 6 }
+     ];
+
 
   });
 
@@ -1058,6 +1037,105 @@ PARTICLE.directive('member', function ($compile, $rootScope, $timeout) {
         }
 
     };
+});
+PARTICLE.directive('contentBlock', function ($parse, $window, $timeout,dataIo,CONFIG,$sce) { 
+
+  var directiveDefinitionObject = {
+  
+  /***
+   *    ███████╗██╗     ███████╗███╗   ███╗███████╗███╗   ██╗████████╗       ██╗        █████╗ ████████╗████████╗██████╗ 
+   *    ██╔════╝██║     ██╔════╝████╗ ████║██╔════╝████╗  ██║╚══██╔══╝       ██║       ██╔══██╗╚══██╔══╝╚══██╔══╝██╔══██╗
+   *    █████╗  ██║     █████╗  ██╔████╔██║█████╗  ██╔██╗ ██║   ██║       ████████╗    ███████║   ██║      ██║   ██████╔╝
+   *    ██╔══╝  ██║     ██╔══╝  ██║╚██╔╝██║██╔══╝  ██║╚██╗██║   ██║       ██╔═██╔═╝    ██╔══██║   ██║      ██║   ██╔══██╗
+   *    ███████╗███████╗███████╗██║ ╚═╝ ██║███████╗██║ ╚████║   ██║       ██████║      ██║  ██║   ██║      ██║   ██║  ██║
+   *    ╚══════╝╚══════╝╚══════╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝   ╚═╝       ╚═════╝      ╚═╝  ╚═╝   ╚═╝      ╚═╝   ╚═╝  ╚═╝
+   *                                                                                                                     
+   */
+  restrict: 'EA',
+    
+  /***
+   *    ████████╗███████╗███╗   ███╗██████╗ ██╗      █████╗ ████████╗███████╗
+   *    ╚══██╔══╝██╔════╝████╗ ████║██╔══██╗██║     ██╔══██╗╚══██╔══╝██╔════╝
+   *       ██║   █████╗  ██╔████╔██║██████╔╝██║     ███████║   ██║   █████╗  
+   *       ██║   ██╔══╝  ██║╚██╔╝██║██╔═══╝ ██║     ██╔══██║   ██║   ██╔══╝  
+   *       ██║   ███████╗██║ ╚═╝ ██║██║     ███████╗██║  ██║   ██║   ███████╗
+   *       ╚═╝   ╚══════╝╚═╝     ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
+   *                                                                         
+   */  
+  template: '<ng-include src="getTemplateUrl()"/>',
+
+  /***
+  *    ███████╗ ██████╗ ██████╗ ██████╗ ███████╗
+  *    ██╔════╝██╔════╝██╔═══██╗██╔══██╗██╔════╝
+  *    ███████╗██║     ██║   ██║██████╔╝█████╗  
+  *    ╚════██║██║     ██║   ██║██╔═══╝ ██╔══╝  
+  *    ███████║╚██████╗╚██████╔╝██║     ███████╗
+  *    ╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚══════╝
+  *                                             
+  */
+  scope: {
+    index:"=",
+    obj:"=",
+    type:"="
+  },
+    
+    /***
+     *    ██╗     ██╗███╗   ██╗██╗  ██╗
+     *    ██║     ██║████╗  ██║██║ ██╔╝
+     *    ██║     ██║██╔██╗ ██║█████╔╝ 
+     *    ██║     ██║██║╚██╗██║██╔═██╗ 
+     *    ███████╗██║██║ ╚████║██║  ██╗
+     *    ╚══════╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝
+     *                                 
+     */
+    link: function (scope, element, attrs) {
+
+      scope.loaded = null; 
+      scope.error = null;
+      scope.CONFIG = CONFIG;
+      var singleType = scope.type;
+  
+      scope.getTemplateUrl = function() {
+        if (singleType.charAt(singleType.length - 1) == 's') {  singleType= singleType.substr(0, singleType.length - 1); }
+        scope.singleType = singleType;
+        return CONFIG.viewPath+singleType+".html";
+      }
+
+      dataIo.getFile({
+        file:CONFIG.contentPath + scope.type+"/"+scope.obj['$oid']+CONFIG.contentFileSuffix
+      }).then(function(_data){
+        
+        // scope.content = dataIo.parseContent(_data.data);
+  //       scope.loaded = true;
+        
+        /***
+         *    ███████╗ █████╗ ██╗  ██╗███████╗    ███████╗███████╗██████╗ ██╗   ██╗███████╗██████╗     ██████╗ ███████╗██╗      █████╗ ██╗   ██╗
+         *    ██╔════╝██╔══██╗██║ ██╔╝██╔════╝    ██╔════╝██╔════╝██╔══██╗██║   ██║██╔════╝██╔══██╗    ██╔══██╗██╔════╝██║     ██╔══██╗╚██╗ ██╔╝
+         *    █████╗  ███████║█████╔╝ █████╗      ███████╗█████╗  ██████╔╝██║   ██║█████╗  ██████╔╝    ██║  ██║█████╗  ██║     ███████║ ╚████╔╝ 
+         *    ██╔══╝  ██╔══██║██╔═██╗ ██╔══╝      ╚════██║██╔══╝  ██╔══██╗╚██╗ ██╔╝██╔══╝  ██╔══██╗    ██║  ██║██╔══╝  ██║     ██╔══██║  ╚██╔╝  
+         *    ██║     ██║  ██║██║  ██╗███████╗    ███████║███████╗██║  ██║ ╚████╔╝ ███████╗██║  ██║    ██████╔╝███████╗███████╗██║  ██║   ██║   
+         *    ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝    ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚══════╝╚═╝  ╚═╝    ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝   
+         *                                                                                                                                      
+         */
+
+        $timeout(function(){
+          scope.content = dataIo.parseContent(_data.data);
+          scope.loaded = true;
+        }, Math.floor((Math.random()*3)+1) * 500);
+
+      }).catch(function (_data) {
+        console.log("Error in DIRECTIVE:contentBlock")
+        scope.error = _data;
+      });
+
+    } //--END link: function
+
+  }; //--END directiveDefinitionObject
+  
+  
+  return directiveDefinitionObject;
+
+
 });
 /***
  *    ██████╗ ██╗███████╗     ██████╗██╗  ██╗ █████╗ ██████╗ ████████╗
@@ -3946,169 +4024,9 @@ PARTICLE.filter('titlecase', function() {
         });
     };
 });
-PARTICLE.factory('githubFactory', ['$http', 'githubSearchDataService', function ($http, githubSearchDataService) {
-
-        "use strict";
-        var githubFactory = {};
-
-        githubFactory.getUser = function (_params) {
-            var searchData = githubSearchDataService.getNew("user", _params);
-            return $http({
-                method: 'GET',
-                url: searchData.url,
-                params: searchData.object,
-            });
-        };
-
-        githubFactory.getReposByUser = function (_params) {
-            var searchData = githubSearchDataService.getNew("reposByUser", _params);
-            return $http({
-                method: 'GET',
-                url: searchData.url,
-                params: searchData.object,
-            });
-        };
-
-        githubFactory.getFileByRepoAndName= function (_params) {
-            var searchData = githubSearchDataService.getNew("fileByRepoName", _params);
-            return $http({
-                method: 'GET',
-                url: searchData.url,
-                params: searchData.object,
-            });
-        };
-
-        githubFactory.getReposByName = function (_params) {
-            var searchData = githubSearchDataService.getNew("reposByName", _params);
-            return $http({
-                method: 'GET',
-                url: searchData.url,
-                params: searchData.object,
-            });
-        };
-
-        githubFactory.getRepoByUserAndName = function (_params) {
-            var searchData = githubSearchDataService.getNew("repoByUserAndName", _params);
-            return $http({
-                method: 'GET',
-                url: searchData.url,
-                params: searchData.object,
-            });
-        };
-
-        githubFactory.getEventsByUser = function (_params) {
-            var searchData = githubSearchDataService.getNew("eventsByUser", _params);
-            return $http({
-                method: 'GET',
-                url: searchData.url,
-                params: searchData.object,
-            });
-        };
-
-        githubFactory.getEventsFromRepoByUserAndName = function (_params) {
-            var searchData = githubSearchDataService.getNew("eventsFromRepoByUserAndName", _params);
-            return $http({
-                method: 'GET',
-                url: searchData.url,
-                params: searchData.object,
-            });
-        };
-
-        return githubFactory;
-    }])
-    .service('githubSearchDataService', function () {
-
-        this.getApiBaseUrl = function (_params) {
-            return "https://api.github.com/";
-        };
-
-        this.fillDataInObjectByList = function (_object, _params, _list) {
-
-            angular.forEach(_list, function (value, key) {
-                if (angular.isDefined(_params[value])) {
-                    _object.object[value] = _params[value];
-                }
-            });
-
-           return _object;
-
-        };
-
-        this.getNew = function (_type, _params) {
-            var githubSearchData = {
-                object: {},
-                url: "",
-            };
-
-            if (angular.isDefined(_params.per_page)) {
-                githubSearchData.object.per_page = _params.per_page;
-            }
-
-            if (angular.isDefined(_params.access_token)) {
-                githubSearchData.object.access_token = _params.access_token;
-            }
-
-            switch (_type) {
-                case "user":
-                    githubSearchData.object.per_page = undefined;
-                    githubSearchData = this.fillDataInObjectByList(githubSearchData, _params, []);
-                    githubSearchData.url = this.getApiBaseUrl() + "users/" + _params.user;
-                    break;
-
-                case "reposByUser":
-                    githubSearchData = this.fillDataInObjectByList(githubSearchData, _params, [
-                        'q', 'sort', 'order', 'page'
-                    ]);
-                    githubSearchData.url = this.getApiBaseUrl() + "users/" + _params.user + "/repos";
-                    break;
-
-                case "reposByName":
-                    githubSearchData = this.fillDataInObjectByList(githubSearchData, _params, [
-                        'sort', 'order', 'page'
-                    ]);
-                    githubSearchData.url = this.getApiBaseUrl() + "search/repositories?q=" + _params.q;
-                    break;
-
-                case "repoByUserAndName":
-                    githubSearchData.object = {
-                        access_token: _params.access_token,
-                    };
-
-                    githubSearchData = this.fillDataInObjectByList(githubSearchData, _params, []);
-
-                    githubSearchData.url = this.getApiBaseUrl() + "repos/" + _params.user + "/" + _params.repo;
-                    break;
-
-                case "eventsByUser":
-                    githubSearchData = this.fillDataInObjectByList(githubSearchData, _params, [
-                        'q', 'sort', 'order', 'page'
-                    ]);
-                    githubSearchData.url = this.getApiBaseUrl() + "users/" + _params.user + "/events";
-                    break;
-
-                case "eventsFromRepoByUserAndName":
-                    githubSearchData = this.fillDataInObjectByList(githubSearchData, _params, [
-                        'q', 'sort', 'order', 'page'
-                    ]);
-                    githubSearchData.url = this.getApiBaseUrl() + "repos/" + _params.user + "/" + _params.repo + "/events";
-                    break;
-
-                case "fileByRepoName":
-                  githubSearchData.object = {
-                      access_token: _params.access_token,
-                  };
-
-                  githubSearchData = this.fillDataInObjectByList(githubSearchData, _params, []);
-                  githubSearchData.url = this.getApiBaseUrl() + "repos/" + _params.user + "/" + _params.repo + "/contents/" + _params.path ;
-									console.log("githubSearchData.url",githubSearchData.url);
-                  break;
-            }
-            return githubSearchData;
-        };
-    })
-		.factory('dataIo', ['$http', 'dataRigger', function ($http, dataRigger) {
-
-		        var dataIo = {};
+PARTICLE.factory('dataIo', ['$http', 'dataRigger','CONFIG','$sce', function ($http, dataRigger,CONFIG,$sce) {
+  
+          var dataIo = {};
 
 		        dataIo.getFile = function (_params) {
 		          var searchData = dataRigger.getNew("file", _params);
@@ -4118,72 +4036,28 @@ PARTICLE.factory('githubFactory', ['$http', 'githubSearchDataService', function 
 		                params: searchData.object,
 		            });
 		        };
-							//
-							// 		        githubFactory.getUser = function (_params) {
-							// 		            var searchData = githubSearchDataService.getNew("user", _params);
-							// 		            return $http({
-							// 		                method: 'GET',
-							// 		                url: searchData.url,
-							// 		                params: searchData.object,
-							// 		            });
-							// 		        };
-							//
-							// 		        githubFactory.getReposByUser = function (_params) {
-							// 		            var searchData = githubSearchDataService.getNew("reposByUser", _params);
-							// 		            return $http({
-							// 		                method: 'GET',
-							// 		                url: searchData.url,
-							// 		                params: searchData.object,
-							// 		            });
-							// 		        };
-							//
-							// 		        githubFactory.getFileByRepoAndName= function (_params) {
-							// 		            var searchData = githubSearchDataService.getNew("fileByRepoName", _params);
-							// console.log("searchData.url",searchData.url);
-							// console.log("searchData.object")
-							// 		            return $http({
-							// 		                method: 'GET',
-							// 		                url: searchData.url,
-							// 		                params: searchData.object,
-							// 		            });
-							// 		        };
-							//
-							// 		        githubFactory.getReposByName = function (_params) {
-							// 		            var searchData = githubSearchDataService.getNew("reposByName", _params);
-							// 		            return $http({
-							// 		                method: 'GET',
-							// 		                url: searchData.url,
-							// 		                params: searchData.object,
-							// 		            });
-							// 		        };
-							//
-							// 		        githubFactory.getRepoByUserAndName = function (_params) {
-							// 		            var searchData = githubSearchDataService.getNew("repoByUserAndName", _params);
-							// 		            return $http({
-							// 		                method: 'GET',
-							// 		                url: searchData.url,
-							// 		                params: searchData.object,
-							// 		            });
-							// 		        };
-							//
-							// 		        githubFactory.getEventsByUser = function (_params) {
-							// 		            var searchData = githubSearchDataService.getNew("eventsByUser", _params);
-							// 		            return $http({
-							// 		                method: 'GET',
-							// 		                url: searchData.url,
-							// 		                params: searchData.object,
-							// 		            });
-							// 		        };
-							//
-							// 		        githubFactory.getEventsFromRepoByUserAndName = function (_params) {
-							// 		            var searchData = githubSearchDataService.getNew("eventsFromRepoByUserAndName", _params);
-							// 		            return $http({
-							// 		                method: 'GET',
-							// 		                url: searchData.url,
-							// 		                params: searchData.object,
-							// 		            });
-							// 		        };
-							//
+            
+            dataIo.parseContent = function(obj) {
+              for (var property in obj) {
+                if (obj.hasOwnProperty(property)) {
+                  if (typeof obj[property] == "object") {
+                    this.parseContent(obj[property]);
+                  } else {
+                    if(CONFIG.trustedHTML.inArray(property)) {
+                      obj[property] = $sce.trustAsHtml(obj[property]);
+                    }
+                  }
+                }
+              }
+              return obj;
+            };
+            
+            dataIo.xml2json = function(xml) {
+             var x2js = new X2JS();
+             var json = x2js.xml_str2json( xml );
+             return json;
+            };
+  
 		        return dataIo;
 		    }])
 		    .service('dataRigger', function () {
@@ -4594,7 +4468,6 @@ function dynamicSort(property) {
     property = property.substr(1);
   }
   return function (a,b) {
-    console.log("dynamicSort");
     var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
     return result * sortOrder;
   };
