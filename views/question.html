@@ -1,0 +1,9 @@
+<section ng-if="!loaded">
+  <div class="loader">Loading...</div>
+</section>
+
+<article ng-if="loaded" id="{{content._id['$oid']}}">
+  <time>{{content.publishedDate.$date | date : longDate}}</time>
+  <h3 class="question">{{content.question}}</h3>
+  <div class="answer">{{content.answer}}</div>
+</article>

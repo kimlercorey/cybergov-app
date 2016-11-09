@@ -10992,6 +10992,7 @@ body {
   min-height: calc(100vh - 28px);
   overflow-y: visible;
   background-color: #fff;
+  outline: 0;
 }
 
 .off-canvas-content > .row {
@@ -11014,6 +11015,7 @@ body {
   border-color: transparent;
   border-style: solid;
   border-width: 0 0 0 0;
+  outline: 0;
 }
 
 .off-canvas.opened {
