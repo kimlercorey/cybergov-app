@@ -23,7 +23,7 @@ PARTICLE.config(function($provide, $stateProvider,$urlRouterProvider,CONFIG) {
         templateUrl: CONFIG.viewPath + 'tagline.html',
       },
       'headerContent': {
-        templateUrl: CONFIG.viewPath + 'header-content-home.html',
+        templateUrl: CONFIG.viewPath + 'home-header.html',
       },
       'rightSidebar': {
         templateUrl: CONFIG.viewPath + 'questions.html',
