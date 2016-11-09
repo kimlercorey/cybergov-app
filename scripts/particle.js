@@ -10,8 +10,136 @@
 var PARTICLE = angular.module('PARTICLE', ['ngAnimate','ui.router','jsonFormatter']);
 
 PARTICLE.config(function($provide, $stateProvider,$urlRouterProvider,CONFIG) {
+    
+ $stateProvider
+  // HOME ===================================================================
+  .state('home', {
+    url: '/',
+    views: {
+      '': {
+        templateUrl: CONFIG.viewPath+'/home/main.html',
+      },
+      'tagline': {
+        templateUrl: CONFIG.viewPath+'/home/tagline.html',
+      },
+      'headerContent': {
+        templateUrl: CONFIG.viewPath+'/home/header-content.html',
+      },
+      'relatedContent': {
+        template: '',
+      }
+    }
+  });
   
-  console.log("CONFIG",CONFIG)
+    //
+  // //===========================================================================
+  //
+  //
+  // var madeStates = [];
+  // var returnStateFromObject = function(obj, type, parentName, arrayOfStates) {
+  //
+  //   if (typeof obj == "object") {
+  //
+  //     var slug = "";
+  //     var stateProperties = {};
+  //     var singleType = type;
+  //
+  //     if (parentName != null) {
+  //       slug = parentName + "." + obj.slug;
+  //     } else {
+  //       slug = "" + obj.slug;
+  //     }
+  //
+  //     if (singleType.charAt(singleType.length - 1) == 's') {
+  //       singleType = singleType.substr(0, singleType.length - 1);
+  //     }
+  //
+  //     stateProperties.params = {};
+  //     stateProperties.params[type] = {};
+  //     stateProperties.hash = obj._id;
+  //     stateProperties.title = obj.title;
+  //     if (type == "collections") {
+  //       stateProperties.templateUrl = CONFIG.viewPath + "sections.html"
+  //       stateProperties.controller = "content";
+  //       stateProperties.views = {
+  //         '': {
+  //           templateUrl: CONFIG.viewPath + 'sections.html',
+  //           controller: 'content',
+  //         },
+  //         'headerContent': {
+  //           templateUrl: CONFIG.viewPath + 'header-content.html',
+  //           controller: 'content'
+  //         },
+  //         'relatedContent': {
+  //           templateUrl: CONFIG.viewPath + 'related-content.html',
+  //           controller: 'content'
+  //         }
+  //       };
+  //       stateProperties.params.contentFile = CONFIG.contentPath + type + "/" + obj["_id"] + CONFIG.contentFileSuffix;
+  //     } else {
+  //       stateProperties.templateUrl = CONFIG.viewPath + type + ".html"
+  //       stateProperties.params.state = slug;
+  //     }
+  //
+  //     stateProperties.name = slug;
+  //     stateProperties.url = "/" + obj.slug;
+  //     $stateProvider.state(slug, stateProperties);
+  //     stateProperties.subs = [];
+  //     return stateProperties;
+  //   } else {
+  //     return null;
+  //   }
+  // }
+  //
+  // var makeCollectionIntoStates = function(obj, parentName, arrayOfStates) {
+  //  var pointer, newParent, newParentName = null;
+  //  for (var property in obj) {
+  //    if (obj.hasOwnProperty(property)) {
+  //      if (CONFIG.collectionsStateObjects.inArray(property)) {
+  //        if (Array.isArray(obj[property]) && obj[property].length) {
+  //          for (var inst in obj[property]) {
+  //            if (obj[property].hasOwnProperty(inst)) {
+  //              newParent = returnStateFromObject(obj[property][inst], property, parentName, arrayOfStates);
+  //              if (newParent !== null) {
+  //                arrayOfStates.push(newParent);
+  //                newParentName = newParent.name;
+  //                makeCollectionIntoStates(obj[property][inst], newParentName, newParent.subs);
+  //              }
+  //            }
+  //          }
+  //        }
+  //      }
+  //    }
+  //  }
+  // }
+  //
+  // //============================================================================
+  //
+  // var objs = {};
+  // objs.collections = CONFIG.nav
+  // makeCollectionIntoStates(objs,null,madeStates);
+  //
+  // $timeout(function(){
+  //   appConfig.settings.states = madeStates;
+  // }, Math.floor((Math.random()*1)+1) * 5);
+  //
+  //appConfig.settings.states = madeStates;
+  
+  // PARTICLE.value('appConfig',{
+ //    settings: {},
+ //    errors:[],
+ //    messages:[],
+ //    states:madeStates
+ //  });
+  
+  // if ($location.path() != "/" && $location.path() != "") {
+ //  $state.go($location.path().replaceAll("/","."));
+ //  } else {
+ //    $state.go("home")
+ //  }
+  $urlRouterProvider.otherwise('/');
+  
+  //============================================================================
   
   $provide.factory('$stateProvider', function () {
       return $stateProvider;
@@ -26,133 +154,104 @@ PARTICLE.config(function($provide, $stateProvider,$urlRouterProvider,CONFIG) {
 
 PARTICLE.run(function($stateProvider,$urlRouterProvider,$state,$location,$timeout,CONFIG,dataIo,appConfig) {
 
-$stateProvider
- // HOME ===================================================================
- .state('home', {
-   url: '/',
-   views: {
-     '': {
-       templateUrl: 'views/home/main.html',
-     },
-     'tagline': {
-       templateUrl: 'views/home/tagline.html',
-     },
-     'headerContent': {
-       templateUrl: 'views/home/header-content.html',
-     },
-     'relatedContent': {
-       template: '',
-     }
-   }
- });
+
 
   var madeStates = [];
+  var returnStateFromObject = function(obj, type, parentName, arrayOfStates) {
 
-  var returnStateFromObject = function(obj,type,parentName,arrayOfStates) {
+    if (typeof obj == "object") {
 
-  if (typeof obj == "object") {
+      var slug = "";
+      var stateProperties = {};
+      var singleType = type;
 
-    var slug = "";
-  	var stateProperties = {};
-  	var singleType = type;
-
-  	if (parentName != null) {
-  	 slug = parentName + "." + obj.slug;
-  	} else {
-  	 slug = "" + obj.slug;
-  	}
-
-  	if (singleType.charAt(singleType.length - 1) == 's') {
-  		singleType= singleType.substr(0, singleType.length - 1);
-  	}
-
-	  stateProperties.params = {};
-    stateProperties.params[type] = {};
-    stateProperties.hash = obj._id;
-    stateProperties.title =  obj.title;
-	if (type=="collections") {
-	  stateProperties.templateUrl= CONFIG.viewPath + "sections.html"
-	  stateProperties.controller = "content";
-    stateProperties.views = {
-      '': {
-        templateUrl: CONFIG.viewPath + 'sections.html',
-        controller: 'content',
-      },
-      'headerContent': {
-          templateUrl: CONFIG.viewPath +'header-content.html',
-          controller: 'content'
-      },
-      'relatedContent': {
-        templateUrl: CONFIG.viewPath+ 'related-content.html',
-        controller: 'content'
+      if (parentName != null) {
+        slug = parentName + "." + obj.slug;
+      } else {
+        slug = "" + obj.slug;
       }
-    };
-    stateProperties.params.contentFile = CONFIG.contentPath + type + "/" + obj["_id"] + CONFIG.contentFileSuffix;
-	} else {
-	  stateProperties.templateUrl= CONFIG.viewPath+ type + ".html"
-	  stateProperties.params.state = slug;
-	}
 
-	stateProperties.name 	= slug;
-	stateProperties.url	= "/" + obj.slug;
-  $stateProvider.state(slug, stateProperties);
-	stateProperties.subs = [];
-	return stateProperties;
-   } else {
-	return null;
-   }
- }
-
-
- var makeCollectionIntoStates = function(obj,parentName,arrayOfStates) {
-    var pointer,newParent, newParentName =null;
-    for (var property in obj) {
-      if (obj.hasOwnProperty(property)) {
-        if(CONFIG.collectionsStateObjects.inArray(property)) {
-		if(Array.isArray(obj[property]) && obj[property].length){
-    		  for (var inst in obj[property]) {
-			if (obj[property].hasOwnProperty(inst)) {
-				newParent = returnStateFromObject( obj[property][inst],property,parentName,arrayOfStates);
-				if (newParent !== null ){
-					arrayOfStates.push(newParent);
-					newParentName = newParent.name;
-					makeCollectionIntoStates(obj[property][inst],newParentName,newParent.subs);
-				}
-			}
-		   }
-		}
-
-	}
+      if (singleType.charAt(singleType.length - 1) == 's') {
+        singleType = singleType.substr(0, singleType.length - 1);
       }
+
+      stateProperties.params = {};
+      stateProperties.params[type] = {};
+      stateProperties.hash = obj._id;
+      stateProperties.title = obj.title;
+      if (type == "collections") {
+        stateProperties.templateUrl = CONFIG.viewPath + "sections.html"
+        stateProperties.controller = "content";
+        stateProperties.views = {
+          '': {
+            templateUrl: CONFIG.viewPath + 'sections.html',
+            controller: 'content',
+          },
+          'headerContent': {
+            templateUrl: CONFIG.viewPath + 'header-content.html',
+            controller: 'content'
+          },
+          'relatedContent': {
+            templateUrl: CONFIG.viewPath + 'related-content.html',
+            controller: 'content'
+          }
+        };
+        stateProperties.params.contentFile = CONFIG.contentPath + type + "/" + obj["_id"] + CONFIG.contentFileSuffix;
+      } else {
+        stateProperties.templateUrl = CONFIG.viewPath + type + ".html"
+        stateProperties.params.state = slug;
+      }
+
+      stateProperties.name = slug;
+      stateProperties.url = "/" + obj.slug;
+      $stateProvider.state(slug, stateProperties);
+      stateProperties.subs = [];
+      return stateProperties;
+    } else {
+      return null;
     }
- }
+  }
+  var makeCollectionIntoStates = function(obj, parentName, arrayOfStates) {
+   var pointer, newParent, newParentName = null;
+   for (var property in obj) {
+     if (obj.hasOwnProperty(property)) {
+       if (CONFIG.collectionsStateObjects.inArray(property)) {
+         if (Array.isArray(obj[property]) && obj[property].length) {
+           for (var inst in obj[property]) {
+             if (obj[property].hasOwnProperty(inst)) {
+               newParent = returnStateFromObject(obj[property][inst], property, parentName, arrayOfStates);
+               if (newParent !== null) {
+                 arrayOfStates.push(newParent);
+                 newParentName = newParent.name;
+                 makeCollectionIntoStates(obj[property][inst], newParentName, newParent.subs);
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+  }
 
 
 
-  dataIo.getFile({
-    file:CONFIG.collectionsDefinition
-  }).then(function(_data){
-    _data.data.sort(dynamicSort('sortOrder'));
     var objs = {};
-    objs.collections = _data.data
+    console.log("CONFIG",CONFIG)
+    objs.collections = CONFIG.nav
     makeCollectionIntoStates(objs,null,madeStates);
-    
+
     $timeout(function(){
       appConfig.settings.states = madeStates;
     }, Math.floor((Math.random()*1)+1) * 5);
-    
-    
-   
+
+
+
     if ($location.path() != "/" && $location.path() != "") {
     $state.go($location.path().replaceAll("/","."));
     } else {
       $state.go("home")
     }
-    $urlRouterProvider.otherwise('/');
-
-  }).catch(function (_data) {
-    ERRORS.push("Error loading colleciton config file: " + formatDate(new Date()));
-  });
+    
 
 
 });
@@ -173,9 +272,7 @@ $stateProvider
     dataIo.getFile({
       file:$stateParams.contentFile
     }).then(function(_data){      
-      //$scope.content = dataIo.parseContent(_data.data);     
       $scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);      
-       
     }).catch(function (_data) {
       $scope.content = _data;
     });
@@ -194,6 +291,7 @@ $stateProvider
 
   PARTICLE.controller("ui",function($stateProvider,$urlRouterProvider,$state,$scope,$location,$timeout,$anchorScroll,$timeout,dataIo,$q,CONFIG,appConfig) {
 
+    $scope.CONFIG = CONFIG;
     $scope.appConfig = appConfig;
     $scope.db = [];
     $scope.ui = [];
@@ -4926,19 +5024,31 @@ function resRef(obj, str) {
 
   var initInjector = angular.injector(["ng"]);
   var $http = initInjector.get("$http");
+  var madeStates = [];
+  var CONFIG = null;
   
   //Load navigation
   var getNavigation = function(settings) {
     
+    
     $http.get(settings.navigationFile)
       .then(function(response) {
         settings.nav = {};
-        settings.nav = response.data;
+
+        var objs = {};
+        CONFIG = settings;
+        
+        settings.nav = response.data.sort(dynamicSort('sortOrder'));
+        objs.collections = settings.nav;
+        makeCollectionIntoStates(objs,null,madeStates);
+        settings.states = madeStates;
+        
         PARTICLE.constant("CONFIG", settings);
         PARTICLE.value('appConfig',{
           settings: {},
           errors:[],
           messages:[],
+          newStates:madeStates
         });
       })
       .then(function bootstrapApplication() {
@@ -4946,9 +5056,87 @@ function resRef(obj, str) {
         angular.element(document).ready(function() { });
       })
       .catch(function (data) {
-        console.log("Unable to load: ",settings.navigationFil);
+        console.log("Unable to load: ",settings.navigationFile);
       });
   }
+  
+ 
+  var returnStateFromObject = function(obj, type, parentName, arrayOfStates) {
+
+    if (typeof obj == "object") {
+
+      var slug = "";
+      var stateProperties = {};
+      var singleType = type;
+
+      if (parentName != null) {
+        slug = parentName + "." + obj.slug;
+      } else {
+        slug = "" + obj.slug;
+      }
+
+      if (singleType.charAt(singleType.length - 1) == 's') {
+        singleType = singleType.substr(0, singleType.length - 1);
+      }
+
+      stateProperties.params = {};
+      stateProperties.params[type] = {};
+      stateProperties.hash = obj._id;
+      stateProperties.title = obj.title;
+      if (type == "collections") {
+        stateProperties.templateUrl = CONFIG.viewPath + "sections.html"
+        stateProperties.controller = "content";
+        stateProperties.views = {
+          '': {
+            templateUrl: CONFIG.viewPath + 'sections.html',
+            controller: 'content',
+          },
+          'headerContent': {
+            templateUrl: CONFIG.viewPath + 'header-content.html',
+            controller: 'content'
+          },
+          'relatedContent': {
+            templateUrl: CONFIG.viewPath + 'related-content.html',
+            controller: 'content'
+          }
+        };
+        stateProperties.params.contentFile = CONFIG.contentPath + type + "/" + obj["_id"] + CONFIG.contentFileSuffix;
+      } else {
+        stateProperties.templateUrl = CONFIG.viewPath + type + ".html"
+        stateProperties.params.state = slug;
+      }
+
+      stateProperties.name = slug;
+      stateProperties.url = "/" + obj.slug;
+      //$stateProvider.state(slug, stateProperties);
+      stateProperties.subs = [];
+      return stateProperties;
+    } else {
+      return null;
+    }
+  }
+  var makeCollectionIntoStates = function(obj, parentName, arrayOfStates) {
+   var pointer, newParent, newParentName = null;
+   for (var property in obj) {
+     if (obj.hasOwnProperty(property)) {
+       if (CONFIG.collectionsStateObjects.inArray(property)) {
+         if (Array.isArray(obj[property]) && obj[property].length) {
+           for (var inst in obj[property]) {
+             if (obj[property].hasOwnProperty(inst)) {
+               newParent = returnStateFromObject(obj[property][inst], property, parentName, arrayOfStates);
+               if (newParent !== null) {
+                 arrayOfStates.push(newParent);
+                 newParentName = newParent.name;
+                 makeCollectionIntoStates(obj[property][inst], newParentName, newParent.subs);
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+  }
+  
 
   //Load app configuration before we bootstrap the app
   return $http.get("app-config.json")
