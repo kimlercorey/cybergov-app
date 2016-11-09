@@ -168,11 +168,13 @@ $stateProvider
  **/
   PARTICLE.controller("content",function($scope,$stateParams,$state,$sce,dataIo,CONFIG) {
 
+    $scope.CONFIG = CONFIG;
+
     dataIo.getFile({
       file:$stateParams.contentFile
     }).then(function(_data){      
-      $scope.content = dataIo.parseContent(_data.data);     
-      //$scope.content = dataIo.parseContent(_data.data[Object.keys(obj)[0]]);      
+      //$scope.content = dataIo.parseContent(_data.data);     
+      $scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);      
        
     }).catch(function (_data) {
       $scope.content = _data;
@@ -205,7 +207,7 @@ $stateProvider
     $scope.$on('$stateChangeSuccess', function (event, state, params, fromState, fromParams) 
     {
          console.log('stateChangeSuccess');
-         $location.hash("scrollPoint-" + $scope.hash);
+         // $location.hash("scrollPoint-" + $scope.hash);
        
         // $timeout(function(){
         // console.log("READY TO SCROLL!!!");
@@ -224,23 +226,23 @@ $stateProvider
            //$anchorScroll();
     }
     
-    dataIo.getFile({
-      file:CONFIG.contentPath + "articles.json"
-    }).then(function(_data){
-      console.log(_data.data)
-      //$scope[$stateParams.contentType] = parseContent(_data.data);
-      //$scope.content = parseContent(_data.data);
-      
-    }).catch(function (_data) {
-      $scope.content = _data;
-    });
-
-    $scope.sushi = [
-       { name: 'Cali Roll', fish: 'Crab', tastiness: 2 },
-       { name: 'Philly', fish: 'Tuna', tastiness: 4 },
-       { name: 'Tiger', fish: 'Eel', tastiness: 7 },
-       { name: 'Rainbow', fish: 'Variety', tastiness: 6 }
-     ];
+    // dataIo.getFile({
+ //      file:CONFIG.contentPath + "articles.json"
+ //    }).then(function(_data){
+ //      console.log(_data.data)
+ //      //$scope[$stateParams.contentType] = parseContent(_data.data);
+ //      //$scope.content = parseContent(_data.data);
+ //
+ //    }).catch(function (_data) {
+ //      $scope.content = _data;
+ //    });
+ //
+ //    $scope.sushi = [
+ //       { name: 'Cali Roll', fish: 'Crab', tastiness: 2 },
+ //       { name: 'Philly', fish: 'Tuna', tastiness: 4 },
+ //       { name: 'Tiger', fish: 'Eel', tastiness: 7 },
+ //       { name: 'Rainbow', fish: 'Variety', tastiness: 6 }
+ //     ];
 
 
   });
@@ -1114,6 +1116,13 @@ PARTICLE.directive('contentBlock', function ($parse, $window, $timeout,dataIo,CO
       scope.error = null;
       scope.CONFIG = CONFIG;
       var singleType = scope.type;
+      var idlocation = "_id";
+      console.log("scope.obj",scope.obj._id)
+      if (scope.obj._id) {
+        idlocation = "_id";
+      } else {
+        idlocation = "$oid";
+      }
   
       scope.getTemplateUrl = function() {
         if (singleType.charAt(singleType.length - 1) == 's') {  singleType= singleType.substr(0, singleType.length - 1); }
@@ -1122,10 +1131,11 @@ PARTICLE.directive('contentBlock', function ($parse, $window, $timeout,dataIo,CO
       }
 
       dataIo.getFile({
-        file:CONFIG.contentPath + scope.type+"/"+scope.obj['$oid']+CONFIG.contentFileSuffix
+        file:CONFIG.contentPath + scope.type+"/"+scope.obj[idlocation]+CONFIG.contentFileSuffix
       }).then(function(_data){
         
         // scope.content = dataIo.parseContent(_data.data);
+        // $scope.content = dataIo.parseContent(_data.data[Object.keys(obj)[0]]);
   //       scope.loaded = true;
         
         /***
@@ -1139,7 +1149,8 @@ PARTICLE.directive('contentBlock', function ($parse, $window, $timeout,dataIo,CO
          */
 
         $timeout(function(){
-          scope.content = dataIo.parseContent(_data.data);
+          //scope.content = dataIo.parseContent(_data.data);
+          scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
           scope.loaded = true;
         }, Math.floor((Math.random()*1)+1) * 50);
 
