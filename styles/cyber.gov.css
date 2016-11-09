@@ -10556,8 +10556,31 @@ li {
   top: 3em;
 }
 
+.header-button-menu > div {
+  display: -ms-flexbox;
+  display: flex;
+  width: 4.5em;
+  height: 4.5em;
+  background-color: #5b616b;
+}
+
+.header-button-menu > div .loader {
+  margin-top: 0.75em;
+  border-top: 0.5em solid rgba(255, 255, 255, 0.2);
+  border-right: 0.5em solid rgba(255, 255, 255, 0.2);
+  border-bottom: 0.5em solid rgba(255, 255, 255, 0.2);
+  border-left: 0.5em solid #fff;
+}
+
 .header-main svg {
   max-width: 100%;
+}
+
+.header-main .loader {
+  border-top: 0.5em solid rgba(255, 255, 255, 0.2);
+  border-right: 0.5em solid rgba(255, 255, 255, 0.2);
+  border-bottom: 0.5em solid rgba(255, 255, 255, 0.2);
+  border-left: 0.5em solid #fff;
 }
 
 .header-top {
