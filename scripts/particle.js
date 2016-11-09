@@ -2,7 +2,6 @@
 
 var PARTICLE = angular.module('PARTICLE', ['ngAnimate','ui.router','jsonFormatter']);
 
-
 PARTICLE.provider("centralObject", function () {
   var obj={};
   return {
@@ -102,19 +101,24 @@ PARTICLE.config(function($stateProvider,$urlRouterProvider,CONFIG,centralObjectP
    }
   }  
   
+    
  $stateProvider
   // HOME ===================================================================
   .state('home', {
     url: '/',
     views: {
       '': {
-        templateUrl: CONFIG.viewPath+'home/main.html',
+        templateUrl: CONFIG.viewPath + 'home.html',
       },
       'tagline': {
-        templateUrl: CONFIG.viewPath+'home/tagline.html',
+        templateUrl: CONFIG.viewPath + 'tagline.html',
       },
       'headerContent': {
-        templateUrl: CONFIG.viewPath+'home/header-content.html',
+        templateUrl: CONFIG.viewPath + 'home-header.html',
+      },
+      'rightSidebar': {
+        templateUrl: CONFIG.viewPath + 'questions.html',
+        controller: 'questions'
       },
       'relatedContent': {
         template: '',
@@ -126,16 +130,6 @@ PARTICLE.config(function($stateProvider,$urlRouterProvider,CONFIG,centralObjectP
   
   
   //===========================================================================
-  // if ($location.path() != "/" && $location.path() != "") {
- //  $state.go($location.path().replaceAll("/","."));
- //  } else {
- //    $state.go("home")
- //  }
-
-  
-
-  //============================================================================
-
 
   var objs = {};
   objs.collections = CONFIG.nav
@@ -211,6 +205,8 @@ PARTICLE.config(function($stateProvider,$urlRouterProvider,CONFIG,centralObjectP
     },2000)
      
     
+    
+
 
   });
 
