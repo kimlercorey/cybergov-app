@@ -14,17 +14,8 @@
   </section>
 
   <section>
-
     <h2>Recent Questions</h2>
-
-    <article ng-repeat="n in [1,2,3,4]">
-      <time>October 9, 2016</time>
-      <h3 class="question">What is the best way to make pancakes?</h3>
-      <div class="answer">
-        <p>Jelly sugar plum brownie marshmallow jelly beans candy tootsie roll. Oat cake ice cream caramels wafer. Fruitcake tootsie roll candy canes fruitcake chupa chups biscuit macaroon bear.</p>
-      </div>
-    </article>
-
+    <content-block ng-repeat="question in content" obj="question" type="'questions'"></content-block>
   </section>
 
 </div>

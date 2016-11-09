@@ -55,6 +55,10 @@ PARTICLE.config(function($stateProvider,$urlRouterProvider,CONFIG,centralObjectP
             templateUrl: CONFIG.viewPath + 'header-content.html',
             controller: 'content'
           },
+          'rightSidebar': {
+            templateUrl: CONFIG.viewPath + 'header-content.html',
+            controller: 'questions'
+          },
           'relatedContent': {
             templateUrl: CONFIG.viewPath + 'related-content.html',
             controller: 'content'
@@ -98,20 +102,19 @@ PARTICLE.config(function($stateProvider,$urlRouterProvider,CONFIG,centralObjectP
    }
   }  
   
-    
  $stateProvider
   // HOME ===================================================================
   .state('home', {
     url: '/',
     views: {
       '': {
-        templateUrl: CONFIG.viewPath+'/home/main.html',
+        templateUrl: CONFIG.viewPath+'home/main.html',
       },
       'tagline': {
-        templateUrl: CONFIG.viewPath+'/home/tagline.html',
+        templateUrl: CONFIG.viewPath+'home/tagline.html',
       },
       'headerContent': {
-        templateUrl: CONFIG.viewPath+'/home/header-content.html',
+        templateUrl: CONFIG.viewPath+'home/header-content.html',
       },
       'relatedContent': {
         template: '',
@@ -123,11 +126,16 @@ PARTICLE.config(function($stateProvider,$urlRouterProvider,CONFIG,centralObjectP
   
   
   //===========================================================================
-
+  // if ($location.path() != "/" && $location.path() != "") {
+ //  $state.go($location.path().replaceAll("/","."));
+ //  } else {
+ //    $state.go("home")
+ //  }
 
   
 
   //============================================================================
+
 
   var objs = {};
   objs.collections = CONFIG.nav
@@ -149,19 +157,37 @@ PARTICLE.config(function($stateProvider,$urlRouterProvider,CONFIG,centralObjectP
  *    └─┘└─┘┘└┘ ┴ └─┘┘└┘ ┴   └─┘└─┘┘└┘ ┴ ┴└─└─┘┴─┘┴─┘└─┘┴└─
  ------------------------------------------------------------------------------------------------------------------------
  **/
+
   PARTICLE.controller("content",function($scope,$stateParams,$state,$sce,dataIo,CONFIG) {
 
     $scope.CONFIG = CONFIG;
 
     dataIo.getFile({
       file:$stateParams.contentFile
-    }).then(function(_data){      
-      $scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);      
+    }).then(function(_data){
+      $scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
     }).catch(function (_data) {
       $scope.content = _data;
     });
 
   });
+
+  PARTICLE.controller("questions",function($scope,$stateParams,$state,$sce,dataIo,CONFIG) {
+
+    $scope.CONFIG = CONFIG;
+
+    log_q($stateParams);
+
+    dataIo.getFile({
+      file:CONFIG.contentPath + "questions.json"
+    }).then(function(_data){
+      $scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
+    }).catch(function (_data) {
+      $scope.content = _data;
+    });
+
+  });
+
 /** END: content: CONTROLLER
 ------------------------------------------------------------------------------------------------------------------------ **/
 
@@ -184,7 +210,6 @@ PARTICLE.config(function($stateProvider,$urlRouterProvider,CONFIG,centralObjectP
        $( document ).foundation();
     },2000)
      
-    
     
 
   });
@@ -1002,59 +1027,59 @@ PARTICLE.directive('member', function ($compile, $rootScope, $timeout) {
 
     };
 });
-PARTICLE.directive('contentBlock', function ($parse, $window, $timeout,dataIo,CONFIG,$sce) { 
+PARTICLE.directive('contentBlock', function ($parse, $window, $timeout,dataIo,CONFIG,$sce) {
 
   var directiveDefinitionObject = {
-  
+
   /***
-   *    ███████╗██╗     ███████╗███╗   ███╗███████╗███╗   ██╗████████╗       ██╗        █████╗ ████████╗████████╗██████╗ 
+   *    ███████╗██╗     ███████╗███╗   ███╗███████╗███╗   ██╗████████╗       ██╗        █████╗ ████████╗████████╗██████╗
    *    ██╔════╝██║     ██╔════╝████╗ ████║██╔════╝████╗  ██║╚══██╔══╝       ██║       ██╔══██╗╚══██╔══╝╚══██╔══╝██╔══██╗
    *    █████╗  ██║     █████╗  ██╔████╔██║█████╗  ██╔██╗ ██║   ██║       ████████╗    ███████║   ██║      ██║   ██████╔╝
    *    ██╔══╝  ██║     ██╔══╝  ██║╚██╔╝██║██╔══╝  ██║╚██╗██║   ██║       ██╔═██╔═╝    ██╔══██║   ██║      ██║   ██╔══██╗
    *    ███████╗███████╗███████╗██║ ╚═╝ ██║███████╗██║ ╚████║   ██║       ██████║      ██║  ██║   ██║      ██║   ██║  ██║
    *    ╚══════╝╚══════╝╚══════╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝   ╚═╝       ╚═════╝      ╚═╝  ╚═╝   ╚═╝      ╚═╝   ╚═╝  ╚═╝
-   *                                                                                                                     
+   *
    */
   restrict: 'EA',
-    
+
   /***
    *    ████████╗███████╗███╗   ███╗██████╗ ██╗      █████╗ ████████╗███████╗
    *    ╚══██╔══╝██╔════╝████╗ ████║██╔══██╗██║     ██╔══██╗╚══██╔══╝██╔════╝
-   *       ██║   █████╗  ██╔████╔██║██████╔╝██║     ███████║   ██║   █████╗  
-   *       ██║   ██╔══╝  ██║╚██╔╝██║██╔═══╝ ██║     ██╔══██║   ██║   ██╔══╝  
+   *       ██║   █████╗  ██╔████╔██║██████╔╝██║     ███████║   ██║   █████╗
+   *       ██║   ██╔══╝  ██║╚██╔╝██║██╔═══╝ ██║     ██╔══██║   ██║   ██╔══╝
    *       ██║   ███████╗██║ ╚═╝ ██║██║     ███████╗██║  ██║   ██║   ███████╗
    *       ╚═╝   ╚══════╝╚═╝     ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
-   *                                                                         
-   */  
+   *
+   */
   template: '<ng-include src="getTemplateUrl()"/>',
 
   /***
   *    ███████╗ ██████╗ ██████╗ ██████╗ ███████╗
   *    ██╔════╝██╔════╝██╔═══██╗██╔══██╗██╔════╝
-  *    ███████╗██║     ██║   ██║██████╔╝█████╗  
-  *    ╚════██║██║     ██║   ██║██╔═══╝ ██╔══╝  
+  *    ███████╗██║     ██║   ██║██████╔╝█████╗
+  *    ╚════██║██║     ██║   ██║██╔═══╝ ██╔══╝
   *    ███████║╚██████╗╚██████╔╝██║     ███████╗
   *    ╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚══════╝
-  *                                             
+  *
   */
   scope: {
     index:"=",
     obj:"=",
     type:"="
   },
-    
+
     /***
      *    ██╗     ██╗███╗   ██╗██╗  ██╗
      *    ██║     ██║████╗  ██║██║ ██╔╝
-     *    ██║     ██║██╔██╗ ██║█████╔╝ 
-     *    ██║     ██║██║╚██╗██║██╔═██╗ 
+     *    ██║     ██║██╔██╗ ██║█████╔╝
+     *    ██║     ██║██║╚██╗██║██╔═██╗
      *    ███████╗██║██║ ╚████║██║  ██╗
      *    ╚══════╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝
-     *                                 
+     *
      */
     link: function (scope, element, attrs) {
 
-      scope.loaded = null; 
+      scope.loaded = null;
       scope.error = null;
       scope.CONFIG = CONFIG;
       var singleType = scope.type;
@@ -1065,7 +1090,7 @@ PARTICLE.directive('contentBlock', function ($parse, $window, $timeout,dataIo,CO
       } else {
         idlocation = "$oid";
       }
-  
+
       scope.getTemplateUrl = function() {
         if (singleType.charAt(singleType.length - 1) == 's') {  singleType= singleType.substr(0, singleType.length - 1); }
         scope.singleType = singleType;
@@ -1075,19 +1100,19 @@ PARTICLE.directive('contentBlock', function ($parse, $window, $timeout,dataIo,CO
       dataIo.getFile({
         file:CONFIG.contentPath + scope.type+"/"+scope.obj[idlocation]+CONFIG.contentFileSuffix
       }).then(function(_data){
-        
+
         // scope.content = dataIo.parseContent(_data.data);
         // $scope.content = dataIo.parseContent(_data.data[Object.keys(obj)[0]]);
   //       scope.loaded = true;
-        
+
         /***
          *    ███████╗ █████╗ ██╗  ██╗███████╗    ███████╗███████╗██████╗ ██╗   ██╗███████╗██████╗     ██████╗ ███████╗██╗      █████╗ ██╗   ██╗
          *    ██╔════╝██╔══██╗██║ ██╔╝██╔════╝    ██╔════╝██╔════╝██╔══██╗██║   ██║██╔════╝██╔══██╗    ██╔══██╗██╔════╝██║     ██╔══██╗╚██╗ ██╔╝
-         *    █████╗  ███████║█████╔╝ █████╗      ███████╗█████╗  ██████╔╝██║   ██║█████╗  ██████╔╝    ██║  ██║█████╗  ██║     ███████║ ╚████╔╝ 
-         *    ██╔══╝  ██╔══██║██╔═██╗ ██╔══╝      ╚════██║██╔══╝  ██╔══██╗╚██╗ ██╔╝██╔══╝  ██╔══██╗    ██║  ██║██╔══╝  ██║     ██╔══██║  ╚██╔╝  
-         *    ██║     ██║  ██║██║  ██╗███████╗    ███████║███████╗██║  ██║ ╚████╔╝ ███████╗██║  ██║    ██████╔╝███████╗███████╗██║  ██║   ██║   
-         *    ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝    ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚══════╝╚═╝  ╚═╝    ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝   
-         *                                                                                                                                      
+         *    █████╗  ███████║█████╔╝ █████╗      ███████╗█████╗  ██████╔╝██║   ██║█████╗  ██████╔╝    ██║  ██║█████╗  ██║     ███████║ ╚████╔╝
+         *    ██╔══╝  ██╔══██║██╔═██╗ ██╔══╝      ╚════██║██╔══╝  ██╔══██╗╚██╗ ██╔╝██╔══╝  ██╔══██╗    ██║  ██║██╔══╝  ██║     ██╔══██║  ╚██╔╝
+         *    ██║     ██║  ██║██║  ██╗███████╗    ███████║███████╗██║  ██║ ╚████╔╝ ███████╗██║  ██║    ██████╔╝███████╗███████╗██║  ██║   ██║
+         *    ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝    ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚══════╝╚═╝  ╚═╝    ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝
+         *
          */
 
         $timeout(function(){
@@ -1104,8 +1129,8 @@ PARTICLE.directive('contentBlock', function ($parse, $window, $timeout,dataIo,CO
     } //--END link: function
 
   }; //--END directiveDefinitionObject
-  
-  
+
+
   return directiveDefinitionObject;
 
 
