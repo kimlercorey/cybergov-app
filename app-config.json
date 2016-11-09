@@ -3,11 +3,12 @@
   "showJSON":false,
   "showMessages":true,
   "statesPath":"content/states.json",
-  "contentPath":"/api/v1/",
+  "contentPath":"api/",
   "viewPath":"views/",
   "contentFileSuffix":".json",
   "trustedHTML":["brief","extended","micro"],
-  "collectionsDefinition":"/api/v1/collections",
+  "collectionsDefinition":"api/nav.json",
+  "navigationFile":"api/nav.json",
   "collectionsStateObjects":["collections","sections","articles"],
   "cleaningObjects":["content","more"]
 }
