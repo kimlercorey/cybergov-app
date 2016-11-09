@@ -17,13 +17,13 @@ PARTICLE.config(function($provide, $stateProvider,$urlRouterProvider,CONFIG) {
     url: '/',
     views: {
       '': {
-        templateUrl: CONFIG.viewPath + '/home/main.html',
+        templateUrl: CONFIG.viewPath + 'home.html',
       },
       'tagline': {
-        templateUrl: CONFIG.viewPath + '/home/tagline.html',
+        templateUrl: CONFIG.viewPath + 'tagline.html',
       },
       'headerContent': {
-        templateUrl: CONFIG.viewPath + '/home/header-content.html',
+        templateUrl: CONFIG.viewPath + 'header-content-home.html',
       },
       'rightSidebar': {
         templateUrl: CONFIG.viewPath + 'questions.html',
