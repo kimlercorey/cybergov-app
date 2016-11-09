@@ -22,9 +22,7 @@ $( document ).ready(function() {
   /**
    * Initialize Foundation plugins after a short delay (change to fire on callback)
    */
-  window.setTimeout( function() {
-    $( document ).foundation();
-  }, 2000 );
+
 
   /**
    * Toggle hamburger menu animation state when clicked

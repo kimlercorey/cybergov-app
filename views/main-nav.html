@@ -1,10 +1,10 @@
 <nav>
   <ul class="vertical menu" data-accordion-menu="">
-    <li ng-repeat="state in appConfig.settings.states">
+    <li ng-repeat="state in applicationStates">
       <a href="#">{{state.title}}</a>
       <ul class="vertical menu nested">
         <li ng-repeat="substate in state.subs">
-          <a ng-click="scrollTo(substate)" ui-sref="{{substate.name}}">{{substate.title}}</a>
+          <a ui-sref="{{substate.name}}">{{substate.title}}</a>
         </li>
       </ul>
     </li>

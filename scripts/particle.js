@@ -1,162 +1,26 @@
-/***
- *    ██████╗  █████╗ ██╗   ██╗██╗  ██╗ █████╗ ██╗   ██╗███████╗
- *    ██╔══██╗██╔══██╗██║   ██║██║  ██║██╔══██╗██║   ██║██╔════╝
- *    ██████╔╝███████║██║   ██║███████║███████║██║   ██║███████╗
- *    ██╔══██╗██╔══██║██║   ██║██╔══██║██╔══██║██║   ██║╚════██║
- *    ██████╔╝██║  ██║╚██████╔╝██║  ██║██║  ██║╚██████╔╝███████║
- *    ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝
- ***/
+
 
 var PARTICLE = angular.module('PARTICLE', ['ngAnimate','ui.router','jsonFormatter']);
 
-PARTICLE.config(function($provide, $stateProvider,$urlRouterProvider,CONFIG) {
-    
- $stateProvider
-  // HOME ===================================================================
-  .state('home', {
-    url: '/',
-    views: {
-      '': {
-        templateUrl: CONFIG.viewPath+'/home/main.html',
-      },
-      'tagline': {
-        templateUrl: CONFIG.viewPath+'/home/tagline.html',
-      },
-      'headerContent': {
-        templateUrl: CONFIG.viewPath+'/home/header-content.html',
-      },
-      'relatedContent': {
-        template: '',
-      }
+
+PARTICLE.provider("centralObject", function () {
+  var obj={};
+  return {
+    set: function (property,value) {
+      console.log("Setting centralObject."+property+" to "+ value)
+      obj[property] = value;
+    },
+    $get: function () {
+      return obj;
     }
-  });
-  
-    //
-  // //===========================================================================
-  //
-  //
-  // var madeStates = [];
-  // var returnStateFromObject = function(obj, type, parentName, arrayOfStates) {
-  //
-  //   if (typeof obj == "object") {
-  //
-  //     var slug = "";
-  //     var stateProperties = {};
-  //     var singleType = type;
-  //
-  //     if (parentName != null) {
-  //       slug = parentName + "." + obj.slug;
-  //     } else {
-  //       slug = "" + obj.slug;
-  //     }
-  //
-  //     if (singleType.charAt(singleType.length - 1) == 's') {
-  //       singleType = singleType.substr(0, singleType.length - 1);
-  //     }
-  //
-  //     stateProperties.params = {};
-  //     stateProperties.params[type] = {};
-  //     stateProperties.hash = obj._id;
-  //     stateProperties.title = obj.title;
-  //     if (type == "collections") {
-  //       stateProperties.templateUrl = CONFIG.viewPath + "sections.html"
-  //       stateProperties.controller = "content";
-  //       stateProperties.views = {
-  //         '': {
-  //           templateUrl: CONFIG.viewPath + 'sections.html',
-  //           controller: 'content',
-  //         },
-  //         'headerContent': {
-  //           templateUrl: CONFIG.viewPath + 'header-content.html',
-  //           controller: 'content'
-  //         },
-  //         'relatedContent': {
-  //           templateUrl: CONFIG.viewPath + 'related-content.html',
-  //           controller: 'content'
-  //         }
-  //       };
-  //       stateProperties.params.contentFile = CONFIG.contentPath + type + "/" + obj["_id"] + CONFIG.contentFileSuffix;
-  //     } else {
-  //       stateProperties.templateUrl = CONFIG.viewPath + type + ".html"
-  //       stateProperties.params.state = slug;
-  //     }
-  //
-  //     stateProperties.name = slug;
-  //     stateProperties.url = "/" + obj.slug;
-  //     $stateProvider.state(slug, stateProperties);
-  //     stateProperties.subs = [];
-  //     return stateProperties;
-  //   } else {
-  //     return null;
-  //   }
-  // }
-  //
-  // var makeCollectionIntoStates = function(obj, parentName, arrayOfStates) {
-  //  var pointer, newParent, newParentName = null;
-  //  for (var property in obj) {
-  //    if (obj.hasOwnProperty(property)) {
-  //      if (CONFIG.collectionsStateObjects.inArray(property)) {
-  //        if (Array.isArray(obj[property]) && obj[property].length) {
-  //          for (var inst in obj[property]) {
-  //            if (obj[property].hasOwnProperty(inst)) {
-  //              newParent = returnStateFromObject(obj[property][inst], property, parentName, arrayOfStates);
-  //              if (newParent !== null) {
-  //                arrayOfStates.push(newParent);
-  //                newParentName = newParent.name;
-  //                makeCollectionIntoStates(obj[property][inst], newParentName, newParent.subs);
-  //              }
-  //            }
-  //          }
-  //        }
-  //      }
-  //    }
-  //  }
-  // }
-  //
-  // //============================================================================
-  //
-  // var objs = {};
-  // objs.collections = CONFIG.nav
-  // makeCollectionIntoStates(objs,null,madeStates);
-  //
-  // $timeout(function(){
-  //   appConfig.settings.states = madeStates;
-  // }, Math.floor((Math.random()*1)+1) * 5);
-  //
-  //appConfig.settings.states = madeStates;
-  
-  // PARTICLE.value('appConfig',{
- //    settings: {},
- //    errors:[],
- //    messages:[],
- //    states:madeStates
- //  });
-  
-  // if ($location.path() != "/" && $location.path() != "") {
- //  $state.go($location.path().replaceAll("/","."));
- //  } else {
- //    $state.go("home")
- //  }
-  $urlRouterProvider.otherwise('/');
-  
-  //============================================================================
-  
-  $provide.factory('$stateProvider', function () {
-      return $stateProvider;
-  });
-  $provide.factory('$urlRouterProvider', function () {
-      return $urlRouterProvider;
-  });
-
-
+  };
 });
 
-
-PARTICLE.run(function($stateProvider,$urlRouterProvider,$state,$location,$timeout,CONFIG,dataIo,appConfig) {
-
-
-
-  var madeStates = [];
+PARTICLE.config(function($stateProvider,$urlRouterProvider,CONFIG,centralObjectProvider) {
+  
+  
+  var applicationStates = [];
+  
   var returnStateFromObject = function(obj, type, parentName, arrayOfStates) {
 
     if (typeof obj == "object") {
@@ -211,6 +75,7 @@ PARTICLE.run(function($stateProvider,$urlRouterProvider,$state,$location,$timeou
       return null;
     }
   }
+
   var makeCollectionIntoStates = function(obj, parentName, arrayOfStates) {
    var pointer, newParent, newParentName = null;
    for (var property in obj) {
@@ -231,28 +96,47 @@ PARTICLE.run(function($stateProvider,$urlRouterProvider,$state,$location,$timeou
        }
      }
    }
-  }
-
-
-
-    var objs = {};
-    console.log("CONFIG",CONFIG)
-    objs.collections = CONFIG.nav
-    makeCollectionIntoStates(objs,null,madeStates);
-
-    $timeout(function(){
-      appConfig.settings.states = madeStates;
-    }, Math.floor((Math.random()*1)+1) * 5);
-
-
-
-    if ($location.path() != "/" && $location.path() != "") {
-    $state.go($location.path().replaceAll("/","."));
-    } else {
-      $state.go("home")
-    }
+  }  
+  
     
+ $stateProvider
+  // HOME ===================================================================
+  .state('home', {
+    url: '/',
+    views: {
+      '': {
+        templateUrl: CONFIG.viewPath+'/home/main.html',
+      },
+      'tagline': {
+        templateUrl: CONFIG.viewPath+'/home/tagline.html',
+      },
+      'headerContent': {
+        templateUrl: CONFIG.viewPath+'/home/header-content.html',
+      },
+      'relatedContent': {
+        template: '',
+      }
+    }
+  });
+  
+  $urlRouterProvider.otherwise('/');
+  
+  
+  //===========================================================================
 
+
+  
+
+  //============================================================================
+
+  var objs = {};
+  objs.collections = CONFIG.nav
+  makeCollectionIntoStates(objs,null,applicationStates);
+  centralObjectProvider.set("applicationStates",applicationStates);
+  centralObjectProvider.set("config",CONFIG);
+  
+  //============================================================================
+  
 
 });
 
@@ -288,60 +172,20 @@ PARTICLE.run(function($stateProvider,$urlRouterProvider,$state,$location,$timeou
  *    └─┘┴  └─┘└─┘┘└┘ ┴ ┴└─└─┘┴─┘┴─┘└─┘┴└─
  ------------------------------------------------------------------------------------------------------------------------
  **/
+  // PARTICLE.controller("ui",function($stateProvider,$urlRouterProvider,$state,$scope,$location,$timeout,$anchorScroll,$timeout,dataIo,$q,CONFIG,appConfig,centralObject) {
 
-  PARTICLE.controller("ui",function($stateProvider,$urlRouterProvider,$state,$scope,$location,$timeout,$anchorScroll,$timeout,dataIo,$q,CONFIG,appConfig) {
+  PARTICLE.controller("ui",function($scope,centralObject,$timeout) {
 
-    $scope.CONFIG = CONFIG;
-    $scope.appConfig = appConfig;
-    $scope.db = [];
-    $scope.ui = [];
+    $scope.CONFIG = centralObject.config;
+    $scope.applicationStates = centralObject.applicationStates;
+    $scope.centralObject = centralObject;
 
-    $scope.gotoState = function(state){
-      $state.go(state)
-    };
+    $timeout(function(){
+       $( document ).foundation();
+    },2000)
+     
     
-    $scope.hash = "";
     
-    $scope.$on('$stateChangeSuccess', function (event, state, params, fromState, fromParams) 
-    {
-         console.log('stateChangeSuccess');
-         // $location.hash("scrollPoint-" + $scope.hash);
-       
-        // $timeout(function(){
-        // console.log("READY TO SCROLL!!!");
-        // $anchorScroll();
-        // }, Math.floor((Math.random()*1)+1) * 5000);
-
-    });
-    
-    $scope.scrollTo = function(where) {
-      console.log(where)
-      $scope.hash = where.hash
-      
-
-      
-           // call $anchorScroll()
-           //$anchorScroll();
-    }
-    
-    // dataIo.getFile({
- //      file:CONFIG.contentPath + "articles.json"
- //    }).then(function(_data){
- //      console.log(_data.data)
- //      //$scope[$stateParams.contentType] = parseContent(_data.data);
- //      //$scope.content = parseContent(_data.data);
- //
- //    }).catch(function (_data) {
- //      $scope.content = _data;
- //    });
- //
- //    $scope.sushi = [
- //       { name: 'Cali Roll', fish: 'Crab', tastiness: 2 },
- //       { name: 'Philly', fish: 'Tuna', tastiness: 4 },
- //       { name: 'Tiger', fish: 'Eel', tastiness: 7 },
- //       { name: 'Rainbow', fish: 'Variety', tastiness: 6 }
- //     ];
-
 
   });
 
@@ -1215,7 +1059,7 @@ PARTICLE.directive('contentBlock', function ($parse, $window, $timeout,dataIo,CO
       scope.CONFIG = CONFIG;
       var singleType = scope.type;
       var idlocation = "_id";
-      console.log("scope.obj",scope.obj._id)
+
       if (scope.obj._id) {
         idlocation = "_id";
       } else {
@@ -1250,7 +1094,7 @@ PARTICLE.directive('contentBlock', function ($parse, $window, $timeout,dataIo,CO
           //scope.content = dataIo.parseContent(_data.data);
           scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
           scope.loaded = true;
-        }, Math.floor((Math.random()*1)+1) * 50);
+        }, Math.floor((Math.random()*10)+1) * 50);
 
       }).catch(function (_data) {
         console.log("Error in DIRECTIVE:contentBlock")
@@ -5022,132 +4866,128 @@ function resRef(obj, str) {
 
 (function() {
 
+  /***
+   *     ██████╗    
+   *    ██╔═████╗   
+   *    ██║██╔██║   
+   *    ████╔╝██║   
+   *    ╚██████╔╝██╗
+   *     ╚═════╝ ╚═╝
+   *                
+   */
+  // Inject the $http angular service so we can load files
   var initInjector = angular.injector(["ng"]);
   var $http = initInjector.get("$http");
-  var madeStates = [];
-  var CONFIG = null;
-  
-  //Load navigation
-  var getNavigation = function(settings) {
-    
-    
-    $http.get(settings.navigationFile)
-      .then(function(response) {
-        settings.nav = {};
 
-        var objs = {};
-        CONFIG = settings;
-        
-        settings.nav = response.data.sort(dynamicSort('sortOrder'));
-        objs.collections = settings.nav;
-        makeCollectionIntoStates(objs,null,madeStates);
-        settings.states = madeStates;
-        
-        PARTICLE.constant("CONFIG", settings);
-        PARTICLE.value('appConfig',{
-          settings: {},
-          errors:[],
-          messages:[],
-          newStates:madeStates
-        });
-      })
-      .then(function bootstrapApplication() {
-        angular.bootstrap(document.body,["PARTICLE"]);
-        angular.element(document).ready(function() { });
-      })
-      .catch(function (data) {
-        console.log("Unable to load: ",settings.navigationFile);
-      });
-  }
-  
- 
-  var returnStateFromObject = function(obj, type, parentName, arrayOfStates) {
 
-    if (typeof obj == "object") {
-
-      var slug = "";
-      var stateProperties = {};
-      var singleType = type;
-
-      if (parentName != null) {
-        slug = parentName + "." + obj.slug;
-      } else {
-        slug = "" + obj.slug;
-      }
-
-      if (singleType.charAt(singleType.length - 1) == 's') {
-        singleType = singleType.substr(0, singleType.length - 1);
-      }
-
-      stateProperties.params = {};
-      stateProperties.params[type] = {};
-      stateProperties.hash = obj._id;
-      stateProperties.title = obj.title;
-      if (type == "collections") {
-        stateProperties.templateUrl = CONFIG.viewPath + "sections.html"
-        stateProperties.controller = "content";
-        stateProperties.views = {
-          '': {
-            templateUrl: CONFIG.viewPath + 'sections.html',
-            controller: 'content',
-          },
-          'headerContent': {
-            templateUrl: CONFIG.viewPath + 'header-content.html',
-            controller: 'content'
-          },
-          'relatedContent': {
-            templateUrl: CONFIG.viewPath + 'related-content.html',
-            controller: 'content'
-          }
-        };
-        stateProperties.params.contentFile = CONFIG.contentPath + type + "/" + obj["_id"] + CONFIG.contentFileSuffix;
-      } else {
-        stateProperties.templateUrl = CONFIG.viewPath + type + ".html"
-        stateProperties.params.state = slug;
-      }
-
-      stateProperties.name = slug;
-      stateProperties.url = "/" + obj.slug;
-      //$stateProvider.state(slug, stateProperties);
-      stateProperties.subs = [];
-      return stateProperties;
-    } else {
-      return null;
-    }
-  }
-  var makeCollectionIntoStates = function(obj, parentName, arrayOfStates) {
-   var pointer, newParent, newParentName = null;
-   for (var property in obj) {
-     if (obj.hasOwnProperty(property)) {
-       if (CONFIG.collectionsStateObjects.inArray(property)) {
-         if (Array.isArray(obj[property]) && obj[property].length) {
-           for (var inst in obj[property]) {
-             if (obj[property].hasOwnProperty(inst)) {
-               newParent = returnStateFromObject(obj[property][inst], property, parentName, arrayOfStates);
-               if (newParent !== null) {
-                 arrayOfStates.push(newParent);
-                 newParentName = newParent.name;
-                 makeCollectionIntoStates(obj[property][inst], newParentName, newParent.subs);
-               }
-             }
-           }
-         }
-       }
-     }
-   }
-  }
-  
-
-  //Load app configuration before we bootstrap the app
+  /***
+   *     ██╗   
+   *    ███║   
+   *    ╚██║   
+   *     ██║   
+   *     ██║██╗
+   *     ╚═╝╚═╝
+   *           
+   */  
+  // Load the app's configuration settings
   return $http.get("app-config.json")
   .then(function(response) {
-    getNavigation(response.data)
+  /***
+   *    ██████╗    
+   *    ╚════██╗   
+   *     █████╔╝   
+   *    ██╔═══╝    
+   *    ███████╗██╗
+   *    ╚══════╝╚═╝
+   *               
+   */
+  // Set settings to the values in the response  
+  var SETTINGS = response.data
+  
+  
+  /***
+   *    ██████╗    
+   *    ╚════██╗   
+   *     █████╔╝   
+   *     ╚═══██╗   
+   *    ██████╔╝██╗
+   *    ╚═════╝ ╚═╝
+   *               
+   */  
+  // Load NAVIGATION/STATE values from navigation file 
+  // specified in the app-config.json in property SETTINGS.navigationFile
+  $http.get(SETTINGS.navigationFile)
+    .then(function(response) {
+      /***
+       *    ██╗  ██╗   
+       *    ██║  ██║   
+       *    ███████║   
+       *    ╚════██║   
+       *         ██║██╗
+       *         ╚═╝╚═╝
+       *               
+       */
+      // Add a new nav property to the settings object and
+      // point .nav to the loaded and sorted values from the nav.json / api 
+      SETTINGS.nav = {};
+      SETTINGS.nav = response.data.sort(dynamicSort('sortOrder'));
+
+      /***
+       *    ███████╗   
+       *    ██╔════╝   
+       *    ███████╗   
+       *    ╚════██║   
+       *    ███████║██╗
+       *    ╚══════╝╚═╝
+       *               
+       */
+      // Create a constant for the app with all these
+      // Settings inside so the app has all these settings when it starts.
+      PARTICLE.constant("CONFIG", SETTINGS);
+     
+    })
+    /***
+     *     ██████╗    
+     *    ██╔════╝    
+     *    ███████╗    
+     *    ██╔═══██╗   
+     *    ╚██████╔╝██╗
+     *     ╚═════╝ ╚═╝
+     *                
+     */
+    // Start up / Boostrap the application 
+    // Attaching the app to the body tag. 
+    .then(function bootstrapApplication() {
+      angular.bootstrap(document.body,["PARTICLE"]);
+      angular.element(document).ready(function() { });
+    })
+    /***
+     *    ███████╗ 
+     *    ╚════██║ 
+     *        ██╔╝ 
+     *       ██╔╝  
+     *       ██║██╗
+     *       ╚═╝╚═╝
+     *             
+     */
+    // Define how to deal with errors if the navigation/nav.json can not be loaded 
+    .catch(function (data) {
+      console.log("Unable to load: ",SETTINGS.navigationFile,data);
+    });
+    
   })
+  /***
+   *     █████╗    
+   *    ██╔══██╗   
+   *    ╚█████╔╝   
+   *    ██╔══██╗   
+   *    ╚█████╔╝██╗
+   *     ╚════╝ ╚═╝
+   *               
+   */
+  // Define how to deal with errors if the app-configs.json can not be loaded 
   .catch(function (data) {
-    console.log("Unable to load /app-configs.json");
+    console.log("Unable to load app-configs.json");
   });
-  
-  
-  
 
 }());
