@@ -10,6 +10,10 @@
 
 <body ng-controller="ui">
 
+
+  
+
+
   <div class="off-canvas-wrapper">
     <div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
 
@@ -35,13 +39,16 @@
                 <div class="row row-grow">
 
                   <div class="columns shrink header-top header-button header-button-menu">
-                    <button type="button" data-toggle="offCanvasLeft" title="Open Navigation Menu">
+                    <button ng-if="appConfig.settings.states" type="button" data-toggle="offCanvasLeft" title="Open Navigation Menu">
                       <span></span>
                       <span></span>
                       <span></span>
                       <span></span>
                     </button>
+                    <div ng-if="!appConfig.settings.states"  class="loader">Loading...</div>
                   </div>
+
+
 
                   <div class="columns header-top header-main padding-bottom-none">
 
@@ -63,6 +70,7 @@
             <div id="main-content" class="row">
 
               <div class="columns shrink column-border show-for-medium"></div>
+<!-- content-block obj='{"_id":"580b72fea39a623c1091a82d","type":"sections"}'></content-block -->
 
               <article ui-view class="columns columns-content"></article>
 
@@ -86,9 +94,11 @@
   </div>
 
   <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/x2js.min.js"></script>
   <script src="scripts/angular.min.js"></script>
   <script src="scripts/angular-ui-router.min.js"></script>
   <script src="scripts/angular-animate.min.js"></script>
+  <script src="scripts/angular-performance.min.js"></script>
   <script src="scripts/json-formatter.min.js"></script>
   <script src="scripts/ipsum.min.js"></script>
   <script src="scripts/foundation.min.js"></script>

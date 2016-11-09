@@ -10,6 +10,9 @@
 var PARTICLE = angular.module('PARTICLE', ['ngAnimate','ui.router','jsonFormatter']);
 
 PARTICLE.config(function($provide, $stateProvider,$urlRouterProvider,CONFIG) {
+  
+  console.log("CONFIG",CONFIG)
+  
   $provide.factory('$stateProvider', function () {
       return $stateProvider;
   });
@@ -21,30 +24,27 @@ PARTICLE.config(function($provide, $stateProvider,$urlRouterProvider,CONFIG) {
 });
 
 
-PARTICLE.run(function($stateProvider,$urlRouterProvider,$state,$location,CONFIG,MESSAGES,ERRORS,STATES,dataIo,appConfig) {
+PARTICLE.run(function($stateProvider,$urlRouterProvider,$state,$location,$timeout,CONFIG,dataIo,appConfig) {
 
-
-
-   $stateProvider
-
-     // HOME ===================================================================
-     .state('home', {
-       url: '/',
-       views: {
-         '': {
-           templateUrl: 'views/home/main.html',
-         },
-         'tagline': {
-           templateUrl: 'views/home/tagline.html',
-         },
-         'headerContent': {
-           templateUrl: 'views/home/header-content.html',
-         },
-         'relatedContent': {
-           template: '',
-         }
-       }
-     })
+$stateProvider
+ // HOME ===================================================================
+ .state('home', {
+   url: '/',
+   views: {
+     '': {
+       templateUrl: 'views/home/main.html',
+     },
+     'tagline': {
+       templateUrl: 'views/home/tagline.html',
+     },
+     'headerContent': {
+       templateUrl: 'views/home/header-content.html',
+     },
+     'relatedContent': {
+       template: '',
+     }
+   }
+ });
 
   var madeStates = [];
 
@@ -67,7 +67,9 @@ PARTICLE.run(function($stateProvider,$urlRouterProvider,$state,$location,CONFIG,
   	}
 
 	  stateProperties.params = {};
-    stateProperties.params[type] = {}
+    stateProperties.params[type] = {};
+    stateProperties.hash = obj._id;
+    stateProperties.title =  obj.title;
 	if (type=="collections") {
 	  stateProperties.templateUrl= CONFIG.viewPath + "sections.html"
 	  stateProperties.controller = "content";
@@ -88,9 +90,6 @@ PARTICLE.run(function($stateProvider,$urlRouterProvider,$state,$location,CONFIG,
     stateProperties.params.contentFile = CONFIG.contentPath + type + "/" + obj["_id"] + CONFIG.contentFileSuffix;
 	} else {
 	  stateProperties.templateUrl= CONFIG.viewPath+ type + ".html"
-	  // stateProperties.controller = "content";
-//     stateProperties.params.contentFile = CONFIG.contentPath + type + "/" + obj["_id"] + CONFIG.contentFileSuffix;
-//     stateProperties.params.contentType = type;
 	  stateProperties.params.state = slug;
 	}
 
@@ -137,9 +136,13 @@ PARTICLE.run(function($stateProvider,$urlRouterProvider,$state,$location,CONFIG,
     var objs = {};
     objs.collections = _data.data
     makeCollectionIntoStates(objs,null,madeStates);
-    appConfig.settings.states = madeStates;
-    console.log(appConfig.settings.states);
-    console.log($location.path())
+    
+    $timeout(function(){
+      appConfig.settings.states = madeStates;
+    }, Math.floor((Math.random()*1)+1) * 5);
+    
+    
+   
     if ($location.path() != "/" && $location.path() != "") {
     $state.go($location.path().replaceAll("/","."));
     } else {
@@ -163,20 +166,17 @@ PARTICLE.run(function($stateProvider,$urlRouterProvider,$state,$location,CONFIG,
  *    └─┘└─┘┘└┘ ┴ └─┘┘└┘ ┴   └─┘└─┘┘└┘ ┴ ┴└─└─┘┴─┘┴─┘└─┘┴└─
  ------------------------------------------------------------------------------------------------------------------------
  **/
-  PARTICLE.controller("content",function($scope,$stateParams,$state,$sce,dataIo,CONFIG,MESSAGES,ERRORS,STATES) {
-
+  PARTICLE.controller("content",function($scope,$stateParams,$state,$sce,dataIo,CONFIG) {
 
     dataIo.getFile({
       file:$stateParams.contentFile
-    }).then(function(_data){
-
-      //$scope[$stateParams.contentType] = parseContent(_data.data);
-      $scope.content = dataIo.parseContent(_data.data);      
-
+    }).then(function(_data){      
+      $scope.content = dataIo.parseContent(_data.data);     
+      //$scope.content = dataIo.parseContent(_data.data[Object.keys(obj)[0]]);      
+       
     }).catch(function (_data) {
       $scope.content = _data;
     });
-
 
   });
 /** END: content: CONTROLLER
@@ -190,19 +190,39 @@ PARTICLE.run(function($stateProvider,$urlRouterProvider,$state,$location,CONFIG,
  ------------------------------------------------------------------------------------------------------------------------
  **/
 
-  PARTICLE.controller("ui",function($stateProvider,$urlRouterProvider,$state,$scope, $datasource,$timeout,dataIo,$q,CONFIG,MESSAGES,ERRORS,STATES,appConfig) {
+  PARTICLE.controller("ui",function($stateProvider,$urlRouterProvider,$state,$scope,$location,$timeout,$anchorScroll,$timeout,dataIo,$q,CONFIG,appConfig) {
 
     $scope.appConfig = appConfig;
-    $scope.CONFIG   = CONFIG;
-    $scope.MESSAGES = MESSAGES;
-    $scope.ERRORS   = ERRORS;
     $scope.db = [];
     $scope.ui = [];
 
-    $scope.STATES= STATES;
     $scope.gotoState = function(state){
       $state.go(state)
     };
+    
+    $scope.hash = "";
+    
+    $scope.$on('$stateChangeSuccess', function (event, state, params, fromState, fromParams) 
+    {
+         console.log('stateChangeSuccess');
+         $location.hash("scrollPoint-" + $scope.hash);
+       
+        // $timeout(function(){
+        // console.log("READY TO SCROLL!!!");
+        // $anchorScroll();
+        // }, Math.floor((Math.random()*1)+1) * 5000);
+
+    });
+    
+    $scope.scrollTo = function(where) {
+      console.log(where)
+      $scope.hash = where.hash
+      
+
+      
+           // call $anchorScroll()
+           //$anchorScroll();
+    }
     
     dataIo.getFile({
       file:CONFIG.contentPath + "articles.json"
@@ -1121,7 +1141,7 @@ PARTICLE.directive('contentBlock', function ($parse, $window, $timeout,dataIo,CO
         $timeout(function(){
           scope.content = dataIo.parseContent(_data.data);
           scope.loaded = true;
-        }, Math.floor((Math.random()*3)+1) * 500);
+        }, Math.floor((Math.random()*1)+1) * 50);
 
       }).catch(function (_data) {
         console.log("Error in DIRECTIVE:contentBlock")
@@ -4895,25 +4915,40 @@ function resRef(obj, str) {
 
   var initInjector = angular.injector(["ng"]);
   var $http = initInjector.get("$http");
+  
+  //Load navigation
+  var getNavigation = function(settings) {
+    
+    $http.get(settings.navigationFile)
+      .then(function(response) {
+        settings.nav = {};
+        settings.nav = response.data;
+        PARTICLE.constant("CONFIG", settings);
+        PARTICLE.value('appConfig',{
+          settings: {},
+          errors:[],
+          messages:[],
+        });
+      })
+      .then(function bootstrapApplication() {
+        angular.bootstrap(document.body,["PARTICLE"]);
+        angular.element(document).ready(function() { });
+      })
+      .catch(function (data) {
+        console.log("Unable to load: ",settings.navigationFil);
+      });
+  }
 
-  //LOADING CONFIG before we bootstrap the app
+  //Load app configuration before we bootstrap the app
   return $http.get("app-config.json")
   .then(function(response) {
-    PARTICLE.constant("CONFIG", response.data);
-    PARTICLE.value('ERRORS',[]);
-    PARTICLE.value('MESSAGES',[]);
-    PARTICLE.value('STATES',{});
-    PARTICLE.value('appConfig',{
-            apiUrl: '/api',
-            settings: {}
-    })
-  })
-  .then(function bootstrapApplication() {
-    angular.bootstrap(document.body,["PARTICLE"]);
-    angular.element(document).ready(function() { });
+    getNavigation(response.data)
   })
   .catch(function (data) {
     console.log("Unable to load /app-configs.json");
   });
+  
+  
+  
 
 }());
