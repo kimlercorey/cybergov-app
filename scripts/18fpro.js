@@ -20,21 +20,6 @@ function resizeOffCanvas() {
 $( document ).ready(function() {
 
   /**
-   * Initialize Foundation plugins after a short delay (change to fire on callback)
-   */
-  window.setTimeout( function() {
-    $( document ).foundation();
-  }, 2000 );
-
-  /**
-   * Toggle hamburger menu animation state when clicked
-   */
-  $('.header-button > button').click(function(){
-    $(this).toggleClass('open');
-  });
-
-
-  /**
    * Trigger resizeOffCanvas() function when window is resized
    */
   $( window ).resize(function() {

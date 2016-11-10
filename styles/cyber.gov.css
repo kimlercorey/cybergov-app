@@ -5462,6 +5462,39 @@ body {
   }
 }
 
+.sticky-container {
+  position: relative;
+}
+
+.sticky {
+  position: absolute;
+  z-index: 0;
+  transform: translate3d(0, 0, 0);
+}
+
+.sticky.is-stuck {
+  position: fixed;
+  z-index: 5;
+}
+
+.sticky.is-stuck.is-at-top {
+  top: 0;
+}
+
+.sticky.is-stuck.is-at-bottom {
+  bottom: 0;
+}
+
+.sticky.is-anchored {
+  position: absolute;
+  left: auto;
+  right: auto;
+}
+
+.sticky.is-anchored.is-at-bottom {
+  bottom: 0;
+}
+
 div,
 dl,
 dt,
@@ -9774,6 +9807,15 @@ polygon path.nt,
   transition: fill 0.5s ease;
 }
 
+[ng\:cloak],
+[ng-cloak],
+[data-ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak {
+  display: none !important;
+}
+
 /**
  * Links:
  *
@@ -10315,8 +10357,10 @@ li {
   }
 }
 
-.header-bar.row {
-  margin-bottom: 1rem;
+@media screen and (min-width: 40em) {
+  .header-bar.row {
+    margin-bottom: 1rem;
+  }
 }
 
 .header-bar.row h1 {
@@ -10491,7 +10535,7 @@ li {
 }
 
 .header-button-icons a svg {
-  max-width: 100%;
+  max-width: 2em;
 }
 
 @media screen and (min-width: 40em) {
@@ -10506,32 +10550,33 @@ li {
   border-right: 1px solid #5b616b;
 }
 
-.header-button-menu > button {
+.header-button-menu > div > button {
   width: 4.5em;
   height: 4.5em;
   font-size: 1em;
   background-color: #5b616b;
+  transition: all 0s;
 }
 
-.header-button-menu > button:active span, .header-button-menu > button:focus span, .header-button-menu > button:hover span, .header-button-menu > button.open span {
+.header-button-menu > div > button:active span, .header-button-menu > div > button:focus span, .header-button-menu > div > button:hover span, .header-button-menu > div > button.open span {
   background-color: #9bdaf1;
 }
 
-.header-button-menu > button.open span:nth-child(1), .header-button-menu > button.open span:nth-child(4) {
+.header-button-menu > div > button[aria-expanded='true'] span:nth-child(1), .header-button-menu > div > button[aria-expanded='true'] span:nth-child(4) {
   top: 2em;
   left: 50%;
   width: 0%;
 }
 
-.header-button-menu > button.open span:nth-child(2) {
+.header-button-menu > div > button[aria-expanded='true'] span:nth-child(2) {
   transform: rotate(45deg);
 }
 
-.header-button-menu > button.open span:nth-child(3) {
+.header-button-menu > div > button[aria-expanded='true'] span:nth-child(3) {
   transform: rotate(-45deg);
 }
 
-.header-button-menu > button span {
+.header-button-menu > div > button span {
   position: absolute;
   left: 1em;
   display: block;
@@ -10544,15 +10589,15 @@ li {
   transition: 0.5s ease;
 }
 
-.header-button-menu > button span:nth-child(1) {
+.header-button-menu > div > button span:nth-child(1) {
   top: 1em;
 }
 
-.header-button-menu > button span:nth-child(2), .header-button-menu > button span:nth-child(3) {
+.header-button-menu > div > button span:nth-child(2), .header-button-menu > div > button span:nth-child(3) {
   top: 2em;
 }
 
-.header-button-menu > button span:nth-child(4) {
+.header-button-menu > div > button span:nth-child(4) {
   top: 3em;
 }
 
@@ -10676,6 +10721,42 @@ li {
 @media screen and (min-width: 40em) {
   .row-subheader h2 {
     font-size: 2em;
+  }
+}
+
+.sticky-header.header-alerts-container.row.closed .header-alerts,
+.sticky-header .header-icon,
+.sticky-header .header-long-content,
+.sticky-header .official-website,
+.sticky-header .tagline {
+  display: none;
+}
+
+.sticky-header .header-bar.row {
+  margin: 0;
+}
+
+.sticky-header .header-main {
+  padding-top: 0;
+}
+
+.sticky-header .header-main h1 {
+  margin: 0.25em 0;
+  font-size: 1.75em;
+}
+
+.sticky-header .header-main h2 {
+  margin: 0;
+  font-size: 1em;
+}
+
+.sticky-header .header-main-content .columns {
+  padding: 0;
+}
+
+@media screen and (min-width: 40em) {
+  .sticky-header .header-top {
+    font-size: 0.75em;
   }
 }
 
@@ -10992,22 +11073,6 @@ body {
 
 .off-canvas-wrapper {
   overflow: hidden;
-}
-
-.off-canvas-wrapper:before, .off-canvas-wrapper:after {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: -2;
-  width: 250px;
-  height: 100%;
-  background-color: #5b616b;
-  content: '';
-}
-
-.off-canvas-wrapper:after {
-  right: 0;
-  left: auto;
   background-color: #5b616b;
 }
 
