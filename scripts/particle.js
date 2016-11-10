@@ -1097,8 +1097,8 @@ PARTICLE.directive('contentBlock', function ($parse, $window, $timeout,dataIo,CO
         file:CONFIG.contentPath + scope.type+"/"+scope.obj[idlocation]+CONFIG.contentFileSuffix
       }).then(function(_data){
 
-        scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
-        scope.loaded = true;
+        // scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
+        // scope.loaded = true;
 
         /***
          *    ███████╗ █████╗ ██╗  ██╗███████╗    ███████╗███████╗██████╗ ██╗   ██╗███████╗██████╗     ██████╗ ███████╗██╗      █████╗ ██╗   ██╗
@@ -1110,11 +1110,11 @@ PARTICLE.directive('contentBlock', function ($parse, $window, $timeout,dataIo,CO
          *
          */
 
-        // $timeout(function(){
-        //   //scope.content = dataIo.parseContent(_data.data);
-        //   scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
-        //   scope.loaded = true;
-        // }, Math.floor((Math.random()*10)+1) * 50);
+        $timeout(function(){
+          //scope.content = dataIo.parseContent(_data.data);
+          scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
+          scope.loaded = true;
+        }, 500);
 
       }).catch(function (_data) {
         console.log("Error in DIRECTIVE:contentBlock")
