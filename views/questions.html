@@ -1,10 +1,20 @@
+<pre ng-if="CONFIG.showTemplateLabels" style="line-height:90%">
+ *                  _   _               _   _         _
+ *  ___ _ _ ___ ___| |_|_|___ ___ ___  | |_| |_ _____| |
+ * | . | | | -_|_ -|  _| | . |   |_ -|_|   |  _|     | |
+ * |_  |___|___|___|_| |_|___|_|_|___|_|_|_|_| |_|_|_|_|
+ *   |_|
+ <hr>
+ <json-formatter json="content" open="1"></json-formatter>
+</pre>
+
 <div>
 
   <section>
     <h2>Ask the CISO a Question</h2>
     <form class="ask-question">
       <textarea title="Ask the CISO a Question" placeholder="Enter your question..."></textarea>
-      <button type="submit" class="button small expanded button-info" data-toggle="offCanvasRight">
+      <button type="submit" class="button small expanded button-info">
         <div class="button-info-icon">
           <span class="fa fa-send-o" aria-hidden="true"></span>
         </div>
@@ -15,7 +25,7 @@
 
   <section>
     <h2>Recent Questions</h2>
-    <content-block ng-repeat="question in content" obj="question" type="'questions'"></content-block>
+    <content-block ng-repeat="question in content.questions track by $index" data="{'obj':question, 'index':$index, 'type':'questions'}"></content-block>
   </section>
 
 </div>

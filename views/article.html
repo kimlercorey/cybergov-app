@@ -5,10 +5,11 @@
    <json-formatter json="content" open="1"></json-formatter>
   <hr>
 </pre>
+<div ng-if="CONFIG.showJSON">ARTICLE:</div>
+<div ng-if="CONFIG.showJSON" ng-include="'views/json-display.html'"></div>
 
-<section ng-if="!loaded">
-  <div class="loader">Loading...</div>
-</section>
+<div ng-include="'views/loading.html'"></div>
+
 <section ng-if="loaded" class="fade">
   <h3>{{content.title}}</h3>
   <p ng-bind-html="content.content.brief "></p>

@@ -1,22 +1,63 @@
-
+/***
+ *    ███╗   ███╗ █████╗ ██╗███╗   ██╗      ███╗   ███╗ ██████╗ ██████╗ ██╗   ██╗██╗     ███████╗
+ *    ████╗ ████║██╔══██╗██║████╗  ██║      ████╗ ████║██╔═══██╗██╔══██╗██║   ██║██║     ██╔════╝
+ *    ██╔████╔██║███████║██║██╔██╗ ██║█████╗██╔████╔██║██║   ██║██║  ██║██║   ██║██║     █████╗
+ *    ██║╚██╔╝██║██╔══██║██║██║╚██╗██║╚════╝██║╚██╔╝██║██║   ██║██║  ██║██║   ██║██║     ██╔══╝
+ *    ██║ ╚═╝ ██║██║  ██║██║██║ ╚████║      ██║ ╚═╝ ██║╚██████╔╝██████╔╝╚██████╔╝███████╗███████╗
+ *    ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝      ╚═╝     ╚═╝ ╚═════╝ ╚═════╝  ╚═════╝ ╚══════╝╚══════╝
+ *
+ *    This provider allows to create a central SINGLETON to hold important information
+ *    Specifically it allows us to store information generated during the .config function
+ *
+ */
 
 var PARTICLE = angular.module('PARTICLE', ['ngAnimate','ui.router','jsonFormatter']);
+// **************************************************************************************************************************
 
-PARTICLE.provider("centralObject", function () {
-  var obj={};
-  return {
-    set: function (property,value) {
-      console.log("Setting centralObject."+property+" to "+ value)
-      obj[property] = value;
-    },
-    $get: function () {
-      return obj;
-    }
-  };
-});
+/**************************************************************************************************************************
+ *
+ *     ██████╗███████╗███╗   ██╗████████╗██████╗  █████╗ ██╗      ██████╗ ██████╗      ██╗███████╗ ██████╗████████╗
+ *    ██╔════╝██╔════╝████╗  ██║╚══██╔══╝██╔══██╗██╔══██╗██║     ██╔═══██╗██╔══██╗     ██║██╔════╝██╔════╝╚══██╔══╝
+ *    ██║     █████╗  ██╔██╗ ██║   ██║   ██████╔╝███████║██║     ██║   ██║██████╔╝     ██║█████╗  ██║        ██║
+ *    ██║     ██╔══╝  ██║╚██╗██║   ██║   ██╔══██╗██╔══██║██║     ██║   ██║██╔══██╗██   ██║██╔══╝  ██║        ██║
+ *    ╚██████╗███████╗██║ ╚████║   ██║   ██║  ██║██║  ██║███████╗╚██████╔╝██████╔╝╚█████╔╝███████╗╚██████╗   ██║
+ *     ╚═════╝╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝  ╚════╝ ╚══════╝ ╚═════╝   ╚═╝
+ *
+ *    This provider allows to create a central SINGLETON to hold important information
+ *    Specifically it allows us to store information generated during the .config function
+ *
+ */
 
+  PARTICLE.provider("centralObject", function () {
+    var obj={};
+    return {
+      set: function (property,value) {
+        console.log("Setting centralObject."+property+" to "+ value)
+        obj[property] = value;
+      },
+      $get: function () {
+        return obj;
+      }
+    };
+  });
+
+// **************************************************************************************************************************
+
+
+/***
+ *        ██████╗ ██████╗ ███╗   ██╗███████╗██╗ ██████╗
+ *       ██╔════╝██╔═══██╗████╗  ██║██╔════╝██║██╔════╝
+ *       ██║     ██║   ██║██╔██╗ ██║█████╗  ██║██║  ███╗
+ *       ██║     ██║   ██║██║╚██╗██║██╔══╝  ██║██║   ██║
+ *    ██╗╚██████╗╚██████╔╝██║ ╚████║██║     ██║╚██████╔╝
+ *    ╚═╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝     ╚═╝ ╚═════╝
+ *
+ *
+ *    This provider allows to create a central SINGLETON to hold important information
+ *    Specifically it allows us to store information generated during the .config function
+ *
+ */
 PARTICLE.config(function($stateProvider,$urlRouterProvider,CONFIG,centralObjectProvider) {
-
 
   var applicationStates = [];
 
@@ -24,14 +65,16 @@ PARTICLE.config(function($stateProvider,$urlRouterProvider,CONFIG,centralObjectP
 
     if (typeof obj == "object") {
 
-      var slug = "";
+      var slug = "", slim ="";
       var stateProperties = {};
       var singleType = type;
 
       if (parentName != null) {
         slug = parentName + "." + obj.slug;
+        slim = parentName + "-" + obj.slug;
       } else {
         slug = "" + obj.slug;
+        slim = "" + obj.slug;
       }
 
       if (singleType.charAt(singleType.length - 1) == 's') {
@@ -40,37 +83,45 @@ PARTICLE.config(function($stateProvider,$urlRouterProvider,CONFIG,centralObjectP
 
       stateProperties.params = {};
       stateProperties.params[type] = {};
+      stateProperties.params[slim] = {};
       stateProperties.hash = obj._id;
       stateProperties.title = obj.title;
-      if (type == "collections") {
-        stateProperties.templateUrl = CONFIG.viewPath + "sections.html"
-        stateProperties.controller = "content";
+      stateProperties.params.conType = []
+
+      if (type=="collections") {
         stateProperties.views = {
-          '': {
-            templateUrl: CONFIG.viewPath + 'sections.html',
-            controller: 'content',
-          },
-          'headerContent': {
+          'headerContent@': {
             templateUrl: CONFIG.viewPath + 'header-content.html',
-            controller: 'content'
+            controller: singleType
           },
-          'rightSidebar': {
-            templateUrl: CONFIG.viewPath + 'questions.html',
-            controller: 'questions'
-          },
-          'relatedContent': {
-            templateUrl: CONFIG.viewPath + 'related-content.html',
-            controller: 'content'
+          'primary@': {
+            templateUrl: CONFIG.viewPath + singleType+ '.html',
+            controller: singleType
           }
         };
-        stateProperties.params.contentFile = CONFIG.contentPath + type + "/" + obj["_id"] + CONFIG.contentFileSuffix;
+        stateProperties.somethingElse = singleType;
       } else {
-        stateProperties.templateUrl = CONFIG.viewPath + type + ".html"
-        stateProperties.params.state = slug;
+        stateProperties.views = {
+          'primary@': {
+            templateUrl: CONFIG.viewPath + singleType+ '.html',
+            controller: singleType
+          }
+        }
+
+        stateProperties.somethingElse = singleType;
+
       }
 
+
+
+      stateProperties.params.contentFile = CONFIG.contentPath + type + "/" + obj["_id"] + CONFIG.contentFileSuffix;
+      stateProperties.params[type] = CONFIG.contentPath + type + "/" + obj["_id"] + CONFIG.contentFileSuffix;
+      stateProperties.params[slim] = CONFIG.contentPath + type + "/" + obj["_id"] + CONFIG.contentFileSuffix;
+      stateProperties.params.conType.push(type);
+      stateProperties.params.state = slug;
       stateProperties.name = slug;
       stateProperties.url = "/" + obj.slug;
+
       $stateProvider.state(slug, stateProperties);
       stateProperties.subs = [];
       return stateProperties;
@@ -99,7 +150,7 @@ PARTICLE.config(function($stateProvider,$urlRouterProvider,CONFIG,centralObjectP
        }
      }
    }
- }
+  }
 
 
  $stateProvider
@@ -107,21 +158,14 @@ PARTICLE.config(function($stateProvider,$urlRouterProvider,CONFIG,centralObjectP
   .state('home', {
     url: '/',
     views: {
-      '': {
-        templateUrl: CONFIG.viewPath + 'home.html',
-      },
-      'tagline': {
+      'tagline@': {
         templateUrl: CONFIG.viewPath + 'tagline.html',
       },
-      'headerContent': {
+      'headerContent@': {
         templateUrl: CONFIG.viewPath + 'home-header.html',
       },
-      'rightSidebar': {
-        templateUrl: CONFIG.viewPath + 'questions.html',
-        controller: 'questions'
-      },
-      'relatedContent': {
-        template: '',
+      'primary@': {
+        templateUrl: CONFIG.viewPath + 'home.html',
       }
     }
   });
@@ -151,22 +195,66 @@ PARTICLE.config(function($stateProvider,$urlRouterProvider,CONFIG,centralObjectP
  *    └─┘└─┘┘└┘ ┴ └─┘┘└┘ ┴   └─┘└─┘┘└┘ ┴ ┴└─└─┘┴─┘┴─┘└─┘┴└─
  ------------------------------------------------------------------------------------------------------------------------
  **/
-
- PARTICLE.controller("content",function($scope,$stateParams,$state,$sce,dataIo,CONFIG) {
-
+PARTICLE.controller("collection",function($scope,$stateParams,$state,$timeout,dataIo,CONFIG) {
   $scope.CONFIG = CONFIG;
+  $scope.loaded = false;
+  console.log("collection:$STATE:",$state)
 
   dataIo.getFile({
-    file:$stateParams.contentFile
+    file:$stateParams.collections
   }).then(function(_data){
-    $scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
+
+    $timeout(function(){
+      $scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
+      $scope.loaded = true;
+    }, 500);
+
   }).catch(function (_data) {
     $scope.content = _data;
   });
 
 });
 
- PARTICLE.controller("questions",function($scope,$stateParams,$state,$sce,dataIo,CONFIG) {
+PARTICLE.controller("section",function($scope,$stateParams,$state,$timeout,dataIo,CONFIG) {
+
+  $scope.CONFIG = CONFIG;
+  $scope.loaded = false;
+  console.log("section: $STATE:",$state)
+
+  dataIo.getFile({
+    file:$stateParams.sections
+  }).then(function(_data){
+    $timeout(function(){
+      $scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
+      $scope.loaded = true;
+    }, 500);
+  }).catch(function (_data) {
+    $scope.content = _data;
+  });
+
+});
+
+
+PARTICLE.controller("article",function($scope,$stateParams,$state,$timeout,dataIo,CONFIG) {
+
+  $scope.CONFIG = CONFIG;
+  $scope.loaded = false;
+
+  dataIo.getFile({
+    file:$stateParams.articles
+  }).then(function(_data){
+    $timeout(function(){
+      $scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
+      $scope.loaded = true;
+    }, 500);
+  }).catch(function (_data) {
+    $scope.content = _data;
+  });
+
+});
+
+
+PARTICLE.controller("questions",function($scope,$stateParams,$state,$sce,dataIo,CONFIG) {
 
   $scope.CONFIG = CONFIG;
 
@@ -190,29 +278,65 @@ PARTICLE.config(function($stateProvider,$urlRouterProvider,CONFIG,centralObjectP
  *    └─┘┴  └─┘└─┘┘└┘ ┴ ┴└─└─┘┴─┘┴─┘└─┘┴└─
  ------------------------------------------------------------------------------------------------------------------------
  **/
-  // PARTICLE.controller("ui",function($stateProvider,$urlRouterProvider,$state,$scope,$location,$timeout,$anchorScroll,$timeout,dataIo,$q,CONFIG,appConfig,centralObject) {
+  PARTICLE.controller("ui",function($scope,centralObject,$timeout) {
 
-    PARTICLE.controller("ui",function($scope,centralObject,$timeout) {
+    $scope.CONFIG = centralObject.config;
+    $scope.applicationStates = centralObject.applicationStates;
+    $scope.centralObject = centralObject;
 
-      $scope.CONFIG = centralObject.config;
-      $scope.applicationStates = centralObject.applicationStates;
-      $scope.centralObject = centralObject;
+    /**
+     ------------------------------------------------------------------------------------------------------------------------
+     *    START
+     *    Can't reconcile Todd's change with mine (Scott's), so they're
+     *    probably duplicate functionality at the moment...
+     ------------------------------------------------------------------------------------------------------------------------
+     **/
 
-      $timeout(function(){
+    $scope.viewParameters = {};
+    $scope.setViewParameter = function(prop,val){  $scope.viewParameters[prop] = val; }
 
-        $( document ).foundation();
+    $scope.viewParams = {};
+    $scope.viewParamsChange = function(obj) {
+      for (var property in obj) {
+        if (obj.hasOwnProperty(property)) {
+          $scope.viewParams[property] = obj[property];
+        }
+      }
+    }
+    $scope.viewParamsChange($scope.CONFIG.viewParams);
 
-        $('#header-alerts-container')
-          .on('sticky.zf.stuckto:top', function(){
-            $(this).addClass('sticky-header');
-          })
-          .on('sticky.zf.unstuckfrom:top', function(){
-            $(this).removeClass('sticky-header');
-          });
+    /**
+     ------------------------------------------------------------------------------------------------------------------------
+     *    END
+     ------------------------------------------------------------------------------------------------------------------------
+     **/
 
-      }, 2000);
+    $timeout(function(){
+       $( document ).foundation();
+
+     $('#header-alerts-container')
+       .on('sticky.zf.stuckto:top', function(){
+         $(this).addClass('sticky-header');
+       })
+       .on('sticky.zf.unstuckfrom:top', function(){
+         $(this).removeClass('sticky-header');
+       });
+
+    },2000)
+
+    $scope.$on('$stateChangeSuccess', function () {
+
+      if ( $('#offCanvasLeft').hasClass('is-open') ) {
+        $('#offCanvasLeft').foundation('close');
+      }
+
+      if ( $('#offCanvasRight').hasClass('is-open') ) {
+        $('#offCanvasRight').foundation('close');
+      }
 
     });
+
+  });
 
 /** END: ui:CONTROLLER
 ------------------------------------------------------------------------------------------------------------------------ **/
@@ -1027,7 +1151,7 @@ PARTICLE.directive('member', function ($compile, $rootScope, $timeout) {
 
     };
 });
-PARTICLE.directive('contentBlock', function ($parse, $window, $timeout,dataIo,CONFIG,$sce) {
+PARTICLE.directive('contentBlock', function ($timeout,dataIo,CONFIG) {
 
   var directiveDefinitionObject = {
 
@@ -1051,7 +1175,9 @@ PARTICLE.directive('contentBlock', function ($parse, $window, $timeout,dataIo,CO
    *       ╚═╝   ╚══════╝╚═╝     ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
    *
    */
-  template: '<ng-include src="getTemplateUrl()"/>',
+  // template: '<ng-include src="getTemplateUrl()"/>',
+  template: '<div ng-include="getTemplateUrl()"></div>',
+  transclude:true,
 
   /***
   *    ███████╗ ██████╗ ██████╗ ██████╗ ███████╗
@@ -1063,9 +1189,7 @@ PARTICLE.directive('contentBlock', function ($parse, $window, $timeout,dataIo,CO
   *
   */
   scope: {
-    index:"=",
-    obj:"=",
-    type:"="
+    data:"="
   },
 
     /***
@@ -1077,33 +1201,34 @@ PARTICLE.directive('contentBlock', function ($parse, $window, $timeout,dataIo,CO
      *    ╚══════╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝
      *
      */
-    link: function (scope, element, attrs) {
-
-      scope.loaded = null;
-      scope.error = null;
-      scope.CONFIG = CONFIG;
-      var singleType = scope.type;
+  controller: function ($scope) {
+      $scope.loaded = null;
+      $scope.error = null;
+      $scope.CONFIG = CONFIG;
+      var singleType = $scope.data.type;
       var idlocation = "_id";
 
-      if (scope.obj._id) {
+
+      if ($scope.data.obj._id) {
         idlocation = "_id";
       } else {
         idlocation = "$oid";
       }
 
-      scope.getTemplateUrl = function() {
+      var singleType = $scope.data.type;
+
+      $scope.getTemplateUrl = function() {
+        // console.log("$scope.getTemplateUrl:" + $scope.data.type + ":" + $scope.data.index);
         if (singleType.charAt(singleType.length - 1) == 's') {  singleType= singleType.substr(0, singleType.length - 1); }
-        scope.singleType = singleType;
+        $scope.singleType = singleType;
         return CONFIG.viewPath+singleType+".html";
       }
 
       dataIo.getFile({
-        file:CONFIG.contentPath + scope.type+"/"+scope.obj[idlocation]+CONFIG.contentFileSuffix
+        file:CONFIG.contentPath + $scope.data.type+"/"+$scope.data.obj[idlocation]+CONFIG.contentFileSuffix
       }).then(function(_data){
-
-        // scope.content = dataIo.parseContent(_data.data);
-        // $scope.content = dataIo.parseContent(_data.data[Object.keys(obj)[0]]);
-  //       scope.loaded = true;
+        // scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
+        // scope.loaded = true;
 
         /***
          *    ███████╗ █████╗ ██╗  ██╗███████╗    ███████╗███████╗██████╗ ██╗   ██╗███████╗██████╗     ██████╗ ███████╗██╗      █████╗ ██╗   ██╗
@@ -1116,18 +1241,16 @@ PARTICLE.directive('contentBlock', function ($parse, $window, $timeout,dataIo,CO
          */
 
         $timeout(function(){
-          //scope.content = dataIo.parseContent(_data.data);
-          scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
-          scope.loaded = true;
-        }, Math.floor((Math.random()*10)+1) * 50);
+          $scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
+          $scope.loaded = true;
+        }, 500);
 
-      }).catch(function (_data) {
+        }).catch(function (_data) {
         console.log("Error in DIRECTIVE:contentBlock")
-        scope.error = _data;
+        $scope.error = _data;
       });
 
-    } //--END link: function
-
+    }
   }; //--END directiveDefinitionObject
 
 
@@ -4027,12 +4150,34 @@ PARTICLE.factory('dataIo', ['$http', 'dataRigger','CONFIG','$sce', function ($ht
           var dataIo = {};
 
 		        dataIo.getFile = function (_params) {
+              if (CONFIG.showConsoleLogs) {
+                console.log("dataIo.getFile",_params)
+              }
 		          var searchData = dataRigger.getNew("file", _params);
 		            return $http({
 		                method: 'GET',
 		                url: searchData.object.file,
 		                params: searchData.object,
 		            });
+		        };
+            
+		        dataIo.getContent = function (_params) {
+              var that = this;
+              if (CONFIG.showConsoleLogs) {
+                console.log("dataIo.getContent",_params.file)
+              }
+		          var searchData = dataRigger.getNew("file", _params);
+		            $http({
+		                method: 'GET',
+		                url: searchData.object.file,
+		                params: searchData.object,
+		            }).then(function(_data){
+                  console.log(_data.data[Object.keys(_data.data)[0]])
+		              _params.content=that.parseContent(_data.data[Object.keys(_data.data)[0]])
+                  console.log("_params.content",_params.content);
+		            }).catch(function (_data) {
+                  $scope.content = _data;
+                  });
 		        };
             
             dataIo.parseContent = function(obj) {
@@ -4888,7 +5033,6 @@ function resRef(obj, str) {
  */
 
 
-
 (function() {
 
   /***
@@ -4903,7 +5047,6 @@ function resRef(obj, str) {
   // Inject the $http angular service so we can load files
   var initInjector = angular.injector(["ng"]);
   var $http = initInjector.get("$http");
-
 
   /***
    *     ██╗   

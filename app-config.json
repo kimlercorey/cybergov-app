@@ -1,6 +1,7 @@
 {
   "showTemplateLabels":false,
   "showJSON":false,
+  "showConsoleLogs":false,
   "showMessages":true,
   "statesPath":"content/states.json",
   "contentPath":"api/v1/",
@@ -9,5 +10,6 @@
   "trustedHTML":["brief","extended","micro"],
   "navigationFile":"api/v1/nav.json",
   "collectionsStateObjects":["collections","sections","articles"],
-  "cleaningObjects":["content","more"]
+  "cleaningObjects":["content","more"],
+  "viewParams": { "sideView": "questions" }
 }

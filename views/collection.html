@@ -3,7 +3,10 @@
  *    └─┐├┤ │   │ ││ ││││└─┐ ├─┤ │ ││││
  *    └─┘└─┘└─┘ ┴ ┴└─┘┘└┘└─┘o┴ ┴ ┴ ┴ ┴┴─┘
  <hr>
- <json-formatter json="content" open="1"></json-formatter>
 </pre>
 
+<div ng-if="CONFIG.showJSON" ng-include="'views/json-display.html'"></div>
+
+<h1>{{content.title}}:</h1>
+<p ng-bind-html="content.content.extended"></p>
 <content-block ng-repeat="section in content.sections track by $index" data="{'obj':section, 'index':$index, 'type':'sections'}"></content-block>
