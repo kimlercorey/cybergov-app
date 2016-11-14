@@ -1,6 +1,4 @@
-<section ng-if="!loaded">
-  <div class="loader">Loading...</div>
-</section>
+<div ng-include="'views/loading.html'"></div>
 
 <article ng-if="loaded" id="{{content._id['$oid']}}">
   <time>{{content.publishedDate.$date | date : longDate}}</time>

@@ -2,16 +2,16 @@
    *    ┌─┐┬┌┐┌┌─┐┬  ┌─┐  ┌─┐┌─┐┌─┐┌┬┐┬┌─┐┌┐┌
    *    └─┐│││││ ┬│  ├┤   └─┐├┤ │   │ ││ ││││
    *    └─┘┴┘└┘└─┘┴─┘└─┘  └─┘└─┘└─┘ ┴ ┴└─┘┘└┘
-   <json-formatter json="content" open="1"></json-formatter>
   <hr>
 </pre>
 
-<section ng-if="!loaded">
-  <div class="loader">Loading...</div>
-</section>
+<div ng-if="CONFIG.showJSON">SECTION:</div>
+<div ng-if="CONFIG.showJSON" ng-include="'views/json-display.html'"></div>
 
-<section ng-if="loaded" id="scrollPoint-{{content._id['$oid']}}">
+<div ng-include="'views/loading.html'"></div>
+
+<section ng-if="content">
   <h2>{{content.title}}</h2>
   <p ng-bind-html="content.content.micro"></p>
-  <content-block ng-repeat="article in content.articles" obj="article" type="'articles'"></content-block>
+  <content-block ng-repeat="article in content.articles track by $index" data="{'obj':article, 'index':$index, 'type':'articles'}"></content-block>
 </section>

@@ -19,11 +19,9 @@
 
           <div class="small-24 medium-expand columns small-order-2 medium-order-1 padding-none max-global">
 
-            <header id="header-alerts-container" class="row expanded row-header header-alerts-container closed" data-toggler=".closed">
+            <header class="row expanded row-header">
 
-              <div ng-include="'views/header-alerts.html'" class="small-24 large-6 columns small-order-1 large-order-2 header-alerts"></div>
-
-              <div class="small-24 large-18 columns small-order-2 large-order-1 padding-none header-alerts-adjacent">
+              <div class="small-24 columns small-order-2 large-order-1 padding-none">
 
                 <div class="row">
                   <div class="small-24 columns padding-none official-website">
@@ -35,15 +33,18 @@
                 <div class="row row-grow">
 
                   <div class="columns shrink header-top header-button header-button-menu">
-                    <button type="button" data-toggle="offCanvasLeft" title="Open Navigation Menu">
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                    </button>
-                    <div ng-if="!applicationStates"  class="loader">Loading...</div>
+                    <div ng-if="!applicationStates">
+                      <div class="loader">Loading...</div>
+                    </div>
+                    <div ng-cloak ng-if="applicationStates">
+                      <button type="button" data-toggle="offCanvasLeft" title="Open Navigation Menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                      </button>
+                    </div>
                   </div>
-
 
                   <div class="columns header-top header-main padding-bottom-none">
 
@@ -52,7 +53,7 @@
                       <h2 class="small-24 large-16 columns" ui-view="tagline"></h2>
                     </div>
 
-                    <div ui-view="headerContent"></div>
+                    <div ui-view="headerContent" class="header-main-content"></div>
 
                   </div>
 
@@ -66,7 +67,7 @@
 
               <div class="columns shrink column-border show-for-medium"></div>
 
-              <article ui-view class="columns columns-content"></article>
+              <article ui-view="primary" class="columns columns-content"></article>
 
               <aside ui-view="relatedContent" class="small-24 medium-6 xlarge-8 columns content-sidebar"></aside>
 
@@ -82,7 +83,15 @@
 
       <div ng-include="'views/main-nav.html'" class="off-canvas position-left navbar" id="offCanvasLeft" data-off-canvas></div>
 
-      <div ui-view="rightSidebar" class="off-canvas position-right sidebar" id="offCanvasRight" data-off-canvas data-position="right"></div>
+      <div class="off-canvas position-right sidebar" id="offCanvasRight" data-off-canvas data-position="right">
+        <div class="text-right">
+          <button class="secondary button button-close" aria-label="Close" type="button" data-close>
+            <span class="fa fa-2x fa-times" aria-hidden="true"></span>
+          </button>
+        </div>
+        {{viewParams.sideView }}
+        <div ng-include="'views/' + viewParams.sideView + '.html'">
+      </div>
 
     </div>
   </div>

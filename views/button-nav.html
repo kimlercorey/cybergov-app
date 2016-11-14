@@ -7,7 +7,7 @@
     </div>
   </a>
 
-  <a data-toggle="header-alerts-container" type="button" title="Alerts">
+  <a data-open="offCanvasRight" ng-click="viewParamsChange({ 'sideView': 'alerts' })" type="button" title="Alerts">
     <div class="row">
       <div class="columns" ng-include="'images/icons/alerts.svg'" aria-hidden="true"></div>
       <div class="xxxlarge-18 xxxxlarge-20 show-for-xxxlarge columns align-middle">Alerts</div>
@@ -21,14 +21,14 @@
     </div>
   </a>
 
-  <a ui-sref="protect-yourself" type="button" title="Protect Yourself">
+  <a ui-sref="protect-yourself-1" type="button" title="Protect Yourself">
     <div class="row">
       <div class="columns" ng-include="'images/icons/umbrella.svg'" aria-hidden="true"></div>
       <div class="xxxlarge-18 xxxxlarge-20 show-for-xxxlarge columns align-middle">Protect Yourself</div>
     </div>
   </a>
 
-  <a data-toggle="offCanvasRight" type="button" title="Ask the CISO">
+  <a data-open="offCanvasRight" ng-click="viewParamsChange({ 'sideView': 'questions' })" type="button" title="Ask the CISO">
     <div class="row">
       <div class="columns" ng-include="'images/icons/paper-airplane.svg'" aria-hidden="true"></div>
       <div class="xxxlarge-18 xxxxlarge-20 show-for-xxxlarge columns align-middle">Ask the CISO</div>

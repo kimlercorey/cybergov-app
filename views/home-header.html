@@ -6,13 +6,13 @@
     <p>Access various resources to help improve your cybersecurity posture.</p>
   </a>
 
-  <a ui-sref="protect-yourself" id="big-icon-umbrella" class="small-24 medium-12 large-8 columns">
+  <a ui-sref="protect-yourself-1" id="big-icon-umbrella" class="small-24 medium-12 large-8 columns">
     <h3>Protect Yourself</h3>
     <div ng-include="'images/icons/umbrella-anim.svg'" aria-hidden="true"></div>
     <p>Learn the basics to protect your personal data and yourself online.</p>
   </a>
 
-  <a data-toggle="offCanvasRight" id="big-icon-airplane" class="small-24 medium-12 large-8 columns">
+  <a data-open="offCanvasRight" ng-click="viewParamsChange({ 'sideView': 'questions' })" id="big-icon-airplane" class="small-24 medium-12 large-8 columns">
     <h3>Ask the CISO</h3>
     <div ng-include="'images/icons/paper-airplane-anim.svg'" aria-hidden="true"></div>
     <p>Find answers to all your most important cybersecurity questions.</p>
@@ -23,7 +23,7 @@
 <div class="row button-report-container">
 
   <div class="small-24 large-16 columns padding-top-none padding-bottom-none">
-    <button ui-sref="get-help.incident-reporting" type="button" class="button button-info alert button-ask button-report">
+    <button ui-sref="get-help.report-an-incident" type="button" class="button button-info alert button-ask button-report">
       <div class="button-info-icon" ng-include="'images/icons/bang-circle.svg'" aria-hidden="true"></div>
       <div class="button-info-title">Report a cyber incident</div>
     </button>

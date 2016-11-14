@@ -6,10 +6,25 @@
   <hr>
 </pre>
 
-<section ng-if="!loaded">
-  <div class="loader">Loading...</div>
-</section>
-<section ng-if="loaded" class="fade">
+ARTICLE:
+<div ng-include="'views/loading.html'"></div>
+<div ng-if="CONFIG.showJSON" ng-include="'views/json-display.html'"></div>
+
+<div ng-include="'views/loading.html'"></div>
+
+<section ng-if="content" class="fade">
+  {{current}}<hr>
+  <json-formatter json="current" open="1"></json-formatter>
+  
+  {{hash}}{{content.slug}}
+  #{{hash}}/{{content.slug}}
+  <a href="#{{hash}}/{{content.slug}}">{{content.title}}</a>
+  
+  <a ui-sref="{{content.slug}}">name:{{content.title}}</a>
+  
+  <div ng-if="CONFIG.showJSON" ng-include="'views/json-display.html'"></div>
+
+  
   <h3>{{content.title}}</h3>
   <p ng-bind-html="content.content.brief "></p>
 </section>
