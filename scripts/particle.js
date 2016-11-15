@@ -32,7 +32,6 @@ var PARTICLE = angular.module('PARTICLE', ['ngAnimate','ui.router','jsonFormatte
     var obj={};
     return {
       set: function (property,value) {
-        console.log("Setting centralObject."+property+" to "+ value)
         obj[property] = value;
       },
       $get: function () {
@@ -42,7 +41,6 @@ var PARTICLE = angular.module('PARTICLE', ['ngAnimate','ui.router','jsonFormatte
   });
 
 // **************************************************************************************************************************
-
 
 /***
  *        ██████╗ ██████╗ ███╗   ██╗███████╗██╗ ██████╗
@@ -59,90 +57,87 @@ var PARTICLE = angular.module('PARTICLE', ['ngAnimate','ui.router','jsonFormatte
  */
 PARTICLE.config(function($stateProvider,$urlRouterProvider,CONFIG,centralObjectProvider) {
 
-  var applicationStates = [];
+  var objectStates = {}, applicationStates = [];
 
-  var returnStateFromObject = function(obj, type, parentName, arrayOfStates) {
+  var configState = function(obj, type, parentName, arrayOfStates,objectOfStates) {
 
     if (typeof obj == "object") {
 
-      var slug = "", slim ="";
-      var stateProperties = {};
-      var singleType = type;
+      var newState = obj;
 
-      if (parentName != null) {
-        slug = parentName + "." + obj.slug;
-        slim = parentName + "-" + obj.slug;
-      } else {
-        slug = "" + obj.slug;
-        slim = "" + obj.slug;
-      }
+      //ADD STATE PROPERTIES TO OBJECT
+      (parentName != null) ? newState.name = parentName + "." + obj.slug : newState.name = "" + obj.slug;
+      newState.contentFile = CONFIG.contentPath + type + "/" + obj["_id"] + CONFIG.contentFileSuffix;
+      newState.url = "/" + obj.slug;
+      newState.subs = [];
 
-      if (singleType.charAt(singleType.length - 1) == 's') {
-        singleType = singleType.substr(0, singleType.length - 1);
-      }
+      //ADD STATE VIEW PROPERTIES TO OBJECT
+      if (type == "collections") {
 
-      stateProperties.params = {};
-      stateProperties.params[type] = {};
-      stateProperties.params[slim] = {};
-      stateProperties.hash = obj._id;
-      stateProperties.title = obj.title;
-      stateProperties.params.conType = []
-
-      if (type=="collections") {
-        stateProperties.views = {
+        newState.views = {
           'headerContent@': {
             templateUrl: CONFIG.viewPath + 'header-content.html',
-            controller: singleType
+            controller: "content",
+            resolve: {
+              contentSettings: function() {
+                return newState;
+              }
+            }
           },
           'primary@': {
-            templateUrl: CONFIG.viewPath + singleType+ '.html',
-            controller: singleType
+            templateUrl: CONFIG.viewPath + type.single() + '.html',
+            controller: "content",
+            resolve: {
+              contentSettings: function() {
+                return newState;
+              }
+            }
           }
         };
-        stateProperties.somethingElse = singleType;
+
       } else {
-        stateProperties.views = {
+
+        newState.views = {
           'primary@': {
-            templateUrl: CONFIG.viewPath + singleType+ '.html',
-            controller: singleType
+            templateUrl: CONFIG.viewPath + type.single()  + '.html',
+            controller: "content",
+            resolve: {
+              contentSettings: function() {
+                return newState;
+              }
+            }
           }
         }
 
-        stateProperties.somethingElse = singleType;
-
-      }
+      }; //-- End else------
 
 
 
-      stateProperties.params.contentFile = CONFIG.contentPath + type + "/" + obj["_id"] + CONFIG.contentFileSuffix;
-      stateProperties.params[type] = CONFIG.contentPath + type + "/" + obj["_id"] + CONFIG.contentFileSuffix;
-      stateProperties.params[slim] = CONFIG.contentPath + type + "/" + obj["_id"] + CONFIG.contentFileSuffix;
-      stateProperties.params.conType.push(type);
-      stateProperties.params.state = slug;
-      stateProperties.name = slug;
-      stateProperties.url = "/" + obj.slug;
+      //Instantiate State
+      $stateProvider.state(newState.name, newState);
 
-      $stateProvider.state(slug, stateProperties);
-      stateProperties.subs = [];
-      return stateProperties;
+      objectOfStates[obj.slug] = { prop:newState };
+      return newState;
+
     } else {
       return null;
     }
   }
 
-  var makeCollectionIntoStates = function(obj, parentName, arrayOfStates) {
-   var pointer, newParent, newParentName = null;
+  var makeStates = function(obj, parentName, arrayOfStates,objectOfStates) {
+   var pointer, newParent, newParentName, newObRef = null;
    for (var property in obj) {
      if (obj.hasOwnProperty(property)) {
        if (CONFIG.collectionsStateObjects.inArray(property)) {
          if (Array.isArray(obj[property]) && obj[property].length) {
            for (var inst in obj[property]) {
              if (obj[property].hasOwnProperty(inst)) {
-               newParent = returnStateFromObject(obj[property][inst], property, parentName, arrayOfStates);
+               newParent = configState(obj[property][inst], property, parentName, arrayOfStates,objectOfStates);
                if (newParent !== null) {
                  arrayOfStates.push(newParent);
                  newParentName = newParent.name;
-                 makeCollectionIntoStates(obj[property][inst], newParentName, newParent.subs);
+                 newObRef = obj[property][inst].slug
+                 makeStates(obj[property][inst], newParentName, newParent.subs,objectOfStates[newObRef]);
                }
              }
            }
@@ -177,9 +172,12 @@ PARTICLE.config(function($stateProvider,$urlRouterProvider,CONFIG,centralObjectP
 
   var objs = {};
   objs.collections = CONFIG.nav
-  makeCollectionIntoStates(objs,null,applicationStates);
-  centralObjectProvider.set("applicationStates",applicationStates);
-  centralObjectProvider.set("config",CONFIG);
+  makeStates(objs,null,applicationStates,objectStates);
+
+    centralObjectProvider.set("applicationStates",applicationStates);
+    centralObjectProvider.set("config",CONFIG);
+    centralObjectProvider.set("objectStates",objectStates);
+
 
   //============================================================================
 
@@ -195,64 +193,22 @@ PARTICLE.config(function($stateProvider,$urlRouterProvider,CONFIG,centralObjectP
  *    └─┘└─┘┘└┘ ┴ └─┘┘└┘ ┴   └─┘└─┘┘└┘ ┴ ┴└─└─┘┴─┘┴─┘└─┘┴└─
  ------------------------------------------------------------------------------------------------------------------------
  **/
-PARTICLE.controller("collection",function($scope,$stateParams,$state,$timeout,dataIo,CONFIG) {
+PARTICLE.controller("content",function($scope,$stateParams,$state,$timeout,dataIo,CONFIG,contentSettings) {
+
   $scope.CONFIG = CONFIG;
-  $scope.loaded = false;
-  console.log("collection:$STATE:",$state)
+  $scope.content = null;
 
   dataIo.getFile({
-    file:$stateParams.collections
+    file:contentSettings.contentFile
   }).then(function(_data){
-
     $timeout(function(){
-      $scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
-      $scope.loaded = true;
-    }, 500);
-
+    $scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
+  }, 500);
   }).catch(function (_data) {
     $scope.content = _data;
   });
 
 });
-
-PARTICLE.controller("section",function($scope,$stateParams,$state,$timeout,dataIo,CONFIG) {
-
-  $scope.CONFIG = CONFIG;
-  $scope.loaded = false;
-  console.log("section: $STATE:",$state)
-
-  dataIo.getFile({
-    file:$stateParams.sections
-  }).then(function(_data){
-    $timeout(function(){
-      $scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
-      $scope.loaded = true;
-    }, 500);
-  }).catch(function (_data) {
-    $scope.content = _data;
-  });
-
-});
-
-
-PARTICLE.controller("article",function($scope,$stateParams,$state,$timeout,dataIo,CONFIG) {
-
-  $scope.CONFIG = CONFIG;
-  $scope.loaded = false;
-
-  dataIo.getFile({
-    file:$stateParams.articles
-  }).then(function(_data){
-    $timeout(function(){
-      $scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
-      $scope.loaded = true;
-    }, 500);
-  }).catch(function (_data) {
-    $scope.content = _data;
-  });
-
-});
-
 
 PARTICLE.controller("questions",function($scope,$stateParams,$state,$sce,dataIo,CONFIG) {
 
@@ -267,6 +223,22 @@ PARTICLE.controller("questions",function($scope,$stateParams,$state,$sce,dataIo,
   });
 
 });
+
+PARTICLE.controller("alerts",function($scope,$stateParams,$state,$sce,dataIo,CONFIG) {
+
+  $scope.CONFIG = CONFIG;
+
+  dataIo.getFile({
+    file:CONFIG.contentPath + "alerts.json"
+  }).then(function(_data){
+    $scope.alerts = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
+  }).catch(function (_data) {
+    $scope.alerts = _data;
+  });
+
+});
+
+PARTICLE.filter('unsafe', function($sce) { return $sce.trustAsHtml; });
 
 /** END: content: CONTROLLER
 ------------------------------------------------------------------------------------------------------------------------ **/
@@ -312,7 +284,8 @@ PARTICLE.controller("questions",function($scope,$stateParams,$state,$sce,dataIo,
      **/
 
     $timeout(function(){
-       $( document ).foundation();
+
+     $( document ).foundation();
 
      $('#header-alerts-container')
        .on('sticky.zf.stuckto:top', function(){
@@ -323,6 +296,9 @@ PARTICLE.controller("questions",function($scope,$stateParams,$state,$sce,dataIo,
        });
 
     },2000)
+
+    $scope.setViewParameter = function(prop,val){  $scope.viewParameters[prop] = val; }
+
 
     $scope.$on('$stateChangeSuccess', function () {
 
@@ -341,6 +317,110 @@ PARTICLE.controller("questions",function($scope,$stateParams,$state,$sce,dataIo,
 /** END: ui:CONTROLLER
 ------------------------------------------------------------------------------------------------------------------------ **/
 
+PARTICLE.directive('alertsBlock', function ($timeout,dataIo,CONFIG,$location,$state) {
+
+  var directiveDefinitionObject = {
+
+  /***
+   *    ███████╗██╗     ███████╗███╗   ███╗███████╗███╗   ██╗████████╗       ██╗        █████╗ ████████╗████████╗██████╗
+   *    ██╔════╝██║     ██╔════╝████╗ ████║██╔════╝████╗  ██║╚══██╔══╝       ██║       ██╔══██╗╚══██╔══╝╚══██╔══╝██╔══██╗
+   *    █████╗  ██║     █████╗  ██╔████╔██║█████╗  ██╔██╗ ██║   ██║       ████████╗    ███████║   ██║      ██║   ██████╔╝
+   *    ██╔══╝  ██║     ██╔══╝  ██║╚██╔╝██║██╔══╝  ██║╚██╗██║   ██║       ██╔═██╔═╝    ██╔══██║   ██║      ██║   ██╔══██╗
+   *    ███████╗███████╗███████╗██║ ╚═╝ ██║███████╗██║ ╚████║   ██║       ██████║      ██║  ██║   ██║      ██║   ██║  ██║
+   *    ╚══════╝╚══════╝╚══════╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝   ╚═╝       ╚═════╝      ╚═╝  ╚═╝   ╚═╝      ╚═╝   ╚═╝  ╚═╝
+   *
+   */
+  restrict: 'EA',
+
+  /***
+   *    ████████╗███████╗███╗   ███╗██████╗ ██╗      █████╗ ████████╗███████╗
+   *    ╚══██╔══╝██╔════╝████╗ ████║██╔══██╗██║     ██╔══██╗╚══██╔══╝██╔════╝
+   *       ██║   █████╗  ██╔████╔██║██████╔╝██║     ███████║   ██║   █████╗
+   *       ██║   ██╔══╝  ██║╚██╔╝██║██╔═══╝ ██║     ██╔══██║   ██║   ██╔══╝
+   *       ██║   ███████╗██║ ╚═╝ ██║██║     ███████╗██║  ██║   ██║   ███████╗
+   *       ╚═╝   ╚══════╝╚═╝     ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
+   *
+   */
+  template: '<div ng-include="getTemplateUrl()"></div>',
+  transclude:true,
+
+  /***
+  *    ███████╗ ██████╗ ██████╗ ██████╗ ███████╗
+  *    ██╔════╝██╔════╝██╔═══██╗██╔══██╗██╔════╝
+  *    ███████╗██║     ██║   ██║██████╔╝█████╗
+  *    ╚════██║██║     ██║   ██║██╔═══╝ ██╔══╝
+  *    ███████║╚██████╗╚██████╔╝██║     ███████╗
+  *    ╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚══════╝
+  *
+  */
+  scope: {
+    data:"="
+  },
+
+    /***
+     *    ██╗     ██╗███╗   ██╗██╗  ██╗
+     *    ██║     ██║████╗  ██║██║ ██╔╝
+     *    ██║     ██║██╔██╗ ██║█████╔╝
+     *    ██║     ██║██║╚██╗██║██╔═██╗
+     *    ███████╗██║██║ ╚████║██║  ██╗
+     *    ╚══════╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝
+     *
+     */
+  controller: function ($scope) {
+
+    $scope.loaded = null;
+    $scope.error = null;
+    $scope.CONFIG = CONFIG;
+    $scope.hash = $location.path();
+    $scope.current = $state.current.name;
+
+    var singleType = $scope.data.type;
+
+    $scope.getTemplateUrl = function() {
+      if (singleType.charAt(singleType.length - 1) == 's') {  singleType= singleType.substr(0, singleType.length - 1); }
+      $scope.singleType = singleType;
+      return CONFIG.viewPath+singleType+".html";
+    }
+
+      dataIo.getFile({
+        file:CONFIG.contentPath + $scope.data.type + CONFIG.contentFileSuffix
+      }).then(function(_data){
+
+          /***
+           *    ███████╗ █████╗ ██╗  ██╗███████╗    ███████╗███████╗██████╗ ██╗   ██╗███████╗██████╗     ██████╗ ███████╗██╗      █████╗ ██╗   ██╗
+           *    ██╔════╝██╔══██╗██║ ██╔╝██╔════╝    ██╔════╝██╔════╝██╔══██╗██║   ██║██╔════╝██╔══██╗    ██╔══██╗██╔════╝██║     ██╔══██╗╚██╗ ██╔╝
+           *    █████╗  ███████║█████╔╝ █████╗      ███████╗█████╗  ██████╔╝██║   ██║█████╗  ██████╔╝    ██║  ██║█████╗  ██║     ███████║ ╚████╔╝
+           *    ██╔══╝  ██╔══██║██╔═██╗ ██╔══╝      ╚════██║██╔══╝  ██╔══██╗╚██╗ ██╔╝██╔══╝  ██╔══██╗    ██║  ██║██╔══╝  ██║     ██╔══██║  ╚██╔╝
+           *    ██║     ██║  ██║██║  ██╗███████╗    ███████║███████╗██║  ██║ ╚████╔╝ ███████╗██║  ██║    ██████╔╝███████╗███████╗██║  ██║   ██║
+           *    ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝    ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚══════╝╚═╝  ╚═╝    ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝
+           *
+           */
+
+          $timeout(function(){
+            $scope.alert = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]])['channel']['item'][$scope.data.index];
+
+            $scope.title = $scope.alert.title.substring($scope.alert.title.indexOf(":") + 1);
+
+            var over = $scope.alert.description.match("<h3>Overview</h3>\n\t\t<p>(.*)</p>\t\t\n\t\t<h3>")[1];
+            over = over.replace(/\[.*\]/g,'');
+            over = over.split(' ').slice(0,24).join(' ');
+            $scope.overview = over + '&hellip; <a href="' + $scope.alert.link + '" class="read-more">Read more</a>';
+
+            $scope.loaded = true;
+          }, 500);
+
+      }).catch(function (_data) {
+        $scope.alert = _data;
+      });
+
+    }
+  }; //--END directiveDefinitionObject
+
+
+  return directiveDefinitionObject;
+
+
+});
 /***
 * ██████╗  █████╗ ██████╗      ██████╗██╗  ██╗ █████╗ ██████╗ ████████╗
 * ██╔══██╗██╔══██╗██╔══██╗    ██╔════╝██║  ██║██╔══██╗██╔══██╗╚══██╔══╝
@@ -1151,7 +1231,7 @@ PARTICLE.directive('member', function ($compile, $rootScope, $timeout) {
 
     };
 });
-PARTICLE.directive('contentBlock', function ($timeout,dataIo,CONFIG) {
+PARTICLE.directive('contentBlock', function ($timeout,dataIo,CONFIG,$location,$state) {
 
   var directiveDefinitionObject = {
 
@@ -1175,7 +1255,6 @@ PARTICLE.directive('contentBlock', function ($timeout,dataIo,CONFIG) {
    *       ╚═╝   ╚══════╝╚═╝     ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
    *
    */
-  // template: '<ng-include src="getTemplateUrl()"/>',
   template: '<div ng-include="getTemplateUrl()"></div>',
   transclude:true,
 
@@ -1202,27 +1281,27 @@ PARTICLE.directive('contentBlock', function ($timeout,dataIo,CONFIG) {
      *
      */
   controller: function ($scope) {
-      $scope.loaded = null;
-      $scope.error = null;
-      $scope.CONFIG = CONFIG;
-      var singleType = $scope.data.type;
-      var idlocation = "_id";
 
+    $scope.loaded = null;
+    $scope.error = null;
+    $scope.CONFIG = CONFIG;
+    $scope.hash = $location.path();
+    $scope.current = $state.current.name;
 
-      if ($scope.data.obj._id) {
-        idlocation = "_id";
-      } else {
-        idlocation = "$oid";
-      }
+    var singleType = $scope.data.type;
+    var idlocation = "_id";
 
-      var singleType = $scope.data.type;
+    if ($scope.data.obj._id) {
+      idlocation = "_id";
+    } else {
+      idlocation = "$oid";
+    }
 
-      $scope.getTemplateUrl = function() {
-        // console.log("$scope.getTemplateUrl:" + $scope.data.type + ":" + $scope.data.index);
-        if (singleType.charAt(singleType.length - 1) == 's') {  singleType= singleType.substr(0, singleType.length - 1); }
-        $scope.singleType = singleType;
-        return CONFIG.viewPath+singleType+".html";
-      }
+    $scope.getTemplateUrl = function() {
+      if (singleType.charAt(singleType.length - 1) == 's') {  singleType= singleType.substr(0, singleType.length - 1); }
+      $scope.singleType = singleType;
+      return CONFIG.viewPath+singleType+".html";
+    }
 
       dataIo.getFile({
         file:CONFIG.contentPath + $scope.data.type+"/"+$scope.data.obj[idlocation]+CONFIG.contentFileSuffix
@@ -1589,6 +1668,109 @@ PARTICLE.directive('itemBlock', function ($compile, $rootScope, $timeout) {
     };
 });
 
+PARTICLE.directive('loadBlock', function ($timeout,dataIo,CONFIG,$location,$state) {
+
+  var directiveDefinitionObject = {
+
+  /***
+   *    ███████╗██╗     ███████╗███╗   ███╗███████╗███╗   ██╗████████╗       ██╗        █████╗ ████████╗████████╗██████╗
+   *    ██╔════╝██║     ██╔════╝████╗ ████║██╔════╝████╗  ██║╚══██╔══╝       ██║       ██╔══██╗╚══██╔══╝╚══██╔══╝██╔══██╗
+   *    █████╗  ██║     █████╗  ██╔████╔██║█████╗  ██╔██╗ ██║   ██║       ████████╗    ███████║   ██║      ██║   ██████╔╝
+   *    ██╔══╝  ██║     ██╔══╝  ██║╚██╔╝██║██╔══╝  ██║╚██╗██║   ██║       ██╔═██╔═╝    ██╔══██║   ██║      ██║   ██╔══██╗
+   *    ███████╗███████╗███████╗██║ ╚═╝ ██║███████╗██║ ╚████║   ██║       ██████║      ██║  ██║   ██║      ██║   ██║  ██║
+   *    ╚══════╝╚══════╝╚══════╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝   ╚═╝       ╚═════╝      ╚═╝  ╚═╝   ╚═╝      ╚═╝   ╚═╝  ╚═╝
+   *
+   */
+  restrict: 'EA',
+
+  /***
+   *    ████████╗███████╗███╗   ███╗██████╗ ██╗      █████╗ ████████╗███████╗
+   *    ╚══██╔══╝██╔════╝████╗ ████║██╔══██╗██║     ██╔══██╗╚══██╔══╝██╔════╝
+   *       ██║   █████╗  ██╔████╔██║██████╔╝██║     ███████║   ██║   █████╗
+   *       ██║   ██╔══╝  ██║╚██╔╝██║██╔═══╝ ██║     ██╔══██║   ██║   ██╔══╝
+   *       ██║   ███████╗██║ ╚═╝ ██║██║     ███████╗██║  ██║   ██║   ███████╗
+   *       ╚═╝   ╚══════╝╚═╝     ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
+   *
+   */
+  template: '<div ng-include="getTemplateUrl()"></div>',
+  transclude:false,
+
+  /***
+  *    ███████╗ ██████╗ ██████╗ ██████╗ ███████╗
+  *    ██╔════╝██╔════╝██╔═══██╗██╔══██╗██╔════╝
+  *    ███████╗██║     ██║   ██║██████╔╝█████╗
+  *    ╚════██║██║     ██║   ██║██╔═══╝ ██╔══╝
+  *    ███████║╚██████╗╚██████╔╝██║     ███████╗
+  *    ╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚══════╝
+  *
+  */
+  scope: {
+    data:"="
+  },
+
+    /***
+     *    ██╗     ██╗███╗   ██╗██╗  ██╗
+     *    ██║     ██║████╗  ██║██║ ██╔╝
+     *    ██║     ██║██╔██╗ ██║█████╔╝
+     *    ██║     ██║██║╚██╗██║██╔═██╗
+     *    ███████╗██║██║ ╚████║██║  ██╗
+     *    ╚══════╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝
+     *
+     */
+  controller: function ($scope) {
+
+    $scope.loaded = null;
+    $scope.error = null;
+    $scope.CONFIG = CONFIG;
+    $scope.hash = $location.path();
+    $scope.current = $state.current.name;
+
+  
+    if ($scope.data) {
+
+    $scope.getTemplateUrl = function() {
+      console.log(CONFIG.viewPath+$scope.data.template);
+      return CONFIG.viewPath+$scope.data.template;
+    }
+      
+     
+      dataIo.getFile({
+        file:CONFIG.contentPath + $scope.data.content + CONFIG.contentFileSuffix
+      }).then(function(_data){
+        // scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
+        // scope.loaded = true;
+
+        /***
+         *    ███████╗ █████╗ ██╗  ██╗███████╗    ███████╗███████╗██████╗ ██╗   ██╗███████╗██████╗     ██████╗ ███████╗██╗      █████╗ ██╗   ██╗
+         *    ██╔════╝██╔══██╗██║ ██╔╝██╔════╝    ██╔════╝██╔════╝██╔══██╗██║   ██║██╔════╝██╔══██╗    ██╔══██╗██╔════╝██║     ██╔══██╗╚██╗ ██╔╝
+         *    █████╗  ███████║█████╔╝ █████╗      ███████╗█████╗  ██████╔╝██║   ██║█████╗  ██████╔╝    ██║  ██║█████╗  ██║     ███████║ ╚████╔╝
+         *    ██╔══╝  ██╔══██║██╔═██╗ ██╔══╝      ╚════██║██╔══╝  ██╔══██╗╚██╗ ██╔╝██╔══╝  ██╔══██╗    ██║  ██║██╔══╝  ██║     ██╔══██║  ╚██╔╝
+         *    ██║     ██║  ██║██║  ██╗███████╗    ███████║███████╗██║  ██║ ╚████╔╝ ███████╗██║  ██║    ██████╔╝███████╗███████╗██║  ██║   ██║
+         *    ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝    ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚══════╝╚═╝  ╚═╝    ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝
+         *
+         */
+
+        $timeout(function(){
+          $scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
+          $scope.loaded = true;
+        }, 500);
+
+        }).catch(function (_data) {
+        console.log("Error in DIRECTIVE:contentBlock")
+        $scope.error = _data;
+      });
+
+    }
+    
+    }
+    
+  }; //--END directiveDefinitionObject
+
+
+  return directiveDefinitionObject;
+
+
+});
 /***
 * ███╗   ███╗██╗   ██╗██╗  ████████╗██╗██████╗ ██╗     ███████╗    ████████╗██╗███╗   ███╗███████╗██╗     ██╗███╗   ██╗███████╗
 * ████╗ ████║██║   ██║██║  ╚══██╔══╝██║██╔══██╗██║     ██╔════╝    ╚══██╔══╝██║████╗ ████║██╔════╝██║     ██║████╗  ██║██╔════╝
@@ -5016,6 +5198,15 @@ function resRef(obj, str) {
     );
 }
 
+String.prototype.upper = function () {
+    return this.toUpperCase();
+};
+
+
+
+String.prototype.single = function () { 
+    return this.replace(/s$/, '');
+};
 /***
  *     █████╗ ██████╗ ██████╗
  *    ██╔══██╗██╔══██╗██╔══██╗

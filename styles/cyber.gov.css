@@ -10476,14 +10476,6 @@ li {
   background-color: #5b616b;
 }
 
-.header-button-menu > div .loader {
-  margin-top: 0.75em;
-  border-top: 0.5em solid rgba(255, 255, 255, 0.2);
-  border-right: 0.5em solid rgba(255, 255, 255, 0.2);
-  border-bottom: 0.5em solid rgba(255, 255, 255, 0.2);
-  border-left: 0.5em solid #fff;
-}
-
 .header-button-menu > div > button {
   width: 4.5em;
   height: 4.5em;
@@ -10537,13 +10529,6 @@ li {
 
 .header-main svg {
   max-width: 100%;
-}
-
-.header-main .loader {
-  border-top: 0.5em solid rgba(255, 255, 255, 0.2);
-  border-right: 0.5em solid rgba(255, 255, 255, 0.2);
-  border-bottom: 0.5em solid rgba(255, 255, 255, 0.2);
-  border-left: 0.5em solid #fff;
 }
 
 .header-top {
@@ -10687,6 +10672,7 @@ li {
 .loader {
   position: relative;
   margin: 1em auto;
+  overflow: hidden;
   text-indent: -9999em;
   border-top: 0.5em solid rgba(152, 27, 30, 0.2);
   border-right: 0.5em solid rgba(152, 27, 30, 0.2);
@@ -10694,6 +10680,19 @@ li {
   border-left: 0.5em solid #981b1e;
   transform: translateZ(0);
   animation: loader 1s infinite linear;
+}
+
+.header-button-menu .loader,
+.header-main .loader,
+.off-canvas .loader {
+  border-top: 0.5em solid rgba(255, 255, 255, 0.2);
+  border-right: 0.5em solid rgba(255, 255, 255, 0.2);
+  border-bottom: 0.5em solid rgba(255, 255, 255, 0.2);
+  border-left: 0.5em solid #fff;
+}
+
+.header-button-menu .loader {
+  margin-top: 0.75em;
 }
 
 @keyframes loader {
@@ -11035,7 +11034,7 @@ body {
 }
 
 .off-canvas.position-right a {
-  color: #fff;
+  color: #9bdaf1;
 }
 
 .off-canvas.position-right a:active, .off-canvas.position-right a:focus, .off-canvas.position-right a:hover {
@@ -11056,6 +11055,10 @@ body {
 
 .off-canvas h2 {
   font-size: 1.5em;
+}
+
+.off-canvas h3 {
+  font-size: 1.2em;
 }
 
 .off-canvas dt {

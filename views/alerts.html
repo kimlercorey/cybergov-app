@@ -8,7 +8,7 @@
  <json-formatter json="content" open="1"></json-formatter>
 </pre>
 
-<section>
+<section ng-controller="alerts">
   <h2>Alerts</h2>
-  <content-block ng-repeat="alert in content.alerts track by $index" data="{'obj':alert, 'index':$index, 'type':'alerts'}"></content-block>
+  <alerts-block ng-repeat="alert in alerts track by $index" data="{'obj':alert, 'index':$index, 'type':'alerts'}"></alerts-block>
 </section>

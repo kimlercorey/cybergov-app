@@ -6,7 +6,7 @@
       <a ng-repeat="state in applicationStates" class="small-24 medium-12 large-8 columns big-icon">
         <h3>{{state.title}}</h3>
         <div ng-include="'images/icons-home/' + state.name + '.svg'" aria-hidden="true"></div>
-        <p>{{state}}</p>
+        <div ng-bind-html="state.content.brief | unsafe"></div>
       </a>
       -->
 

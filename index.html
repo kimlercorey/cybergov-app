@@ -84,12 +84,13 @@
       <div ng-include="'views/main-nav.html'" class="off-canvas position-left navbar" id="offCanvasLeft" data-off-canvas></div>
 
       <div class="off-canvas position-right sidebar" id="offCanvasRight" data-off-canvas data-position="right">
-        <div class="text-right">
-          <button class="secondary button button-close" aria-label="Close" type="button" data-close>
-            <span class="fa fa-2x fa-times" aria-hidden="true"></span>
-          </button>
-        </div>
-        <div ng-include="'views/' + viewParams.sideView + '.html'">
+
+        <button class="secondary button button-close float-right" aria-label="Close" type="button" data-close>
+          <span class="fa fa-2x fa-times" aria-hidden="true"></span>
+        </button>
+
+        <load-block ng-if="viewParams.loadBlock" data="viewParams.loadBlock"></load-block>
+
       </div>
 
     </div>
@@ -111,7 +112,7 @@
 
   <script src="scripts/bows.min.js"></script>
   <script>
-    var log_q = bows("Questions");
+    var log = bows("Home");
   </script>
 
 </body>
