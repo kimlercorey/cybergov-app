@@ -50,7 +50,7 @@
 
                     <div class="row header-bar">
                       <h1 class="small-24 large-8 columns"><a ui-sref="home">cyber.gov</a></h1>
-                      <h2 class="small-24 large-16 columns" ui-view="tagline"></h2>
+                      <div class="small-24 large-16 columns site-tagline" ui-view="tagline"></div>
                     </div>
 
                     <div ui-view="headerContent" class="header-main-content"></div>
@@ -63,7 +63,7 @@
 
             </header>
 
-            <div id="main-content" class="row main-content">
+            <div id="main-content" class="row main-content" ng-class="$state.is('home') ? '' : 'stickycontent'">
 
               <div class="columns shrink column-border show-for-medium"></div>
 

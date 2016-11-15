@@ -263,24 +263,24 @@ PARTICLE.filter('unsafe', function($sce) { return $sce.trustAsHtml; });
 
       $( document ).foundation();
 
-      if ($state.current.name != 'home') {
-        var headHeight = $('#main-header').outerHeight();
-        $('#main-content').css('margin-top', headHeight );
+      var headHeight = $('#main-header').outerHeight();
+      $('#main-content.stickycontent').css('margin-top', headHeight );
 
-        $(window).scroll(function() {
-          var scrolledPx = $(window).scrollTop();
+      $(window).scroll(function() {
+        var scrolledPx = $(window).scrollTop();
+        var contentHeight = $('#main-content').outerHeight();
+        var windowHeight = $(window).outerHeight();
 
-          if (scrolledPx > 54) {
-            $('#main-header').addClass('smaller');
-            $('#main-content').addClass('content-smaller');
-            $('#main-content').css('margin-top', '54px' );
-          } else {
-            $('#main-header').removeClass('smaller');
-            $('#main-content').removeClass('content-smaller');
-            $('#main-content').css('margin-top', headHeight );
-          }
-        });
-      }
+        if ((scrolledPx > 54) && (contentHeight > windowHeight)) {
+          $('#main-header.sticky').addClass('smaller');
+          $('#main-content.stickycontent').addClass('content-smaller');
+          $('#main-content.stickycontent').css('margin-top', '54px' );
+        } else {
+          $('#main-header.sticky').removeClass('smaller');
+          $('#main-content.stickycontent').removeClass('content-smaller');
+          $('#main-content.stickycontent').css('margin-top', headHeight );
+        }
+      });
 
     },2000)
 
@@ -288,6 +288,13 @@ PARTICLE.filter('unsafe', function($sce) { return $sce.trustAsHtml; });
 
 
     $scope.$on('$stateChangeSuccess', function () {
+
+      $timeout(function(){
+        var headHeight = $('#main-header').outerHeight();
+        $('#main-content:not(.stickycontent)').css('margin-top', '0' );
+        $('#main-content.stickycontent').css('margin-top', headHeight );
+        $('#main-header').removeClass('smaller');
+      },1000)
 
       if ( $('#offCanvasLeft').hasClass('is-open') ) {
         $('#offCanvasLeft').foundation('close');
