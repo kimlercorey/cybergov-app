@@ -1,9 +1,7 @@
-<div ng-if="!alert">
-  <div class="loader">Loading...</div>
-</div>
+<div ng-include="'views/loading.html'"></div>
 
-<article ng-if="loaded">
-  <time>{{alert.pubDate.$date | date : longDate}}</time>
-  <h3><a href="{{alert.link}}">{{title}}</a></h3>
-  <p ng-bind-html="overview | unsafe"></p>
+<article ng-if="loaded" class="sidebar-single">
+  <time>{{content.publishedDate | date : longDate}}</time>
+  <h3><a href="{{content.link}}">{{content.title}}</a></h3>
+  <div ng-bind-html="content.overview | unsafe"></div>
 </article>

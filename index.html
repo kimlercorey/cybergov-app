@@ -88,8 +88,11 @@
         <button class="secondary button button-close float-right" aria-label="Close" type="button" data-close>
           <span class="fa fa-2x fa-times" aria-hidden="true"></span>
         </button>
-
-        <load-block ng-if="viewParams.loadBlock" data="viewParams.loadBlock"></load-block>
+        
+        
+        <load-block ng-if="viewParams.sideViewData.content=='questions'" data="viewParams.sideViewData"></load-block>
+        <load-block ng-if="viewParams.sideViewData.content=='alerts'" data="viewParams.sideViewData"></load-block>
+        
 
       </div>
 

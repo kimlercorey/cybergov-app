@@ -7,7 +7,7 @@
     </div>
   </a>
 
-  <a data-open="offCanvasRight" ng-click="viewParamsChange({ 'loadBlock': {'template':'alerts.html', 'content':'alerts'} })" type="button" title="Alerts">
+  <a data-open="offCanvasRight" ng-click="viewParamsChange({ 'sideViewData': {'template':'alerts.html', 'content':'alerts', 'data':[{'content':'alerts'}]} })" type="button" title="Alerts">
     <div class="row">
       <div class="columns" ng-include="'images/icons/alerts.svg'" aria-hidden="true"></div>
       <div class="xxxlarge-18 xxxxlarge-20 show-for-xxxlarge columns align-middle">Alerts</div>
@@ -28,7 +28,8 @@
     </div>
   </a>
 
-  <a data-open="offCanvasRight" ng-click="viewParamsChange({ 'loadBlock': {'template':'questions.html', 'content':'questions'} })" type="button" title="Ask the CISO">
+  <!-- <a data-open="offCanvasRight" ng-click="viewParamsChange({ 'sideView': 'questions' })" type="button" title="Ask the CISO"> -->
+  <a data-open="offCanvasRight" ng-click="viewParamsChange({ 'sideViewData': {'template':'questions.html', 'content':'questions'} })" type="button" title="Ask the CISO">
     <div class="row">
       <div class="columns" ng-include="'images/icons/paper-airplane.svg'" aria-hidden="true"></div>
       <div class="xxxlarge-18 xxxxlarge-20 show-for-xxxlarge columns align-middle">Ask the CISO</div>
