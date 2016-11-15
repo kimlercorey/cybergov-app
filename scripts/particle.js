@@ -11,7 +11,10 @@
  *
  */
 
-var PARTICLE = angular.module('PARTICLE', ['ngAnimate','ui.router','jsonFormatter']);
+var PARTICLE = angular.module('PARTICLE', ['ngAnimate','ui.router','jsonFormatter'])
+  .run(['$rootScope',  '$state', function ($rootScope, $state) {
+    $rootScope.$state = $state;
+  }]);
 // **************************************************************************************************************************
 
 /**************************************************************************************************************************
@@ -223,7 +226,7 @@ PARTICLE.filter('unsafe', function($sce) { return $sce.trustAsHtml; });
  *    └─┘┴  └─┘└─┘┘└┘ ┴ ┴└─└─┘┴─┘┴─┘└─┘┴└─
  ------------------------------------------------------------------------------------------------------------------------
  **/
-  PARTICLE.controller("ui",function($scope,centralObject,$timeout) {
+  PARTICLE.controller("ui",function($scope,centralObject,$timeout,$state) {
 
     $scope.CONFIG = centralObject.config;
     $scope.applicationStates = centralObject.applicationStates;
@@ -258,15 +261,26 @@ PARTICLE.filter('unsafe', function($sce) { return $sce.trustAsHtml; });
 
     $timeout(function(){
 
-     $( document ).foundation();
+      $( document ).foundation();
 
-     $('#header-alerts-container')
-       .on('sticky.zf.stuckto:top', function(){
-         $(this).addClass('sticky-header');
-       })
-       .on('sticky.zf.unstuckfrom:top', function(){
-         $(this).removeClass('sticky-header');
-       });
+      if ($state.current.name != 'home') {
+        var headHeight = $('#main-header').outerHeight();
+        $('#main-content').css('margin-top', headHeight );
+
+        $(window).scroll(function() {
+          var scrolledPx = $(window).scrollTop();
+
+          if (scrolledPx > 54) {
+            $('#main-header').addClass('smaller');
+            $('#main-content').addClass('content-smaller');
+            $('#main-content').css('margin-top', '54px' );
+          } else {
+            $('#main-header').removeClass('smaller');
+            $('#main-content').removeClass('content-smaller');
+            $('#main-content').css('margin-top', headHeight );
+          }
+        });
+      }
 
     },2000)
 

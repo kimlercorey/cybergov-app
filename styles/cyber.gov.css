@@ -10095,6 +10095,11 @@ li {
   max-width: 100%;
 }
 
+.content-smaller .column-border {
+  width: 4.5em;
+  font-size: 12px;
+}
+
 .extended-content {
   position: relative;
   display: none;
@@ -10125,6 +10130,11 @@ li {
   .row .home-content.row {
     margin: -2em;
   }
+}
+
+.main-content {
+  margin-top: 54px;
+  transition: margin-top 0.5s ease;
 }
 
 .max-global {
@@ -10567,9 +10577,15 @@ li {
 }
 
 .row-header {
-  width: 100%;
   color: #fff;
   background-color: #323a45;
+}
+
+.row-header.sticky {
+  position: fixed;
+  width: 100%;
+  max-height: 400px;
+  transition: max-height 0.5s ease;
 }
 
 .row-header h1 {
@@ -10634,37 +10650,41 @@ li {
   }
 }
 
-.sticky-header .header-icon,
-.sticky-header .header-long-content,
-.sticky-header .official-website,
-.sticky-header .tagline {
+.smaller {
+  max-height: 54px;
+}
+
+.smaller .header-icon,
+.smaller .header-long-content,
+.smaller .official-website,
+.smaller .tagline {
   display: none;
 }
 
-.sticky-header .header-bar.row {
+.smaller .header-bar.row {
   margin: 0;
 }
 
-.sticky-header .header-main {
+.smaller .header-main {
   padding-top: 0;
 }
 
-.sticky-header .header-main h1 {
+.smaller .header-main h1 {
   margin: 0.25em 0;
   font-size: 1.75em;
 }
 
-.sticky-header .header-main h2 {
+.smaller .header-main h2 {
   margin: 0;
   font-size: 1em;
 }
 
-.sticky-header .header-main-content .columns {
+.smaller .header-main-content .columns {
   padding: 0;
 }
 
 @media screen and (min-width: 40em) {
-  .sticky-header .header-top {
+  .smaller .header-top {
     font-size: 0.75em;
   }
 }

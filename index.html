@@ -17,9 +17,9 @@
 
         <div class="row expanded">
 
-          <div class="small-24 medium-expand columns small-order-2 medium-order-1 padding-none max-global" data-sticky-container>
+          <div class="small-24 medium-expand columns small-order-2 medium-order-1 padding-none max-global">
 
-            <header class="row expanded row-header">
+            <header id="main-header" class="row expanded row-header" ng-class="$state.is('home') ? '' : 'sticky'">
 
               <div class="small-24 columns small-order-2 large-order-1 padding-none">
 
@@ -63,7 +63,7 @@
 
             </header>
 
-            <div id="main-content" class="row">
+            <div id="main-content" class="row main-content">
 
               <div class="columns shrink column-border show-for-medium"></div>
 
@@ -88,11 +88,11 @@
         <button class="secondary button button-close float-right" aria-label="Close" type="button" data-close>
           <span class="fa fa-2x fa-times" aria-hidden="true"></span>
         </button>
-        
-        
+
+
         <load-block ng-if="viewParams.sideViewData.content=='questions'" data="viewParams.sideViewData"></load-block>
         <load-block ng-if="viewParams.sideViewData.content=='alerts'" data="viewParams.sideViewData"></load-block>
-        
+
 
       </div>
 
