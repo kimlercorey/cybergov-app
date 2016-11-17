@@ -2,76 +2,10 @@
   <div class="small-24 columns padding-none">
     <div class="row big-icon-container">
 
-      <!--
-      <a ng-repeat="state in applicationStates" class="small-24 medium-12 large-8 columns big-icon">
+      <a ng-repeat="state in applicationStates | navFilter: 'homeBody' | orderBy: 'homePageOrder'" ui-sref="{{state.name}}" class="small-24 medium-12 large-8 columns big-icon">
         <h3>{{state.title}}</h3>
-        <div ng-include="'images/icons-home/' + state.name + '.svg'" aria-hidden="true"></div>
-        <div ng-bind-html="state.content.brief | unsafe"></div>
-      </a>
-      -->
-
-      <a class="small-24 medium-12 large-8 columns big-icon">
-        <h3>Our Cyber Strategy</h3>
-        <div ng-include="'images/icons-home/our-cyber-strategy.svg'" aria-hidden="true"></div>
-        <div>
-          <p>Learn more about the federal government’s cybersecurity strategy.</p>
-        </div>
-      </a>
-
-      <a class="small-24 medium-12 large-8 columns big-icon">
-        <h3>Policy</h3>
-        <div ng-include="'images/icons-home/policy.svg'" aria-hidden="true"></div>
-        <div>
-          <p>View a collection of policies and guidelines for federal agencies.</p>
-        </div>
-      </a>
-
-      <a class="small-24 medium-12 large-8 columns big-icon">
-        <h3>Best Practices</h3>
-        <div ng-include="'images/icons-home/best-practices.svg'" aria-hidden="true"></div>
-        <div>
-          <p>Access proven solutions to cybersecurity challenges.</p>
-        </div>
-      </a>
-
-      <a class="small-24 medium-12 large-8 columns big-icon">
-        <h3>Tools &amp; Solutions</h3>
-        <div ng-include="'images/icons-home/tools-and-solutions.svg'" aria-hidden="true"></div>
-        <div>
-          <p>Discover tools and solutions to help protect your digital assets.</p>
-        </div>
-      </a>
-
-      <a class="small-24 medium-12 large-8 columns big-icon">
-        <h3>Careers</h3>
-        <div ng-include="'images/icons-home/careers.svg'" aria-hidden="true"></div>
-        <div>
-          <p>Explore oppurtunities to join the growing cybersecurity workforce</p>
-        </div>
-      </a>
-
-      <a class="small-24 medium-12 large-8 columns big-icon">
-        <h3>Education &amp; Training</h3>
-        <div ng-include="'images/icons-home/education-and-training.svg'" aria-hidden="true"></div>
-        <div>
-          <p>Find opportunities to educate yourself and train your workforce in cybersecurity.</p>
-        </div>
-      </a>
-
-      <a class="small-24 medium-12 large-8 columns big-icon">
-        <h3>Agency Performance</h3>
-        <div ng-include="'images/icons-home/agency-performance.svg'" aria-hidden="true"></div>
-        <div>
-          <p>Saucer trifecta a java café au lait french press foam, espresso.</p>
-        </div>
-      </a>
-
-      <a class="small-24 medium-12 large-8 columns big-icon">
-        <h3>CISO Council</h3>
-        <div ng-include="'images/icons-home/ciso-council.svg'" aria-hidden="true"></div>
-        <div>
-          <p>Ut convallis, sem sit amet interdum consectetuer.</p>
-        </div>
+        <div ng-include="'images/collection-icons/multicolor/' + state.slug + '.svg'" aria-hidden="true"></div>
+        <div ng-bind-html="state.content.micro | unsafe"></div>
       </a>
 
       <div class="show-for-large large-8 columns big-icon"></div>

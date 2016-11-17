@@ -9771,6 +9771,41 @@ p + .stat {
   clip: auto;
 }
 
+.row-footer {
+  font-size: 0.8em;
+  color: #fff;
+  text-align: center;
+  background-color: #323a45;
+}
+
+.row-footer > .columns > * {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.row-footer > .columns > *:last-child {
+  margin-bottom: 0;
+}
+
+.row-footer a {
+  color: #9bdaf1;
+  border-bottom: 1px solid #9bdaf1;
+}
+
+.row-footer a:active, .row-footer a:focus, .row-footer a:hover {
+  color: #fff;
+  border-bottom-color: #fff;
+}
+
+.row-footer ul {
+  max-width: 40em;
+  list-style: none;
+}
+
+.row-footer .column-border:first-child {
+  border-right: 1px solid #5b616b;
+}
+
 ::-moz-selection {
   color: #fff;
   background: #981b1e;
@@ -9831,7 +9866,7 @@ textarea {
  *     a(href="#") Link
  */
 a {
-  color: #981b1e;
+  color: #0071bc;
 }
 
 a:active, a:focus, a:hover {
@@ -9856,6 +9891,14 @@ hr.ng-scope:last-child {
 p,
 li {
   line-height: 1.5;
+}
+
+.article-single {
+  margin-left: 2em;
+}
+
+.article-single h3 {
+  color: #981b1e;
 }
 
 .button {
@@ -10337,9 +10380,11 @@ li {
   margin: 0 -1rem;
 }
 
-.header-big-icons.row > a {
+.header-big-icons.row > button {
   display: -ms-flexbox;
   display: flex;
+  -ms-flex-align: stretch;
+      align-items: stretch;
   -ms-flex-direction: column;
       flex-direction: column;
   -ms-flex-pack: justify;
@@ -10348,18 +10393,18 @@ li {
 }
 
 @media screen and (min-width: 64em) {
-  .header-big-icons.row > a:first-child {
+  .header-big-icons.row > button:first-child {
     border-right: 1px solid #5b616b;
   }
 }
 
-@media screen and (min-width: 40em) {
-  .header-big-icons.row > a:last-child {
+@media screen and (min-width: 64em) {
+  .header-big-icons.row > button:last-child {
     border-left: 1px solid #5b616b;
   }
 }
 
-.header-big-icons.row > a:active .path-primary, .header-big-icons.row > a:focus .path-primary, .header-big-icons.row > a:hover .path-primary {
+.header-big-icons.row > button:active .path-primary, .header-big-icons.row > button:focus .path-primary, .header-big-icons.row > button:hover .path-primary {
   fill: #9bdaf1;
 }
 
@@ -10379,13 +10424,17 @@ li {
   margin: 0 auto 1em;
 }
 
-.header-big-icons.row svg#icon-umbrella {
-  max-height: 10em;
-  margin-top: 1em;
+.header-big-icons.row p {
+  text-align: left;
 }
 
 .header-big-icons.row p:last-child {
   margin: 0;
+}
+
+.header-big-icons.row #protect-yourself-anim svg {
+  max-height: 10em;
+  margin-top: 1em;
 }
 
 .header-button {
@@ -10419,7 +10468,7 @@ li {
   }
 }
 
-.header-button-icons a {
+.header-button-icons button {
   padding: 0;
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
   font-size: 14px;
@@ -10430,50 +10479,57 @@ li {
 }
 
 @media screen and (max-width: 39.9375em) {
-  .header-button-icons a {
+  .header-button-icons button {
     -ms-flex: 1 1 auto;
         flex: 1 1 auto;
   }
 }
 
 @media screen and (min-width: 40em) {
-  .header-button-icons a {
+  .header-button-icons button {
     display: -ms-flexbox;
     display: flex;
     width: 100%;
+    max-width: 480px;
     margin: 1rem 0;
   }
 }
 
-.header-button-icons a:active, .header-button-icons a:focus, .header-button-icons a:hover {
+.header-button-icons button:active, .header-button-icons button:focus, .header-button-icons button:hover {
   color: #9bdaf1;
 }
 
-.header-button-icons a:active svg, .header-button-icons a:focus svg, .header-button-icons a:hover svg {
+.header-button-icons button:active svg, .header-button-icons button:focus svg, .header-button-icons button:hover svg {
   transform: scale(1.2);
   animation: hoverscale 1s 1 ease-in-out;
 }
 
-.header-button-icons a:active .path-primary, .header-button-icons a:focus .path-primary, .header-button-icons a:hover .path-primary {
+.header-button-icons button:active .path-primary, .header-button-icons button:focus .path-primary, .header-button-icons button:hover .path-primary {
   fill: #9bdaf1;
 }
 
-.header-button-icons a > .row {
+.header-button-icons button a {
+  display: block;
+  width: 100%;
+  color: #fff;
+}
+
+.header-button-icons button .row {
   width: 100%;
 }
 
 @media screen and (max-width: 39.9375em) {
-  .header-button-icons a > .row > .columns {
+  .header-button-icons button .row > .columns {
     padding: 0.75em 1rem 0.5em;
   }
 }
 
-.header-button-icons a svg {
+.header-button-icons button svg {
   max-width: 2em;
 }
 
 @media screen and (min-width: 40em) {
-  .header-button-icons a svg {
+  .header-button-icons button svg {
     max-width: 3em;
   }
 }

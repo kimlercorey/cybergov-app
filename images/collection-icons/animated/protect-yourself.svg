@@ -10,12 +10,12 @@
   <animate id="umbrella-closed" xlink:href="#umbrella" begin="indefinite" fill="freeze" attributeName="d" dur="300ms" to="M239.31,301.5H234.1c-7.21-17.94,10.39,3.5-16.16,3.5s-9-17.94-16.16,0h-4.92c-6.32-15.72,15.71,1.23-6.51-1.5v11a33.1,33.1,0,1,0,66.21,0,6.21,6.21,0,0,1,12.41,0,45.52,45.52,0,0,1-91,0V303c-25.33.87,3.55-15.31-3.39,2h-4.92c-7.21-17.94,10.39,0-16.16,0s-9-21.44-16.16-3.5h-6.61c0-74.13,47.24-169,47.24-283.53V6.21a6.21,6.21,0,1,1,12.41,0v12C190.34,133,239.31,229.47,239.31,301.5Z"/>
   <script>
     umbrellaOpen = document.getElementById( 'umbrella-open' );
-    $( '#big-icon-umbrella' ).mouseenter(function() {
+    $( '#protect-yourself-anim' ).mouseenter(function() {
       umbrellaOpen.beginElement();
     });
 
     umbrellaClosed = document.getElementById( 'umbrella-closed' );
-    $( '#big-icon-umbrella' ).mouseleave(function() {
+    $( '#protect-yourself-anim' ).mouseleave(function() {
       umbrellaClosed.beginElement();
     });
   </script>

@@ -1,7 +1,7 @@
 <nav>
   <ul class="vertical menu" data-accordion-menu="">
 
-    <li ng-repeat="state in applicationStates">
+    <li ng-repeat="state in applicationStates | navFilter: 'mainNav' | orderBy: 'sortOrder'">
       <a href="#">{{state.title}}</a>
       <ul class="vertical menu nested">
 
