@@ -7,8 +7,8 @@
 
 <div ng-if="CONFIG.showJSON" ng-include="'views/json-display.html'"></div>
 
-<h1>{{content.title}}:</h1>
-  <p ng-bind-html="content.content.extended"></p> 
-<content-block ng-repeat="section in content.sections track by $index" data="{'obj':section, 'index':$index, 'type':'sections'}"></content-block>
-
-
+<div ng-if="content">
+  <h1>{{content.title}}</h1>
+  <p ng-bind-html="content.content.extended"></p>
+  <content-block ng-repeat="section in content.sections track by $index" data="{'obj':section, 'index':$index, 'type':'sections'}"></content-block>
+</div>

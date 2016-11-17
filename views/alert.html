@@ -1,6 +1,7 @@
 <div ng-include="'views/loading.html'"></div>
 
-<a ng-if="loaded" id="{{content._id['$oid']}}" class="row header-alert">
-  <time>{{content.publishedDate.$date | date : longDate}}</time>
-  <h3>{{content.title}}</h3>
-</a>
+<article ng-if="loaded" class="sidebar-single">
+  <time>{{content.publishedDate | date : longDate}}</time>
+  <h3><a href="{{content.link}}">{{content.title}}</a></h3>
+  <div ng-bind-html="content.overview | unsafe"></div>
+</article>

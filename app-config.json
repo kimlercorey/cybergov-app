@@ -2,7 +2,7 @@
   "showTemplateLabels":false,
   "showJSON":0,
   "showConsoleLogs":false,
-  "showMessages":true,
+  "showMessages":false,
   "statesPath":"content/states.json",
   "contentPath":"/api/v1/",
   "viewPath":"views/",
@@ -11,5 +11,5 @@
   "navigationFile":"api/v1/nav.json",
   "collectionsStateObjects":["collections","sections","articles"],
   "cleaningObjects":["content","more"],
-  "viewParams": { "sideView": "questions" }
+  "viewParams": { "loadBlock": { "template": "questions.html", "content": "questions" } }
 }

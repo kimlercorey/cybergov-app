@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360" id="icon-paper-airplane">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360">
   <defs>
     <style>
       .path-primary { fill: #fff; }
@@ -10,12 +10,12 @@
   <animate id="airplane-back" xlink:href="#airplane" begin="indefinite" fill="freeze" attributeName="d" dur="300ms" to="M161.16,229.66,288,102.95l-6.85,175.78Zm-8.28,66.53-2.68-51.14,48.3,19.75ZM276,89,142.7,222.09,74.76,194.32ZM308.4,51.25,31.23,196.35l100.16,41,4.85,92.6,82.59-56.79,79.62,32.59Z"/>
   <script>
     airplaneThrow = document.getElementById( 'airplane-throw' );
-    $( '#big-icon-airplane' ).mouseenter(function() {
+    $( '#ask-the-ciso-anim' ).mouseenter(function() {
       airplaneThrow.beginElement();
     });
 
     airplaneBack = document.getElementById( 'airplane-back' );
-    $( '#big-icon-airplane' ).mouseleave(function() {
+    $( '#ask-the-ciso-anim' ).mouseleave(function() {
       airplaneBack.beginElement();
     });
   </script>

@@ -1,45 +1,18 @@
 <nav>
 
-  <a type="button" title="Search">
-    <div class="row">
-      <div class="columns" ng-include="'images/icons/search.svg'" aria-hidden="true"></div>
-      <div class="xxxlarge-18 xxxxlarge-20 show-for-xxxlarge columns align-middle">Search</div>
-    </div>
-  </a>
-
-  <a data-open="offCanvasRight" ng-click="viewParamsChange({ 'sideView': 'alerts' })" type="button" title="Alerts">
-    <div class="row">
-      <div class="columns" ng-include="'images/icons/alerts.svg'" aria-hidden="true"></div>
-      <div class="xxxlarge-18 xxxxlarge-20 show-for-xxxlarge columns align-middle">Alerts</div>
-    </div>
-  </a>
-
-  <a ui-sref="get-help" type="button" title="Get Help">
-    <div class="row">
-      <div class="columns" ng-include="'images/icons/help-hand.svg'" aria-hidden="true"></div>
-      <div class="xxxlarge-18 xxxxlarge-20 show-for-xxxlarge columns align-middle">Get Help</div>
-    </div>
-  </a>
-
-  <a ui-sref="protect-yourself-1" type="button" title="Protect Yourself">
-    <div class="row">
-      <div class="columns" ng-include="'images/icons/umbrella.svg'" aria-hidden="true"></div>
-      <div class="xxxlarge-18 xxxxlarge-20 show-for-xxxlarge columns align-middle">Protect Yourself</div>
-    </div>
-  </a>
-
-  <a data-open="offCanvasRight" ng-click="viewParamsChange({ 'sideView': 'questions' })" type="button" title="Ask the CISO">
-    <div class="row">
-      <div class="columns" ng-include="'images/icons/paper-airplane.svg'" aria-hidden="true"></div>
-      <div class="xxxlarge-18 xxxxlarge-20 show-for-xxxlarge columns align-middle">Ask the CISO</div>
-    </div>
-  </a>
-
-  <a ui-sref="get-help.incident-reporting" type="button" title="Report a Cyber Incident">
-    <div class="row">
-      <div class="columns" ng-include="'images/icons/bang-circle.svg'" aria-hidden="true"></div>
-      <div class="xxxlarge-18 xxxxlarge-20 show-for-xxxlarge columns align-middle">Report a Cyber Incident</div>
-    </div>
-  </a>
+  <button ng-repeat="state in applicationStates | navFilter: 'rightNav' | orderBy: 'rightNavOrder'" type="button" title="{{state.title}}">
+    <a ng-if="state.offCanvas" data-open="offCanvasRight" ng-click="viewParamsChange({ 'sideViewData': {'template': state.offCanvas + '.html', 'content': state.offCanvas, 'data':[{'content':'alerts'}]} })">
+      <div class="row">
+        <div class="columns" ng-include="'images/collection-icons/static/' + state.slug + '.svg'" aria-hidden="true"></div>
+        <div class="xxxlarge-18 xxxxlarge-20 show-for-xxxlarge columns align-middle">{{state.title}}</div>
+      </div>
+    </a>
+    <a ng-if="!state.offCanvas" ui-sref="{{state.name}}">
+      <div class="row">
+        <div class="columns" ng-include="'images/collection-icons/static/' + state.slug + '.svg'" aria-hidden="true"></div>
+        <div class="xxxlarge-18 xxxxlarge-20 show-for-xxxlarge columns align-middle">{{state.title}}</div>
+      </div>
+    </a>
+  </button>
 
 </nav>

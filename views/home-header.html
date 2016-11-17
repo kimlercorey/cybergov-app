@@ -1,31 +1,26 @@
 <div class="row header-big-icons">
 
-  <a ui-sref="get-help" id="big-icon-hand" class="small-24 large-8 columns">
-    <h3>Get Help</h3>
-    <div ng-include="'images/icons/help-hand-anim.svg'" aria-hidden="true"></div>
-    <p>Access various resources to help improve your cybersecurity posture.</p>
-  </a>
-
-  <a ui-sref="protect-yourself-1" id="big-icon-umbrella" class="small-24 medium-12 large-8 columns">
-    <h3>Protect Yourself</h3>
-    <div ng-include="'images/icons/umbrella-anim.svg'" aria-hidden="true"></div>
-    <p>Learn the basics to protect your personal data and yourself online.</p>
-  </a>
-
-  <a data-open="offCanvasRight" ng-click="viewParamsChange({ 'sideView': 'questions' })" id="big-icon-airplane" class="small-24 medium-12 large-8 columns">
-    <h3>Ask the CISO</h3>
-    <div ng-include="'images/icons/paper-airplane-anim.svg'" aria-hidden="true"></div>
-    <p>Find answers to all your most important cybersecurity questions.</p>
-  </a>
+  <button ng-repeat="state in applicationStates | navFilter: 'homeHeader' | orderBy: 'homePageOrder'" id="{{state.name}}-anim" class="small-24 large-8 columns" type="button" title="{{state.title}}">
+    <a ng-if="state.offCanvas" data-open="offCanvasRight" ng-click="viewParamsChange({ 'sideViewData': {'template': state.offCanvas + '.html', 'content': state.offCanvas, 'data':[{'content':'alerts'}]} })">
+      <h3>{{state.title}}</h3>
+      <div ng-include="'images/collection-icons/animated/' + state.slug + '.svg'" aria-hidden="true"></div>
+      <div ng-bind-html="state.content.micro | unsafe"></div>
+    </a>
+    <a ng-if="!state.offCanvas" ui-sref="{{state.name}}">
+      <h3>{{state.title}}</h3>
+      <div ng-include="'images/collection-icons/animated/' + state.slug + '.svg'" aria-hidden="true"></div>
+      <div ng-bind-html="state.content.micro | unsafe"></div>
+    </a>
+  </button>
 
 </div>
 
 <div class="row button-report-container">
 
   <div class="small-24 large-16 columns padding-top-none padding-bottom-none">
-    <button ui-sref="get-help.report-an-incident" type="button" class="button button-info alert button-ask button-report">
-      <div class="button-info-icon" ng-include="'images/icons/bang-circle.svg'" aria-hidden="true"></div>
-      <div class="button-info-title">Report a cyber incident</div>
+    <button ng-repeat="state in applicationStates | navFilter: 'homeHeaderButton'" ui-sref="{{state.name}}" type="button" class="button button-info alert button-ask button-report">
+      <div class="button-info-icon" ng-include="'images/collection-icons/static/' + state.slug + '.svg'" aria-hidden="true"></div>
+      <div class="button-info-title">{{state.title}}</div>
     </button>
   </div>
 

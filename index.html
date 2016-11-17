@@ -19,7 +19,7 @@
 
           <div class="small-24 medium-expand columns small-order-2 medium-order-1 padding-none max-global">
 
-            <header class="row expanded row-header">
+            <header id="main-header" class="row expanded row-header" ng-class="$state.is('home') ? '' : 'sticky'">
 
               <div class="small-24 columns small-order-2 large-order-1 padding-none">
 
@@ -50,7 +50,7 @@
 
                     <div class="row header-bar">
                       <h1 class="small-24 large-8 columns"><a ui-sref="home">cyber.gov</a></h1>
-                      <h2 class="small-24 large-16 columns" ui-view="tagline"></h2>
+                      <div class="small-24 large-16 columns site-tagline" ui-view="tagline"></div>
                     </div>
 
                     <div ui-view="headerContent" class="header-main-content"></div>
@@ -63,7 +63,7 @@
 
             </header>
 
-            <div id="main-content" class="row">
+            <main id="main-content" class="row main-content" ng-class="$state.is('home') ? '' : 'stickycontent'">
 
               <div class="columns shrink column-border show-for-medium"></div>
 
@@ -71,7 +71,15 @@
 
               <aside ui-view="relatedContent" class="small-24 medium-6 xlarge-8 columns content-sidebar"></aside>
 
-            </div>
+            </main>
+
+            <footer id="main-footer" class="row row-grow expanded row-footer">
+
+              <div class="columns shrink column-border show-for-medium"></div>
+
+              <div ng-include="'views/footer.html'" class="columns align-middle padding-double-all"></div>
+
+            </footer>
 
           </div>
 
@@ -84,35 +92,34 @@
       <div ng-include="'views/main-nav.html'" class="off-canvas position-left navbar" id="offCanvasLeft" data-off-canvas></div>
 
       <div class="off-canvas position-right sidebar" id="offCanvasRight" data-off-canvas data-position="right">
-        <div class="text-right">
-          <button class="secondary button button-close" aria-label="Close" type="button" data-close>
+        <div>
+
+          <button class="secondary button button-close float-right" aria-label="Close" title="Close" type="button" data-close>
             <span class="fa fa-2x fa-times" aria-hidden="true"></span>
           </button>
+
+          <load-block ng-if="viewParams.sideViewData.content=='questions'" data="viewParams.sideViewData"></load-block>
+          <load-block ng-if="viewParams.sideViewData.content=='alerts'" data="viewParams.sideViewData"></load-block>
+
         </div>
-        {{viewParams.sideView }}
-        <div ng-include="'views/' + viewParams.sideView + '.html'">
       </div>
 
     </div>
   </div>
 
   <script src="scripts/jquery.min.js"></script>
-  <script src="scripts/x2js.min.js"></script>
   <script src="scripts/angular.min.js"></script>
   <script src="scripts/angular-ui-router.min.js"></script>
   <script src="scripts/angular-animate.min.js"></script>
-  <script src="scripts/angular-performance.min.js"></script>
   <script src="scripts/json-formatter.min.js"></script>
-  <script src="scripts/ipsum.min.js"></script>
   <script src="scripts/foundation.min.js"></script>
-  <script src="scripts/18fpro.min.js"></script>
   <script src="scripts/particle.min.js"></script>
   <script src="scripts/cyber.gov.min.js"></script>
   <script src="//dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=EOP&subagency=OMB" id="_fed_an_ua_tag" async></script>
 
   <script src="scripts/bows.min.js"></script>
   <script>
-    var log_q = bows("Questions");
+    var log = bows("cyber.gov");
   </script>
 
 </body>

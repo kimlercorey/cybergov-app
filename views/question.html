@@ -1,7 +1,7 @@
 <div ng-include="'views/loading.html'"></div>
 
-<article ng-if="loaded" id="{{content._id['$oid']}}">
+<article ng-if="loaded" id="{{content._id['$oid']}}" class="sidebar-single">
   <time>{{content.publishedDate.$date | date : longDate}}</time>
-  <h3 class="question">{{content.question}}</h3>
-  <div class="answer">{{content.answer}}</div>
+  <h3>{{content.question}}</h3>
+  <div>{{content.answer}}</div>
 </article>
