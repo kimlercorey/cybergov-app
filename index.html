@@ -98,6 +98,7 @@
             <span class="fa fa-2x fa-times" aria-hidden="true"></span>
           </button>
 
+          <load-block ng-if="viewParams.sideViewData.content=='search'" data="viewParams.sideViewData"></load-block>
           <load-block ng-if="viewParams.sideViewData.content=='questions'" data="viewParams.sideViewData"></load-block>
           <load-block ng-if="viewParams.sideViewData.content=='alerts'" data="viewParams.sideViewData"></load-block>
 
