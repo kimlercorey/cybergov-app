@@ -10499,6 +10499,10 @@ li {
   color: #9bdaf1;
 }
 
+.header-button-icons button:active a, .header-button-icons button:focus a, .header-button-icons button:hover a {
+  color: #9bdaf1;
+}
+
 .header-button-icons button:active svg, .header-button-icons button:focus svg, .header-button-icons button:hover svg {
   transform: scale(1.2);
   animation: hoverscale 1s 1 ease-in-out;
