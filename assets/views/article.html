@@ -8,8 +8,8 @@
 <div ng-include="'assets/views/loading.html'"></div>
 
 <section ng-if="content" class="article-single fade">
-  <div ng-if="CONFIG.showJSON" ng-include="'assets/views/json-display.html'"></div>
+  <div ng-if="CONFIG.showJSON" ng-include="'views/json-display.html'"></div>
   <h3><a href="#{{hash}}/{{content.slug}}">{{content.title}}</a></h3>
-  <h3><a href="{{content.content.url}}">{{content.title}}</a></h3>
+  <!-- h3><a href="{{content.content.url}}">{{content.title}}</a></h3 -->
   <p ng-bind-html="content.content.brief "></p>
 </section>
