@@ -1,0 +1,7 @@
+<div ng-include="'assets/views/loading.html'"></div>
+
+<article ng-if="loaded" class="sidebar-single">
+  <time>{{content.publishedDate | date : longDate}}</time>
+  <h3><a href="{{content.link}}">{{content.title}}</a></h3>
+  <div ng-bind-html="content.overview | unsafe"></div>
+</article>

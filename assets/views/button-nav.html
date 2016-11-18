@@ -1,0 +1,24 @@
+<nav>
+
+  <button ng-repeat="state in applicationStates | navFilter: 'rightNav' | orderBy: 'rightNavOrder'" type="button" title="{{state.title}}">
+    <a ng-if="state.offCanvas" data-open="offCanvasRight" ng-click="viewParamsChange({ 'sideViewData': {'template': state.template + '.html', 'content': state.controller, 'data':[{'content': state.controller}]} })">
+      <div class="row">
+        <div class="columns" ng-include="'assets/images/collection-icons/static/' + state.slug + '.svg'" aria-hidden="true"></div>
+        <div class="xxxlarge-18 xxxxlarge-20 show-for-xxxlarge columns align-middle">
+          <section ng-if="state.shortTitle">{{state.shortTitle}}</section>
+          <section ng-if="!state.shortTitle">{{state.title}}</section>
+        </div>
+      </div>
+    </a>
+    <a ng-if="!state.offCanvas" ui-sref="{{state.name}}">
+      <div class="row">
+        <div class="columns" ng-include="'assets/images/collection-icons/static/' + state.slug + '.svg'" aria-hidden="true"></div>
+        <div class="xxxlarge-18 xxxxlarge-20 show-for-xxxlarge columns align-middle">
+          <section ng-if="state.shortTitle">{{state.shortTitle}}</section>
+          <section ng-if="!state.shortTitle">{{state.title}}</section>
+        </div>
+      </div>
+    </a>
+  </button>
+
+</nav>

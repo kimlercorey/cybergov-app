@@ -1,15 +1,13 @@
 {
-  "showTemplateLabels":false,
-  "showJSON":0,
-  "showConsoleLogs":false,
-  "showMessages":false,
+  "showTemplateLabels":true,
+  "showJSON":false,
+  "showMessages":true,
   "statesPath":"content/states.json",
   "contentPath":"/api/v1/",
   "viewPath":"views/",
   "contentFileSuffix":"",
   "trustedHTML":["brief","extended","micro"],
-  "navigationFile":"api/v1/nav.json",
+  "collectionsDefinition":"api/nav.json",
   "collectionsStateObjects":["collections","sections","articles"],
-  "cleaningObjects":["content","more"],
-  "assetLibraries": [ "base", "cyber.gov" ]
+  "cleaningObjects":["content","more"]
 }
