@@ -1,0 +1,25 @@
+<pre ng-if="CONFIG.showTemplateLabels" style="line-height:90%">
+ <hr>
+ <json-formatter json="content" open="1"></json-formatter>
+</pre>
+
+<div ng-include="'assets/views/loading.html'"></div>
+
+<div class="row" ng-if="content">
+
+  <div class="small-6 xxlarge-4 columns align-middle header-icon" ng-include="'assets/images/collection-icons/static/' + content.slug + '.svg'" aria-hidden="true"></div>
+
+  <div class="small-18 xxlarge-20 columns align-middle">
+    <h2>{{content.title}}</h2>
+    <p ng-bind-html="content.content.micro" class="header-long-content"></p>
+    <form class="row search">
+      <div class="input-group small-24 large-12 columns padding-none">
+        <input class="input-group-field" type="search">
+        <div class="input-group-button">
+          <button type="submit" class="button" value="Search">Search</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+</div>

@@ -220,14 +220,17 @@ PARTICLE.config(function($stateProvider,$urlRouterProvider,CONFIG,centralObjectP
       newState.contentFile = CONFIG.contentPath + type + "/" + obj._id + CONFIG.contentFileSuffix;
       newState.url = "/" + obj.slug;
       newState.subs = [];
+      newState.template = obj.template ? obj.template : type.single();
+      newState.headerTemplate = obj.headerTemplate ? obj.headerTemplate : 'header-content';
+      newState.controller = obj.controller ? obj.controller : 'content';
 
       //ADD STATE VIEW PROPERTIES TO OBJECT
       if (type == "collections") {
 
         newState.views = {
           'headerContent@': {
-            templateUrl: CONFIG.viewPath + 'header-content.html',
-            controller: "content",
+            templateUrl: CONFIG.viewPath + newState.headerTemplate + '.html',
+            controller: 'content',
             resolve: {
               contentSettings: function() {
                 return newState;
@@ -235,8 +238,8 @@ PARTICLE.config(function($stateProvider,$urlRouterProvider,CONFIG,centralObjectP
             }
           },
           'primary@': {
-            templateUrl: CONFIG.viewPath + type.single() + '.html',
-            controller: "content",
+            templateUrl: CONFIG.viewPath + newState.template + '.html',
+            controller: newState.controller,
             resolve: {
               contentSettings: function() {
                 return newState;
@@ -249,8 +252,8 @@ PARTICLE.config(function($stateProvider,$urlRouterProvider,CONFIG,centralObjectP
 
         newState.views = {
           'primary@': {
-            templateUrl: CONFIG.viewPath + type.single()  + '.html',
-            controller: "content",
+            templateUrl: CONFIG.viewPath + newState.template + '.html',
+            controller: newState.controller,
             resolve: {
               contentSettings: function() {
                 return newState;
@@ -309,7 +312,7 @@ PARTICLE.config(function($stateProvider,$urlRouterProvider,CONFIG,centralObjectP
         templateUrl: CONFIG.viewPath + 'tagline.html',
       },
       'headerContent@': {
-        templateUrl: CONFIG.viewPath + 'home-header.html',
+        templateUrl: CONFIG.viewPath + 'header-home.html',
       },
       'primary@': {
         templateUrl: CONFIG.viewPath + 'home.html',
@@ -640,6 +643,48 @@ PARTICLE.directive('loadBlock', function ($timeout,dataIo,CONFIG,$location,$stat
 
 
 });
+PARTICLE.filter('navFilter', function() {
+  return function(items, menu) {
+    var filtered = [];
+
+    if (menu === undefined || menu === '') {
+      return items;
+    }
+
+    angular.forEach(items, function(item) {
+
+      if ( menu === 'mainNav' ) {
+        if ( item.sortOrder >= 1 ) {
+          filtered.push(item);
+        }
+      } else if ( menu === 'rightNav' ) {
+        if ( item.rightNavOrder >= 1 ) {
+          filtered.push(item);
+        }
+      } else if ( menu === 'homeHeader' ) {
+        if ( item.homePageOrder >= 1 && item.homePageOrder <= 3 ) {
+          filtered.push(item);
+        }
+      } else if ( menu === 'homeHeaderButton' ) {
+        if ( item.homePageOrder == 4 ) {
+          filtered.push(item);
+        }
+      } else if ( menu === 'homeBody' ) {
+        if ( item.homePageOrder >= 5 ) {
+          filtered.push(item);
+        }
+      } else {
+        filtered.push(item);
+      }
+
+    });
+
+    return filtered;
+  };
+});
+
+PARTICLE.filter('unsafe', function($sce) { return $sce.trustAsHtml; });
+
 PARTICLE.factory('dataIo', ['$http', 'dataRigger','CONFIG','$sce', function ($http, dataRigger,CONFIG,$sce) {
 
           var dataIo = {};
@@ -1049,48 +1094,6 @@ PARTICLE.factory('$datasource', ['$http', '$sce', '$timeout', function ($http, $
     return service;
 
 }]);
-
-PARTICLE.filter('navFilter', function() {
-  return function(items, menu) {
-    var filtered = [];
-
-    if (menu === undefined || menu === '') {
-      return items;
-    }
-
-    angular.forEach(items, function(item) {
-
-      if ( menu === 'mainNav' ) {
-        if ( item.sortOrder >= 1 ) {
-          filtered.push(item);
-        }
-      } else if ( menu === 'rightNav' ) {
-        if ( item.rightNavOrder >= 1 ) {
-          filtered.push(item);
-        }
-      } else if ( menu === 'homeHeader' ) {
-        if ( item.homePageOrder >= 1 && item.homePageOrder <= 3 ) {
-          filtered.push(item);
-        }
-      } else if ( menu === 'homeHeaderButton' ) {
-        if ( item.homePageOrder == 4 ) {
-          filtered.push(item);
-        }
-      } else if ( menu === 'homeBody' ) {
-        if ( item.homePageOrder >= 5 ) {
-          filtered.push(item);
-        }
-      } else {
-        filtered.push(item);
-      }
-
-    });
-
-    return filtered;
-  };
-});
-
-PARTICLE.filter('unsafe', function($sce) { return $sce.trustAsHtml; });
 
 /***
  *     ██████╗██╗  ██╗██╗   ██╗███╗   ██╗██╗  ██╗     █████╗ ██████╗ ██████╗  █████╗ ██╗   ██╗
