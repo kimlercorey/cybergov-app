@@ -12,5 +12,5 @@
   "collectionsStateObjects": [ "collections", "sections", "articles" ],
   "cleaningObjects": [ "content", "more" ],
   "viewParams": { "loadBlock": { "template": "questions.html", "content": "questions" } },
-  "assetLibraries": [ "base", "cyber.gov" ]
+  "assetLibraries": [ "pylon", "cyber.gov" ]
 }

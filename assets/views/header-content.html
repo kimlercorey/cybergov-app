@@ -10,9 +10,7 @@
 
 <div class="row" ng-if="content">
 
-  <div class="small-6 large-4 columns align-middle header-icon" ng-include="'assets/images/collection-icons/static/' + content.slug + '.svg'" aria-hidden="true"></div>
-
-  <div class="small-18 large-20 columns align-middle">
+  <div>
     <h2>{{content.title}}</h2>
     <p ng-bind-html="content.content.micro" class="header-long-content"></p>
   </div>

@@ -5614,12 +5614,14 @@ p + .stat {
   background-color: #323a45;
 }
 
-.row-footer > .columns > * {
+.row-footer > .columns > *,
+.row-footer > .columns > *:only-child {
   margin-right: auto;
   margin-left: auto;
 }
 
-.row-footer > .columns > *:last-child {
+.row-footer > .columns > *:last-child,
+.row-footer > .columns > *:only-child:last-child {
   margin-bottom: 0;
 }
 
