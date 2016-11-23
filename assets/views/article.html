@@ -9,7 +9,7 @@
 
 <section ng-if="content" class="article-single fade">
   <div ng-if="CONFIG.showJSON" ng-include="'views/json-display.html'"></div>
-  <h3 ng-if="!content.content.url">{{content.title}}</h3>
-  <h3 ng-if="content.content.url"><a href="{{content.content.url}}" target="_blank">{{content.title}}</a></h3>
+  <h3 ng-if="!content.url">{{content.title}}</h3>
+  <h3 ng-if="content.url"><a href="{{content.url}}" target="_blank">{{content.title}}</a></h3>
   <p ng-bind-html="content.content.brief "></p>
 </section>
