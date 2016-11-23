@@ -4,18 +4,13 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="apple-mobile-web-app-title" content="cyber.gov">
-  <meta name="application-name" content="cyber.gov">
-  <meta name="msapplication-config" content="assets/favicons/browserconfig.xml">
-  <meta name="theme-color" content="#ffffff">
-  <title>cyber.gov</title>
   <link rel="stylesheet" href="assets/styles/styles.min.css">
-  <link rel="apple-touch-icon" href="assets/favicons/apple-touch-icon.png" sizes="180x180">
-  <link rel="icon" type="image/png" href="assets/favicons/favicon-32x32.png" sizes="32x32">
-  <link rel="icon" type="image/png" href="assets/favicons/favicon-16x16.png" sizes="16x16">
-  <link rel="shortcut icon" href="assets/favicons/favicon.ico">
-  <link rel="manifest" href="assets/favicons/manifest.json">
-  <link rel="mask-icon" href="assets/favicons/safari-pinned-tab.svg" color="#981b1e">
+  <link rel="apple-touch-icon" href="assets/favicons/apple-touch-icon.png?site=policy.cio.gov" sizes="180x180">
+  <link rel="icon" type="image/png" href="assets/favicons/favicon-32x32.png?site=policy.cio.gov" sizes="32x32">
+  <link rel="icon" type="image/png" href="assets/favicons/favicon-16x16.png?site=policy.cio.gov" sizes="16x16">
+  <link rel="shortcut icon" href="assets/favicons/favicon.ico?site=policy.cio.gov">
+  <link rel="manifest" href="assets/favicons/manifest.json?site=policy.cio.gov">
+  <link rel="mask-icon" href="assets/favicons/safari-pinned-tab.svg?site=policy.cio.gov" color="#981b1e">
 </head>
 
 <body ng-controller="ui">
@@ -60,9 +55,7 @@
 
                     <div class="row header-bar">
                       <h1 class="small-24 large-8 columns">
-                        <a ui-sref="home">
-                          <load-block data="{'template': 'global.html', 'content': 'globals', 'field': 'Site Title'}"></load-block>
-                        </a>
+                        <a ui-sref="home">{{CONFIG.siteTitle}}</a>
                       </h1>
                       <div class="small-24 large-16 columns site-tagline" ui-view="tagline"></div>
                     </div>

@@ -11,6 +11,7 @@
   "navigationFile": "api/v1/nav.json",
   "collectionsStateObjects": [ "collections", "sections", "articles" ],
   "cleaningObjects": [ "content", "more" ],
-  "viewParams": { "loadBlock": { "template": "questions.html", "content": "questions" } },
-  "assetLibraries": [ "pylon", "cyber.gov" ]
+  "viewParams": { },
+  "assetLibraries": [ "pylon", "policy.cio.gov" ],
+  "siteTitle": "policy.cio.gov"
 }

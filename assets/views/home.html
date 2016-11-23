@@ -1,0 +1,10 @@
+<div class="row home-content">
+  <div class="small-24 columns">
+
+    <div ng-repeat="state in applicationStates">
+      <h3><a ui-sref="{{state.name}}">{{state.title}}</a></h3>
+      <div ng-bind-html="state.content.micro | unsafe"></div>
+    </div>
+
+  </div>
+</div>

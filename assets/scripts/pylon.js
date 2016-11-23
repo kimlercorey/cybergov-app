@@ -207,6 +207,8 @@ var PARTICLE = angular.module('PARTICLE', ['ngAnimate','ui.router','jsonFormatte
  */
 PARTICLE.config(function($stateProvider,$urlRouterProvider,CONFIG,centralObjectProvider) {
 
+  document.title = CONFIG.siteTitle;
+
   var objectStates = {}, applicationStates = [];
 
   var configState = function(obj, type, parentName, arrayOfStates,objectOfStates) {
