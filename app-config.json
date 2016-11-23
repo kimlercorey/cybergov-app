@@ -12,6 +12,6 @@
   "collectionsStateObjects": [ "collections", "sections", "articles" ],
   "cleaningObjects": [ "content", "more" ],
   "viewParams": { },
-  "assetLibraries": [ "pylon", "policy.cio.gov" ],
-  "siteTitle": "policy.cio.gov"
+  "assetLibraries": [ "_pylon", "cyber.gov" ],
+  "siteTitle": "cyber.gov"
 }

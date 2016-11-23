@@ -3,6 +3,48 @@
  <json-formatter json="content" open="1"></json-formatter>
 </pre>
 
+ <json-formatter json="content" open="1"></json-formatter>
+
+
 <section>
+  <h2>Search</h2>
+  <form class="search">
+    <div class="input-group">
+      <input class="input-group-field" type="search" ng-model="searchTerm">
+      <div class="input-group-button">
+        <button type="submit" class="button button-icon" value="Search">
+          <div ng-include="'assets/images/collection-icons/static/search.svg'">
+        </button>
+      </div>
+    </div>
+  </form>
+</section>
+
+
+<h2>Articles</h2>{{searchTerm}}
+<ul>
+  <li ng-repeat="article in content | filter: searchTerm">
+    {{article.title}}
+  </li>
+</ul>
+
+{{objectStates}}
+
+<section>
+  <h2>Most Popular Articles</h2>
+  <ul class="search-results">
+    <li>
+      <a ui-sref="get-help/report-an-incident">Report an Incident</a>
+    </li>
+    <li>
+      <a ui-sref="get-help/incident-guidelines">Incident Guidelines</a>
+    </li>
+    <li>
+      <a ui-sref="our-cyber-strategy/federal-cybersecurity-strategy">Federal Cybersecurity Strategy</a>
+    </li>
+    <li>
+      <a ui-sref="our-cyber-strategy/cybersecurity-national-action-plan-cnap">Cybersecurity National Action Plan (CNAP)</a>
+    </li>
+  </ul>
   <h2>Search Results</h2>
 </section>
