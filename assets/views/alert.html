@@ -1,7 +1,10 @@
 <div ng-include="'assets/views/loading.html'"></div>
 
-<article ng-if="loaded" class="sidebar-single">
+<article ng-if="loaded" class="off-canvas-single">
   <time>{{content.publishedDate | date : longDate}}</time>
-  <h3><a href="{{content.link}}">{{content.title}}</a></h3>
-  <div ng-bind-html="content.overview | unsafe"></div>
+  <h3><a href="{{content.link}}" target="_blank">{{content.title}}<span ng-include="'assets/images/icons/link-external.svg'" aria-hidden="true"></span></a></h3>
+  <p>
+    <span ng-bind-html="content.overview | unsafe"></span>
+    <a href="{{content.link}}" class="read-more" target="_blank">Read more<span ng-include="'assets/images/icons/link-external.svg'" aria-hidden="true"></span></a>
+  </div>
 </article>

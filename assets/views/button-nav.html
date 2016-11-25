@@ -1,10 +1,10 @@
 <nav>
 
-  <button ng-repeat="state in applicationStates | navFilter: 'rightNav' | orderBy: 'rightNavOrder'" type="button" title="{{state.title}}">
+  <button ng-repeat="state in applicationStates | navFilter: 'rightNav' | orderBy: 'rightNavOrder'" type="button" title="{{state.title}}" data-tooltip aria-haspopup="true" class="has-tip left" data-disable-hover="false">
     <a ng-if="state.offCanvas" data-open="offCanvasRight" ng-click="viewParamsChange({ 'sideViewData': {'template': state.template + '.html', 'content': state.controller, 'data':[{'content': state.controller}]} })">
       <div class="row">
         <div class="columns" ng-include="'assets/images/collection-icons/static/' + state.slug + '.svg'" aria-hidden="true"></div>
-        <div class="xxxlarge-18 xxxxlarge-20 show-for-xxxlarge columns align-middle">
+        <div class="xxxlarge-18 xxxxlarge-20 show-for-xxxlarge columns align-middle icon-menu-text">
           <section ng-if="state.shortTitle">{{state.shortTitle}}</section>
           <section ng-if="!state.shortTitle">{{state.title}}</section>
         </div>
@@ -13,7 +13,7 @@
     <a ng-if="!state.offCanvas" ui-sref="{{state.name}}">
       <div class="row">
         <div class="columns" ng-include="'assets/images/collection-icons/static/' + state.slug + '.svg'" aria-hidden="true"></div>
-        <div class="xxxlarge-18 xxxxlarge-20 show-for-xxxlarge columns align-middle">
+        <div class="xxxlarge-18 xxxxlarge-20 show-for-xxxlarge columns align-middle icon-menu-text">
           <section ng-if="state.shortTitle">{{state.shortTitle}}</section>
           <section ng-if="!state.shortTitle">{{state.title}}</section>
         </div>
