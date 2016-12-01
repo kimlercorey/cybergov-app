@@ -3,19 +3,19 @@
   "showJSON": 0,
   "showConsoleLogs": false,
   "showMessages": false,
-  "contentPath": "content/",
+  "contentPath": "api/v1/",
   "viewPath": "assets/views/",
   "contentFileSuffix": ".json",
   "trustedHTML": [ "brief", "extended", "micro" ],
-  "navigationFile": "content/nav.json",
+  "navigationFile": "api/v1/nav.json",
   "collectionsStateObjects": [ "collections", "sections", "articles" ],
   "cleaningObjects": [ "content", "more" ],
   "viewParams": { },
   "assetLibraries": [ "pylon", "cyber.gov" ],
   "siteTitle": "cyber.gov",
   "contentPaths": {
-    "src":    "src/assets/cyber.gov/content",
-    "dest":   "app/content"
+    "src":    "src/assets/cyber.gov/api/v1",
+    "dest":   "app/api/v1"
   },
   "sites":{
     "mysite.gov": {
