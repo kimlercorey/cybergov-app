@@ -22,26 +22,22 @@
 
         <div class="row expanded">
 
-          <div class="small-24 medium-expand columns small-order-2 medium-order-1 padding-none max-global">
+          <div class="columns small-order-2 medium-order-1 padding-none max-global">
 
             <header id="main-header" class="row expanded row-header">
+              <div class="columns small-order-2 large-order-1 padding-none">
 
-              <div class="small-24 columns small-order-2 large-order-1 padding-none">
-
-                <div class="row">
-                  <div class="small-24 columns padding-none official-website">
+                <div class="row expanded">
+                  <div class="columns padding-none official-website">
                     <a href="#main-content" target="_self" class="show-on-focus">Skip to main content</a>
                     <div class="tagline">An official website of the United States government</div>
                   </div>
                 </div>
 
-                <div class="row row-grow">
+                <div class="row expanded">
+                  <div class="columns shrink header-top header-bar padding-none">
 
-                  <div class="columns shrink header-top header-button header-button-menu">
-                    <div ng-if="!applicationStates">
-                      <div class="loader">Loading...</div>
-                    </div>
-                    <div ng-cloak ng-if="applicationStates">
+                    <div class="header-button header-button-menu">
                       <button type="button" data-toggle="offCanvasLeft" title="Open Navigation Menu">
                         <span></span>
                         <span></span>
@@ -49,48 +45,69 @@
                         <span></span>
                       </button>
                     </div>
+
                   </div>
 
-                  <div class="columns header-top header-main padding-bottom-none">
-
-                    <div class="row header-bar">
-                      <h1 class="small-24 large-8 columns">
-                        <a ui-sref="home">{{CONFIG.siteTitle}}</a>
-                      </h1>
-                      <div class="small-24 large-16 columns site-tagline" ui-view="tagline"></div>
-                    </div>
-
-                    <div ui-view="headerContent" class="header-main-content"></div>
-
+                  <div data-ng-show="!$state.includes('home')" class="columns header-top header-bar">
+                    <h1><a ui-sref="home">{{CONFIG.siteTitle}}</a></h1>
                   </div>
 
                 </div>
 
-              </div>
+                <div class="row expanded">
+                  <div class="columns padding-none">
+                    <div class="row row-centered header-top">
+                      <div class="columns header-top header-main padding-top-none padding-bottom-none">
 
+                        <div data-ng-show="$state.includes('home')" ui-view="headerContent" class="row align-middle home-logo"></div>
+
+                        <div data-ng-show="!$state.includes('home')" ui-view="headerContent" class="row align-middle"></div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
             </header>
 
-            <main id="main-content" class="row main-content" ng-class="$state.is('home') ? '' : 'stickycontent'">
+            <main id="main-content" class="row expanded main-content">
+              <div class="columns padding-none">
 
-              <div class="columns shrink column-border show-for-medium"></div>
+                <div data-ng-show="$state.includes('home')" class="row expanded">
 
-              <article ui-view="primary" class="columns columns-content"></article>
+                  <article ui-view="primary" class="columns columns-content"></article>
 
-              <aside ui-view="relatedContent" class="small-24 medium-6 xlarge-8 columns content-sidebar"></aside>
+                  <aside ui-view="relatedContent" class="small-24 medium-6 xlarge-8 columns content-sidebar"></aside>
 
+                </div>
+
+                <div data-ng-show="!$state.includes('home')" class="row row-centered">
+
+                  <article ui-view="primary" class="columns columns-content"></article>
+
+                  <aside ui-view="relatedContent" class="small-24 medium-6 xlarge-8 columns content-sidebar"></aside>
+
+                </div>
+
+              </div>
             </main>
 
             <footer id="main-footer" class="row row-grow expanded row-footer">
+              <div class="columns padding-none">
+                <div class="row row-centered">
+                  <div class="columns">
 
-              <div class="columns shrink column-border show-for-medium"></div>
+                    <div ng-include="'assets/views/footer.html'" class="columns align-middle"></div>
 
-              <div ng-include="'assets/views/footer.html'" class="columns align-middle padding-double-all"></div>
-
+                  </div>
+                </div>
+              </div>
             </footer>
 
           </div>
 
-          <div ng-include="'assets/views/button-nav.html'" class="small-24 medium-expand columns small-order-1 medium-order-2 header-top header-button icon-menu max-global-diff"></div>
+          <div ng-include="'assets/views/button-nav.html'" class="small-24 columns small-order-1 medium-order-2 header-top header-button icon-menu"></div>
 
         </div>
 
@@ -106,7 +123,6 @@
             <span></span>
           </button>
 
-          <load-block ng-if="viewParams.sideViewData.content=='search'" data="viewParams.sideViewData"></load-block>
           <load-block ng-if="viewParams.sideViewData.content=='questions'" data="viewParams.sideViewData"></load-block>
           <load-block ng-if="viewParams.sideViewData.content=='alerts'" data="viewParams.sideViewData"></load-block>
 
@@ -117,12 +133,16 @@
   </div>
 
   <script src="assets/scripts/jquery.min.js"></script>
+  <script src="assets/scripts/fuse.min.js"></script>
   <script src="assets/scripts/angular.min.js"></script>
+  <script src="assets/scripts/angular-sanitize.min.js"></script>
+  <script src="assets/scripts/markdown.min.js"></script>
+  <script src="assets/scripts/showdown.min.js"></script>
   <script src="assets/scripts/angular-ui-router.min.js"></script>
   <script src="assets/scripts/angular-animate.min.js"></script>
   <script src="assets/scripts/json-formatter.min.js"></script>
   <script src="assets/scripts/foundation.min.js"></script>
-  <script src="assets/scripts/_pylon.min.js"></script>
+  <script src="assets/scripts/pylon.min.js"></script>
 
 </body>
 </html>

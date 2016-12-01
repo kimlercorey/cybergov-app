@@ -1,35 +1,7 @@
-<div class="row header-big-icons" data-equalizer>
+<div class="small-8 medium-6 large-5 columns padding-none align-self-bottom" ng-include="'assets/images/logo.svg'"></div>
 
-  <button ng-repeat="state in applicationStates | navFilter: 'homeHeader' | orderBy: 'homePageOrder'" id="{{state.name}}-anim" class="small-24 large-8 columns" type="button" title="{{state.title}}">
-    <a ng-if="state.offCanvas" data-open="offCanvasRight" ng-click="viewParamsChange({ 'sideViewData': {'template': state.template + '.html', 'content': state.controller, 'data':[{'content': state.controller}]} })">
-      <h3 data-equalizer-watch>{{state.title}}</h3>
-      <div ng-include="'assets/images/collection-icons/animated/' + state.slug + '.svg'" aria-hidden="true"></div>
-      <div ng-bind-html="state.content.micro | unsafe"></div>
-    </a>
-    <a ng-if="!state.offCanvas" ui-sref="{{state.name}}">
-      <h3 data-equalizer-watch>{{state.title}}</h3>
-      <div ng-include="'assets/images/collection-icons/animated/' + state.slug + '.svg'" aria-hidden="true"></div>
-      <div ng-bind-html="state.content.micro | unsafe"></div>
-    </a>
-  </button>
-
-</div>
-
-<div class="row button-report-container">
-
-  <div class="small-24 large-12 columns padding-top-none padding-bottom-none">
-    <button ng-repeat="state in applicationStates | navFilter: 'homeHeaderButton' | orderBy: 'homePageOrder'" type="button" class="button button-info alert button-ask button-report">
-      <a ng-if="state.offCanvas" data-open="offCanvasRight" ng-click="viewParamsChange({ 'sideViewData': {'template': state.template + '.html', 'content': state.controller, 'data':[{'content': state.controller}]} })">
-        <div class="button-info-icon" ng-include="'assets/images/collection-icons/static/' + state.slug + '.svg'" aria-hidden="true"></div>
-        <div class="button-info-title">{{state.title}}</div>
-      </a>
-      <a ng-if="!state.offCanvas" ui-sref="{{state.name}}">
-        <div class="button-info-icon" ng-include="'assets/images/collection-icons/static/' + state.slug + '.svg'" aria-hidden="true"></div>
-        <div class="button-info-title">{{state.title}}</div>
-      </a>
-    </button>
-  </div>
-  <div class="show-for-large large-4 columns"></div>
-  <div class="show-for-large large-8 columns padding-none button-report-border"></div>
-
+<div class="columns padding-top-none align-self-middle">
+  <h1>{{CONFIG.siteTitle}}</h1>
+  <p><load-block data="{'template': 'global.html', 'content': 'globals', 'field': 'Site Tagline'}"></load-block></p>
+  <a href="#">Learn more…</a>
 </div>

@@ -1,0 +1,36 @@
+<pre ng-if="CONFIG.showTemplateLabels" style="line-height:90%">
+   *    ┌─┐┬┌┐┌┌─┐┬  ┌─┐  ┌─┐┌─┐┌─┐┌┬┐┬┌─┐┌┐┌
+   *    └─┐│││││ ┬│  ├┤   └─┐├┤ │   │ ││ ││││
+   *    └─┘┴┘└┘└─┘┴─┘└─┘  └─┘└─┘└─┘ ┴ ┴└─┘┘└┘
+  <hr>
+</pre>
+
+<div ng-if="CONFIG.showJSON">SECTION:</div>
+<div ng-if="CONFIG.showJSON" ng-include="'assets/views/json-display.html'"></div>
+
+<div ng-include="'assets/views/loading.html'"></div>
+
+    <form class="row search">
+      <div class="input-group">
+        <input class="input-group-field" type="search" ng-model="searchterm">
+        <div class="input-group-button">
+          <button type="submit" ng-click="doSearch(searchterm)" class="button" value="Search">Search</button>
+        </div>
+      </div>
+    </form>
+
+<p ng-if="message" class="fade">
+{{message}}
+</p>
+<p ng-if="total" class="fade">
+Matches: {{total}}
+</p>
+  
+
+  
+  <ul>
+    <content-block  ng-repeat="ar in content.articles" data="{'obj':ar.item, 'matches':ar.matches, 'score':ar.score, 'index':$index, 'type':'articles', 'template':'article-search'}"></content-block>
+  </ul>
+
+
+

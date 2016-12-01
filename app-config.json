@@ -3,15 +3,60 @@
   "showJSON": 0,
   "showConsoleLogs": false,
   "showMessages": false,
-  "statesPath": "content/states.json",
-  "contentPath": "api/v1/",
+  "contentPath": "content/",
   "viewPath": "assets/views/",
   "contentFileSuffix": ".json",
   "trustedHTML": [ "brief", "extended", "micro" ],
-  "navigationFile": "api/v1/nav.json",
+  "navigationFile": "content/nav.json",
   "collectionsStateObjects": [ "collections", "sections", "articles" ],
   "cleaningObjects": [ "content", "more" ],
   "viewParams": { },
-  "assetLibraries": [ "_pylon", "cyber.gov" ],
-  "siteTitle": "cyber.gov"
+  "assetLibraries": [ "pylon", "cyber.gov" ],
+  "siteTitle": "cyber.gov",
+  "contentPaths": {
+    "src":    "src/assets/cyber.gov/content",
+    "dest":   "app/content"
+  },
+  "sites":{
+    "mysite.gov": {
+      "showTemplateLabels": false,
+      "showJSON": 0,
+      "showConsoleLogs": false,
+      "showMessages": false,
+      "contentPath": "content/",
+      "viewPath": "assets/views/",
+      "contentFileSuffix": ".json",
+      "trustedHTML": [ "brief", "extended", "micro" ],
+      "navigationFile": "content/nav.json",
+      "collectionsStateObjects": [ "collections", "sections", "articles" ],
+      "cleaningObjects": [ "content", "more" ],
+      "viewParams": { },
+      "assetLibraries": [ "pylon", "mysite.gov" ],
+      "siteTitle": "mysite.gov",
+      "contentPaths": {
+        "src":    "src/assets/mysite.gov/content",
+        "dest":   "app/content"
+      }
+    },
+    "cyber.gov": {
+      "showTemplateLabels": false,
+      "showJSON": 0,
+      "showConsoleLogs": false,
+      "showMessages": false,
+      "contentPath": "api/v1/",
+      "viewPath": "assets/views/",
+      "contentFileSuffix": ".json",
+      "trustedHTML": [ "brief", "extended", "micro" ],
+      "navigationFile": "api/v1/nav.json",
+      "collectionsStateObjects": [ "collections", "sections", "articles" ],
+      "cleaningObjects": [ "content", "more" ],
+      "viewParams": { },
+      "assetLibraries": [ "pylon", "cyber.gov" ],
+      "siteTitle": "cyber.gov",
+      "contentPaths": {
+        "src":    "src/assets/cyber.gov/api/v1",
+        "dest":   "app/api/v1"
+      }
+    }
+  }
 }

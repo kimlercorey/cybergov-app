@@ -82,9 +82,6 @@
       SETTINGS.nav = {};
       SETTINGS.nav = response.data.sort(dynamicSort('sortOrder'));
 
-      SETTINGS.navRight = {};
-      SETTINGS.navRight = response.data.sort(dynamicSort('sortOrder'));
-
       /***
        *    ███████╗
        *    ██╔════╝
@@ -158,7 +155,7 @@
  *
  */
 
-var PARTICLE = angular.module('PARTICLE', ['ngAnimate','ui.router','jsonFormatter'])
+var PARTICLE = angular.module('PARTICLE', ['ngAnimate','ui.router','jsonFormatter','ngSanitize','btford.markdown'])
   .run(['$rootScope',  '$state', function ($rootScope, $state) {
     $rootScope.$state = $state;
   }]);
@@ -354,7 +351,7 @@ PARTICLE.controller("content",function($scope,$stateParams,$state,$timeout,dataI
 
   $scope.CONFIG = CONFIG;
   $scope.content = null;
-
+  $scope.searchterm = "searchterm";
   dataIo.getFile({
     file:contentSettings.contentFile
   }).then(function(_data){
@@ -379,10 +376,12 @@ PARTICLE.controller("content",function($scope,$stateParams,$state,$timeout,dataI
  ------------------------------------------------------------------------------------------------------------------------
  **/
   PARTICLE.controller("ui",function($scope,centralObject,$timeout,$state) {
+    $scope.searchterm = "searchterm";
 
     $scope.CONFIG = centralObject.config;
     $scope.applicationStates = centralObject.applicationStates;
     $scope.centralObject = centralObject;
+
 
     /**
      ------------------------------------------------------------------------------------------------------------------------
@@ -492,6 +491,7 @@ PARTICLE.directive('contentBlock', function ($timeout,dataIo,CONFIG,$location,$s
     $scope.CONFIG = CONFIG;
     $scope.hash = $location.path();
     $scope.current = $state.current.name;
+    
 
     var singleType = $scope.data.type;
     var idlocation = "_id";
@@ -501,8 +501,12 @@ PARTICLE.directive('contentBlock', function ($timeout,dataIo,CONFIG,$location,$s
     } else {
       idlocation = "$oid";
     }
+    
 
     $scope.getTemplateUrl = function() {
+      if ($scope.data.template) {
+        return CONFIG.viewPath+$scope.data.template+".html";
+      }
       if (singleType.charAt(singleType.length - 1) == 's') {  singleType= singleType.substr(0, singleType.length - 1); }
       $scope.singleType = singleType;
       return CONFIG.viewPath+singleType+".html";
@@ -541,6 +545,25 @@ PARTICLE.directive('contentBlock', function ($timeout,dataIo,CONFIG,$location,$s
   return directiveDefinitionObject;
 
 
+});
+/***
+ *    ██╗███╗   ██╗ ██████╗██╗     ██╗   ██╗██████╗ ███████╗    ██████╗ ███████╗██████╗ ██╗      █████╗  ██████╗███████╗
+ *    ██║████╗  ██║██╔════╝██║     ██║   ██║██╔══██╗██╔════╝    ██╔══██╗██╔════╝██╔══██╗██║     ██╔══██╗██╔════╝██╔════╝
+ *    ██║██╔██╗ ██║██║     ██║     ██║   ██║██║  ██║█████╗█████╗██████╔╝█████╗  ██████╔╝██║     ███████║██║     █████╗  
+ *    ██║██║╚██╗██║██║     ██║     ██║   ██║██║  ██║██╔══╝╚════╝██╔══██╗██╔══╝  ██╔═══╝ ██║     ██╔══██║██║     ██╔══╝  
+ *    ██║██║ ╚████║╚██████╗███████╗╚██████╔╝██████╔╝███████╗    ██║  ██║███████╗██║     ███████╗██║  ██║╚██████╗███████╗
+ *    ╚═╝╚═╝  ╚═══╝ ╚═════╝╚══════╝ ╚═════╝ ╚═════╝ ╚══════╝    ╚═╝  ╚═╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝ ╚═════╝╚══════╝
+ *                                                                                                                      
+ */
+
+PARTICLE.directive('includeReplace', function () {
+    return {
+        require: 'ngInclude',
+        restrict: 'A', /* optional */
+        link: function (scope, el, attrs) {
+            el.replaceWith(el.children());
+        }
+    };
 });
 PARTICLE.directive('loadBlock', function ($timeout,dataIo,CONFIG,$location,$state) {
 
@@ -598,6 +621,10 @@ PARTICLE.directive('loadBlock', function ($timeout,dataIo,CONFIG,$location,$stat
     $scope.CONFIG = CONFIG;
     $scope.hash = $location.path();
     $scope.current = $state.current.name;
+    if ($scope.data.assignto) {
+      $scope.content = {};
+      $scope.content[$scope.data.assignto] = {};
+    }
 
 
     if ($scope.data) {
@@ -625,7 +652,12 @@ PARTICLE.directive('loadBlock', function ($timeout,dataIo,CONFIG,$location,$stat
          */
 
         $timeout(function(){
-          $scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
+          if ($scope.data.assignto) {
+            $scope.content[$scope.data.assignto] = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
+          } else {
+            $scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
+          }
+          //console.log($scope.content);
           $scope.loaded = true;
         }, 500);
 
@@ -645,48 +677,147 @@ PARTICLE.directive('loadBlock', function ($timeout,dataIo,CONFIG,$location,$stat
 
 
 });
-PARTICLE.filter('navFilter', function() {
-  return function(items, menu) {
-    var filtered = [];
+PARTICLE.directive('searchBlock', function ($timeout,dataIo,CONFIG,$location,$state) {
 
-    if (menu === undefined || menu === '') {
-      return items;
+/***
+ *    ███████╗███████╗ █████╗ ██████╗  ██████╗██╗  ██╗      ██████╗ ██╗      ██████╗  ██████╗██╗  ██╗
+ *    ██╔════╝██╔════╝██╔══██╗██╔══██╗██╔════╝██║  ██║      ██╔══██╗██║     ██╔═══██╗██╔════╝██║ ██╔╝
+ *    ███████╗█████╗  ███████║██████╔╝██║     ███████║█████╗██████╔╝██║     ██║   ██║██║     █████╔╝
+ *    ╚════██║██╔══╝  ██╔══██║██╔══██╗██║     ██╔══██║╚════╝██╔══██╗██║     ██║   ██║██║     ██╔═██╗
+ *    ███████║███████╗██║  ██║██║  ██║╚██████╗██║  ██║      ██████╔╝███████╗╚██████╔╝╚██████╗██║  ██╗
+ *    ╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝      ╚═════╝ ╚══════╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝
+ *
+ */
+
+  var directiveDefinitionObject = {
+
+  /***
+   *    ███████╗██╗     ███████╗███╗   ███╗███████╗███╗   ██╗████████╗       ██╗        █████╗ ████████╗████████╗██████╗
+   *    ██╔════╝██║     ██╔════╝████╗ ████║██╔════╝████╗  ██║╚══██╔══╝       ██║       ██╔══██╗╚══██╔══╝╚══██╔══╝██╔══██╗
+   *    █████╗  ██║     █████╗  ██╔████╔██║█████╗  ██╔██╗ ██║   ██║       ████████╗    ███████║   ██║      ██║   ██████╔╝
+   *    ██╔══╝  ██║     ██╔══╝  ██║╚██╔╝██║██╔══╝  ██║╚██╗██║   ██║       ██╔═██╔═╝    ██╔══██║   ██║      ██║   ██╔══██╗
+   *    ███████╗███████╗███████╗██║ ╚═╝ ██║███████╗██║ ╚████║   ██║       ██████║      ██║  ██║   ██║      ██║   ██║  ██║
+   *    ╚══════╝╚══════╝╚══════╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝   ╚═╝       ╚═════╝      ╚═╝  ╚═╝   ╚═╝      ╚═╝   ╚═╝  ╚═╝
+   *
+   */
+  restrict: 'EA',
+
+  /***
+   *    ████████╗███████╗███╗   ███╗██████╗ ██╗      █████╗ ████████╗███████╗
+   *    ╚══██╔══╝██╔════╝████╗ ████║██╔══██╗██║     ██╔══██╗╚══██╔══╝██╔════╝
+   *       ██║   █████╗  ██╔████╔██║██████╔╝██║     ███████║   ██║   █████╗
+   *       ██║   ██╔══╝  ██║╚██╔╝██║██╔═══╝ ██║     ██╔══██║   ██║   ██╔══╝
+   *       ██║   ███████╗██║ ╚═╝ ██║██║     ███████╗██║  ██║   ██║   ███████╗
+   *       ╚═╝   ╚══════╝╚═╝     ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
+   *
+   */
+  template: '<div ng-include="getTemplateUrl()"></div>',
+  transclude:false,
+
+  /***
+  *    ███████╗ ██████╗ ██████╗ ██████╗ ███████╗
+  *    ██╔════╝██╔════╝██╔═══██╗██╔══██╗██╔════╝
+  *    ███████╗██║     ██║   ██║██████╔╝█████╗
+  *    ╚════██║██║     ██║   ██║██╔═══╝ ██╔══╝
+  *    ███████║╚██████╗╚██████╔╝██║     ███████╗
+  *    ╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚══════╝
+  *
+  */
+  scope: {
+    data:"="
+  },
+
+    /***
+     *    ██╗     ██╗███╗   ██╗██╗  ██╗
+     *    ██║     ██║████╗  ██║██║ ██╔╝
+     *    ██║     ██║██╔██╗ ██║█████╔╝
+     *    ██║     ██║██║╚██╗██║██╔═██╗
+     *    ███████╗██║██║ ╚████║██║  ██╗
+     *    ╚══════╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝
+     *
+     */
+  controller: function ($scope) {
+
+    $scope.loaded = null;
+    $scope.error = null;   
+    $scope.CONFIG = CONFIG;
+    $scope.hash = $location.path();
+    $scope.current = $state.current.name;
+    var originalResults = {};
+    if ($scope.data.assignto) {
+      $scope.content = {};
+      $scope.content[$scope.data.assignto] = {};
     }
 
-    angular.forEach(items, function(item) {
+    if ($scope.data) {
 
-      if ( menu === 'mainNav' ) {
-        if ( item.sortOrder >= 1 ) {
-          filtered.push(item);
-        }
-      } else if ( menu === 'rightNav' ) {
-        if ( item.rightNavOrder >= 1 ) {
-          filtered.push(item);
-        }
-      } else if ( menu === 'homeHeader' ) {
-        if ( item.homePageOrder >= 1 && item.homePageOrder <= 3 ) {
-          filtered.push(item);
-        }
-      } else if ( menu === 'homeHeaderButton' ) {
-        if ( item.homePageOrder == 4 ) {
-          filtered.push(item);
-        }
-      } else if ( menu === 'homeBody' ) {
-        if ( item.homePageOrder >= 5 ) {
-          filtered.push(item);
-        }
-      } else {
-        filtered.push(item);
-      }
+      var fuse; // "list" is the item array
+      $scope.getTemplateUrl = function() {
+        return CONFIG.viewPath+$scope.data.template;
+      };
 
-    });
+      $scope.doSearch = function(needle) {
 
-    return filtered;
-  };
+        $scope.message = "";
+        var results;
+        if (needle === undefined  || needle === null  || needle === "") {
+          $scope.message = ("Please enter a search term");
+          return;
+        } else {
+          results = fuse.search(needle);
+          $scope.total = (results.length) || "None";
+        }
+
+        if ($scope.data.assignto) {
+          $scope.content[$scope.data.assignto] = results;
+        } else {
+          $scope.content = results;
+        }
+
+      };
+
+      dataIo.getFile({
+        file:CONFIG.contentPath + $scope.data.content + CONFIG.contentFileSuffix
+      }).then(function(_data){
+        // scope.content = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
+        // scope.loaded = true;
+
+        /***
+         *    ███████╗ █████╗ ██╗  ██╗███████╗    ███████╗███████╗██████╗ ██╗   ██╗███████╗██████╗     ██████╗ ███████╗██╗      █████╗ ██╗   ██╗
+         *    ██╔════╝██╔══██╗██║ ██╔╝██╔════╝    ██╔════╝██╔════╝██╔══██╗██║   ██║██╔════╝██╔══██╗    ██╔══██╗██╔════╝██║     ██╔══██╗╚██╗ ██╔╝
+         *    █████╗  ███████║█████╔╝ █████╗      ███████╗█████╗  ██████╔╝██║   ██║█████╗  ██████╔╝    ██║  ██║█████╗  ██║     ███████║ ╚████╔╝
+         *    ██╔══╝  ██╔══██║██╔═██╗ ██╔══╝      ╚════██║██╔══╝  ██╔══██╗╚██╗ ██╔╝██╔══╝  ██╔══██╗    ██║  ██║██╔══╝  ██║     ██╔══██║  ╚██╔╝
+         *    ██║     ██║  ██║██║  ██╗███████╗    ███████║███████╗██║  ██║ ╚████╔╝ ███████╗██║  ██║    ██████╔╝███████╗███████╗██║  ██║   ██║
+         *    ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝    ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚══════╝╚═╝  ╚═╝    ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝
+         *
+         */
+
+        $timeout(function(){
+          fuse = new Fuse(_data.data[Object.keys(_data.data)[0]], $scope.data.options);
+          console.log("Fuse", _data.data, _data.data[Object.keys(_data.data)[0]]);
+          //originalResults = dataIo.parseContent(_data.data[Object.keys(_data.data)[0]]);
+          $scope.loaded = true;
+        }, 500);
+
+
+
+
+        }).catch(function (_data) {
+        console.log("Error in DIRECTIVE:contentBlock");
+        $scope.error = _data;
+      });
+
+    }
+
+    }
+
+  }; //--END directiveDefinitionObject
+
+
+  return directiveDefinitionObject;
+
+
 });
-
-PARTICLE.filter('unsafe', function($sce) { return $sce.trustAsHtml; });
-
 PARTICLE.factory('dataIo', ['$http', 'dataRigger','CONFIG','$sce', function ($http, dataRigger,CONFIG,$sce) {
 
           var dataIo = {};
@@ -1096,6 +1227,40 @@ PARTICLE.factory('$datasource', ['$http', '$sce', '$timeout', function ($http, $
     return service;
 
 }]);
+
+PARTICLE.filter('navFilter', function() {
+  return function(items, menu) {
+    var filtered = [];
+
+    if (menu === undefined || menu === '') {
+      return items;
+    }
+
+    angular.forEach(items, function(item) {
+
+      if ( menu === 'mainNav' ) {
+        if ( item.sortOrder >= 1 ) {
+          filtered.push(item);
+        }
+      } else if ( menu === 'rightNav' ) {
+        if ( item.rightNavOrder >= 1 ) {
+          filtered.push(item);
+        }
+      } else if ( menu === 'homeBody' ) {
+        if ( item.homePageOrder >= 1 ) {
+          filtered.push(item);
+        }
+      } else {
+        filtered.push(item);
+      }
+
+    });
+
+    return filtered;
+  };
+});
+
+PARTICLE.filter('unsafe', function($sce) { return $sce.trustAsHtml; });
 
 /***
  *     ██████╗██╗  ██╗██╗   ██╗███╗   ██╗██╗  ██╗     █████╗ ██████╗ ██████╗  █████╗ ██╗   ██╗

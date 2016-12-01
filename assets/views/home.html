@@ -1,10 +1,10 @@
-<div class="row home-content">
+<div class="row expanded home-content">
   <div class="small-24 columns padding-none">
-    <div class="row big-icon-container" data-equalizer>
+    <div class="row expanded row-centered-home" data-equalizer>
 
       <a ng-repeat="state in applicationStates | navFilter: 'homeBody' | orderBy: 'homePageOrder'" ui-sref="{{state.name}}" class="small-24 medium-12 large-8 columns big-icon">
         <h3 data-equalizer-watch>{{state.title}}</h3>
-        <div ng-include="'assets/images/collection-icons/multicolor/' + state.slug + '.svg'" aria-hidden="true"></div>
+        <div ng-include="'assets/images/collection-icons/' + state.slug + '.svg'" aria-hidden="true"></div>
         <div ng-bind-html="state.content.micro | unsafe"></div>
       </a>
 
