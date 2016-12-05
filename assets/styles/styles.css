@@ -5726,14 +5726,14 @@ p + .stat {
   color: #fff;
 }
 
-.row-footer blockquote,
-.row-footer h2,
-.row-footer h3,
-.row-footer h4,
-.row-footer h5,
-.row-footer h6,
-.row-footer li,
-.row-footer p {
+.row-footer .columns > blockquote:only-child,
+.row-footer .columns > h2:only-child,
+.row-footer .columns > h3:only-child,
+.row-footer .columns > h4:only-child,
+.row-footer .columns > h5:only-child,
+.row-footer .columns > h6:only-child,
+.row-footer .columns > li:only-child,
+.row-footer .columns > p:only-child {
   margin-right: auto;
   margin-left: auto;
 }
@@ -5949,7 +5949,7 @@ svg {
 
 @media screen and (min-width: 40em) {
   .max-global {
-    max-width: calc(100% - 72px);
+    max-width: 100%;
   }
 }
 
@@ -6194,7 +6194,7 @@ svg {
 }
 
 .row-header .header-bar h1 {
-  margin-bottom: 0;
+  margin: 0 1rem;
   font-size: 3em;
 }
 
@@ -6305,6 +6305,7 @@ svg {
 }
 
 .big-icon p {
+  margin: 0 auto;
   text-align: center;
 }
 
@@ -6623,6 +6624,10 @@ svg {
 
 .text-largest {
   font-size: 1.3em;
+}
+
+.font-weight-700 {
+  font-weight: 700;
 }
 
 .vertical.menu {

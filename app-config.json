@@ -57,6 +57,26 @@
         "src":    "src/assets/cyber.gov/api/v1",
         "dest":   "app/api/v1"
       }
+    },
+    "itdashboard.gov":{
+      "showTemplateLabels": false,
+      "showJSON": 0,
+      "showConsoleLogs": false,
+      "showMessages": false,
+      "contentPath": "api/v1/",
+      "viewPath": "assets/views/",
+      "contentFileSuffix": ".json",
+      "trustedHTML": [ "brief", "extended", "micro" ],
+      "navigationFile": "api/v1/nav.json",
+      "collectionsStateObjects": [ "collections", "sections", "articles" ],
+      "cleaningObjects": [ "content", "more" ],
+      "viewParams": { },
+      "assetLibraries": [ "pylon", "itdashboard.gov" ],
+      "siteTitle": "cyber.gov",
+      "contentPaths": {
+        "src":    "src/assets/itdashboard.gov/api/v1",
+        "dest":   "app/api/v1"
+      }
     }
   }
 }
