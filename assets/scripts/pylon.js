@@ -67,7 +67,7 @@
   // Load NAVIGATION/STATE values from navigation file
   // specified in the app-config.json in property SETTINGS.navigationFile
   $http.get(SETTINGS.navigationFile)
-    .then(function(response) {
+    .then(function(_data) {
       /***
        *    ██╗  ██╗
        *    ██║  ██║
@@ -80,7 +80,7 @@
       // Add a new nav property to the settings object and
       // point .nav to the loaded and sorted values from the nav.json / api
       SETTINGS.nav = {};
-      SETTINGS.nav = response.data.sort(dynamicSort('sortOrder'));
+      SETTINGS.nav = _data.data[Object.keys(_data.data)[0]].sort(dynamicSort('sortOrder'));
 
       /***
        *    ███████╗

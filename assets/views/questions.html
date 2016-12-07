@@ -10,17 +10,15 @@
 
 <section>
   <h2>Ask the CISO a Question</h2>
-  <form class="ask-question">
-    <button type="submit" class="button small expanded button-info alt">
-      <a href="mailto:ombcyber@omb.eop.gov">
-        <div class="button-info-icon" ng-include="'assets/images/collection-icons/ask-the-ciso.svg'" aria-hidden="true"></div>
-        <div class="button-info-title">Send Your Question</div>
-      </a>
-    </button>
-  </form>
+  <p>Ask the U.S. Chief Information Security Officer a question. Email your question to: <a href="mailto:ombcyber@omb.eop.gov">ombcyber@omb.eop.gov</a>.
+  <h3>Recent Questions</h3>
+  <content-block ng-repeat="question in content track by $index" data="{'obj':question, 'index':$index, 'type':'questions'}"></content-block>
 </section>
 
 <section>
-  <h2>Recent Questions</h2>
-  <content-block ng-repeat="question in content track by $index" data="{'obj':question, 'index':$index, 'type':'questions'}"></content-block>
+  <h2>
+    <span ng-include="'assets/images/logo-github.svg'" aria-hidden="true"></span>
+    Report a Website Issue
+  </h2>
+  <p>If you’re having an issue with the <strong>cyber.gov</strong> website, please <a href="https://github.com/ombegov/pylon/issues/new" target="_blank">report the issue</a> at our code repository on Github.</p>
 </section>
