@@ -5821,10 +5821,10 @@ a:active, a:focus, a:hover {
 }
 
 a[href^='http://'], a[href^='https://'], a[href^='mailto'], a[href$='.pdf'] {
-  padding-right: 1.5em;
-  margin-right: 0.5em;
+  padding-left: 1.5em;
+  margin-left: 0.5em;
   background-image: url("../images/icons/link-external.svg");
-  background-position: center right;
+  background-position: center left;
   background-repeat: no-repeat;
   background-size: 1em auto;
 }
@@ -5845,7 +5845,7 @@ h5,
 h6,
 li,
 p {
-  max-width: 40em;
+  max-width: 40rem;
 }
 
 hr.ng-scope:last-child {
@@ -5951,7 +5951,7 @@ svg {
   top: 0.1em;
   width: 0.8em;
   height: 0.8em;
-  margin-left: 0.25em;
+  margin-right: 0.25em;
 }
 
 .main-content {
@@ -5970,24 +5970,60 @@ svg {
 }
 
 .main-content .article-single {
-  margin-left: 2em;
+  max-width: 40rem;
+  margin-bottom: 1rem;
 }
 
-.main-content .article-single h3 a[href^='http://'], .main-content .article-single h3 a[href^='https://'], .main-content .article-single h3 a[href$='.pdf'] {
-  padding-right: 0;
+.main-content .article-single + .article-single {
+  padding-top: 1rem;
+  margin-top: 1rem;
+  border-top: 1px solid #d6d7d9;
+}
+
+.main-content .article-single h3 {
+  position: relative;
+  margin-bottom: 0;
+}
+
+.main-content .article-single h3 .link-icon-container {
+  position: relative;
+  left: -2rem;
+  float: left;
+  margin-right: -1.5rem;
+}
+
+.main-content .article-single h3 a[href^='http://'], .main-content .article-single h3 a[href^='https://'], .main-content .article-single h3 a[href^='mailto'], .main-content .article-single h3 a[href$='.pdf'] {
+  padding-left: 0;
+  margin-left: 0;
   background: none;
 }
 
-.main-content .article-single h3 a[href^='http://'] .link-icon-pdf, .main-content .article-single h3 a[href^='https://'] .link-icon-pdf, .main-content .article-single h3 a[href$='.pdf'] .link-icon-pdf {
+.main-content .article-single h3 a[href^='http://'] .link-icon-external, .main-content .article-single h3 a[href^='https://'] .link-icon-external {
+  display: inline;
+}
+
+.main-content .article-single h3 a[href^='http://'] .link-icon-email,
+.main-content .article-single h3 a[href^='http://'] .link-icon-pdf, .main-content .article-single h3 a[href^='https://'] .link-icon-email,
+.main-content .article-single h3 a[href^='https://'] .link-icon-pdf {
   display: none;
 }
 
-.main-content .article-single h3 a[href$='.pdf'] .link-icon-external {
+.main-content .article-single h3 a[href^='mailto'] .link-icon-email {
+  display: inline;
+}
+
+.main-content .article-single h3 a[href^='mailto'] .link-icon-external,
+.main-content .article-single h3 a[href^='mailto'] .link-icon-pdf {
   display: none;
 }
 
 .main-content .article-single h3 a[href$='.pdf'] .link-icon-pdf {
   display: inline;
+}
+
+.main-content .article-single h3 a[href$='.pdf'] .link-icon-external,
+.main-content .article-single h3 a[href$='.pdf'] .link-icon-email {
+  display: none;
 }
 
 .main-content .article-single h3 a .link-icon .path-red {
@@ -6003,6 +6039,20 @@ svg {
   font-size: 0.8em;
   font-weight: 700;
   color: #212121;
+}
+
+.main-content .article-single p {
+  margin-bottom: 0;
+}
+
+.main-content .article-single .article-single-source {
+  font-size: 0.8em;
+  font-style: italic;
+  font-weight: 300;
+}
+
+.main-content .section-single + .section-single {
+  margin-top: 2rem;
 }
 
 .max-global {
@@ -7054,6 +7104,10 @@ body {
 
 .header-icon .path-white {
   fill: #323a45;
+}
+
+.header-icon-report-a-cyber-incident .path-white {
+  fill: #fff;
 }
 
 .big-icon .path-dark-gray {

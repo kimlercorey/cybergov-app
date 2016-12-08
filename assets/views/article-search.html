@@ -8,11 +8,13 @@
 <div ng-include="'assets/views/loading.html'"></div>
 
 <section ng-if="content" class="article-single fade">
+  <div ng-if="CONFIG.showJSON" ng-include="'views/json-display.html'"></div>
   <h3 ng-if="!content.url">{{content.title}}</h3>
-  <h3 ng-if="content.url"><a href="{{content.url}}" target="_blank">{{content.title}}<span ng-include="'assets/images/icons/link-external.svg'" aria-hidden="true"></span><span ng-include="'assets/images/icons/link-pdf.svg'" aria-hidden="true"></span></a></h3>
-  <!-- <h5>Score:{{data.score}}</h5> -->
-  <!--p>{{data}}</p -->
-  <p>{{data.matches}}</p>
-  
+  <h3 ng-if="content.url">
+    <a href="{{content.url}}" target="_blank"><span ng-include="'assets/images/icons/link-external.svg'" aria-hidden="true"></span><span ng-include="'assets/images/icons/link-pdf.svg'" aria-hidden="true"></span><span ng-include="'assets/images/icons/link-email.svg'" aria-hidden="true"></span>{{content.title}}</a>
+  </h3>
+  <h4><span ng-if="content.subtitle">{{content.subtitle}}</span><span ng-if="content.urldate"> ({{content.urldate}})</span></h4>
+  <p class="text-smallest margin-bottom-none" ng-if="content.source">{{content.source}}</p>
   <p ng-bind-html="content.content.brief"></p>
+  <p ng-bind-html="content.content.extended"></p>
 </section>

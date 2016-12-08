@@ -1,7 +1,5 @@
-<div ng-include="'assets/views/loading.html'"></div>
-
-<article ng-if="loaded" id="{{content._id['$oid']}}" class="sidebar-single">
-  <time>{{content.publishedDate.$date | date : longDate}}</time>
-  <h3>{{content.question}}</h3>
-  <div>{{content.answer}}</div>
+<article ng-repeat="question in content track by $index" id="{{content._id['$oid']}}" class="article-question">
+  <time>{{question.publishedDate.$date | date : longDate}}</time>
+  <h3>{{question.question}}</h3>
+  <div class="answer">{{question.answer}}</div>
 </article>

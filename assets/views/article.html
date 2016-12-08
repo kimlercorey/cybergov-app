@@ -7,13 +7,17 @@
 
 <div ng-include="'assets/views/loading.html'"></div>
 
-<section ng-if="content" class="article-single fade">
+<section ng-if="content" class="fade" ng-class="{ 'padding-double-left': content.url!='' }">
   <div ng-if="CONFIG.showJSON" ng-include="'views/json-display.html'"></div>
   <h3 ng-if="!content.url">{{content.title}}</h3>
-  <h3 ng-if="content.url" class="margin-none"><a href="{{content.url}}" target="_blank">{{content.title}}<span ng-include="'assets/images/icons/link-external.svg'" aria-hidden="true"></span><span ng-include="'assets/images/icons/link-pdf.svg'" aria-hidden="true"></span></a></h3>
-  <h4 ng-if="content.subtitle">{{content.subtitle}}</h4>
-  <p ng-if="content.content.brief" class="padding-left" ng-bind-html="content.content.brief"></p>
-  <p ng-if="content.content.extended" ng-bind-html="content.content.extended"></p>
-  <p class="padding text-smallest margin-top-none" ng-if="content.source">{{content.source}}</p>
-  
+  <h3 ng-if="content.url">
+    <a href="{{content.url}}" target="_blank"><span class="link-icon-container"><span ng-include="'assets/images/icons/link-external.svg'" aria-hidden="true"></span><span ng-include="'assets/images/icons/link-pdf.svg'" aria-hidden="true"></span><span ng-include="'assets/images/icons/link-email.svg'" aria-hidden="true"></span></span>{{content.title}}</a>
+  </h3>
+  <p ng-if="content.source" class="article-single-source">{{content.source}}</p>
+  <h4>
+    <span ng-if="content.subtitle">{{content.subtitle}}</span>
+    <date ng-if="content.urlDate"> ({{content.urlDate.$date | date : 'MMMM d, yyyy'}})</date>
+  </h4>
+  <p ng-bind-html="content.content.brief"></p>
+  <p ng-bind-html="content.content.extended"></p>
 </section>

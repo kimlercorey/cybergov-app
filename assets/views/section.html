@@ -19,5 +19,5 @@
 <section ng-if="content && !content.content.file">
   <h2>{{content.title}}</h2>
   <p ng-bind-html="content.content.micro"></p>
-  <content-block ng-repeat="article in content.articles track by $index" data="{'obj':article, 'index':$index, 'type':'articles'}"></content-block>
+  <div class="article-single" content-block ng-repeat="article in content.articles track by $index" data="{'obj':article, 'index':$index, 'type':'articles'}"></div>
 </section>

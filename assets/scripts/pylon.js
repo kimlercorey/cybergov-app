@@ -818,40 +818,6 @@ PARTICLE.directive('searchBlock', function ($timeout,dataIo,CONFIG,$location,$st
 
 
 });
-PARTICLE.filter('navFilter', function() {
-  return function(items, menu) {
-    var filtered = [];
-
-    if (menu === undefined || menu === '') {
-      return items;
-    }
-
-    angular.forEach(items, function(item) {
-
-      if ( menu === 'mainNav' ) {
-        if ( item.sortOrder >= 1 ) {
-          filtered.push(item);
-        }
-      } else if ( menu === 'rightNav' ) {
-        if ( item.rightNavOrder >= 1 ) {
-          filtered.push(item);
-        }
-      } else if ( menu === 'homeBody' ) {
-        if ( item.homePageOrder >= 1 ) {
-          filtered.push(item);
-        }
-      } else {
-        filtered.push(item);
-      }
-
-    });
-
-    return filtered;
-  };
-});
-
-PARTICLE.filter('unsafe', function($sce) { return $sce.trustAsHtml; });
-
 PARTICLE.factory('dataIo', ['$http', 'dataRigger','CONFIG','$sce', function ($http, dataRigger,CONFIG,$sce) {
 
           var dataIo = {};
@@ -1261,6 +1227,40 @@ PARTICLE.factory('$datasource', ['$http', '$sce', '$timeout', function ($http, $
     return service;
 
 }]);
+
+PARTICLE.filter('navFilter', function() {
+  return function(items, menu) {
+    var filtered = [];
+
+    if (menu === undefined || menu === '') {
+      return items;
+    }
+
+    angular.forEach(items, function(item) {
+
+      if ( menu === 'mainNav' ) {
+        if ( item.sortOrder >= 1 ) {
+          filtered.push(item);
+        }
+      } else if ( menu === 'rightNav' ) {
+        if ( item.rightNavOrder >= 1 ) {
+          filtered.push(item);
+        }
+      } else if ( menu === 'homeBody' ) {
+        if ( item.homePageOrder >= 1 ) {
+          filtered.push(item);
+        }
+      } else {
+        filtered.push(item);
+      }
+
+    });
+
+    return filtered;
+  };
+});
+
+PARTICLE.filter('unsafe', function($sce) { return $sce.trustAsHtml; });
 
 /***
  *     ██████╗██╗  ██╗██╗   ██╗███╗   ██╗██╗  ██╗     █████╗ ██████╗ ██████╗  █████╗ ██╗   ██╗

@@ -8,5 +8,5 @@
 <div ng-if="CONFIG.showJSON" ng-include="'assets/views/json-display.html'"></div>
 
 <div ng-if="content">
-  <content-block ng-repeat="section in content.sections track by $index" data="{'obj':section, 'index':$index, 'type':'sections'}"></content-block>
+  <div class="section-single" content-block ng-repeat="section in content.sections track by $index" data="{'obj':section, 'index':$index, 'type':'sections'}"></div>
 </div>

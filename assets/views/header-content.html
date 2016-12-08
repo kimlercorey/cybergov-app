@@ -8,11 +8,11 @@
 
 <div ng-include="'assets/views/loading.html'"></div>
 
-<div ng-if="content" class="show-for-medium medium-6 large-5 columns align-self-middle header-icon" ng-include="'assets/images/collection-icons/' + content.slug + '.svg'"></div>
+<div ng-if="content" class="show-for-medium medium-6 large-5 columns align-self-middle header-icon header-icon-{{content.slug}}" ng-include="'assets/images/collection-icons/' + content.slug + '.svg'"></div>
 
 <div ng-if="content" class="columns align-self-middle">
   <h2>
-    <span ng-if="content" class="show-for-small-only header-icon" ng-include="'assets/images/collection-icons/' + content.slug + '.svg'"></span>
+    <span ng-if="content" class="show-for-small-only header-icon header-icon-{{content.slug}}" ng-include="'assets/images/collection-icons/' + content.slug + '.svg'"></span>
     {{content.title}}
   </h2>
   <p ng-bind-html="content.content.micro" class="header-long-content"></p>
