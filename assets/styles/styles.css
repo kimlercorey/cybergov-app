@@ -5874,6 +5874,11 @@ svg {
   padding: 1.5em;
 }
 
+.row-header .columns.columns-content {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 @media screen and (min-width: 40em) {
   .columns.columns-content {
     padding: 2em;
@@ -5887,6 +5892,16 @@ svg {
 
 .fade.ng-enter.ng-enter-active {
   opacity: 1;
+}
+
+.flex-col-sm {
+  width: 100%;
+}
+
+@media screen and (max-width: 39.9375em) {
+  .flex-col-sm {
+    display: block;
+  }
 }
 
 .icon-list {
@@ -5933,7 +5948,6 @@ svg {
 }
 
 .main-content .article-single {
-  max-width: 53rem;
   margin-bottom: 1rem;
 }
 
@@ -6024,24 +6038,6 @@ svg {
 
 .main-content .section-single + .section-single {
   margin-top: 2rem;
-}
-
-.flex-col-sm {
-  width: 100%;
-}
-
-@media screen and (max-width: 39.9375em) {
-  .flex-col-sm {
-    display: block;
-  }
-}
-
-@media screen and (min-width: 40em) {
-  .flex-col-sm > * {
-    -ms-flex-item-align: stretch;
-        -ms-grid-row-align: stretch;
-        align-self: stretch;
-  }
 }
 
 .max-global {
@@ -6152,7 +6148,7 @@ svg {
 }
 
 .row .row.row-centered {
-  max-width: 1368px;
+  max-width: 53rem;
   margin: 0 auto;
 }
 
@@ -6232,6 +6228,16 @@ svg {
 
 .header-button-menu > button span:nth-child(4) {
   top: 3em;
+}
+
+.header-main {
+  padding: 0 1.5em;
+}
+
+@media screen and (min-width: 40em) {
+  .header-main {
+    padding: 0 2em;
+  }
 }
 
 .header-main svg {

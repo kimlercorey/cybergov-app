@@ -59,7 +59,7 @@
                 <div class="row expanded">
                   <div class="columns padding-none">
                     <div class="row row-centered header-top">
-                      <div class="columns header-top header-main padding-top-none padding-bottom-none">
+                      <div class="columns header-top header-main">
 
                         <div data-ng-show="$state.includes('home')" ui-view="headerContent" class="row align-middle home-logo"></div>
 
@@ -77,11 +77,7 @@
               <div class="columns padding-none">
 
                 <div data-ng-show="$state.includes('home')" class="row expanded">
-
-                  <article ui-view="primary" class="columns columns-content"></article>
-
-                  <aside ui-view="relatedContent" class="small-24 medium-6 xlarge-8 columns content-sidebar"></aside>
-
+                  <article ui-view="primary" class="columns"></article>
                 </div>
 
                 <div data-ng-show="!$state.includes('home')" class="row row-centered">
