@@ -5827,7 +5827,7 @@ h5,
 h6,
 li,
 p {
-  max-width: 40rem;
+  max-width: 53rem;
 }
 
 p,
@@ -5849,13 +5849,6 @@ svg {
 
 .article-question .answer {
   font-style: italic;
-}
-
-@media screen and (max-width: 39.9375em) {
-  .flex-col-sm {
-    -ms-flex-direction: column;
-        flex-direction: column;
-  }
 }
 
 .input-group-button button {
@@ -5940,7 +5933,7 @@ svg {
 }
 
 .main-content .article-single {
-  max-width: 40rem;
+  max-width: 53rem;
   margin-bottom: 1rem;
 }
 
@@ -5958,7 +5951,7 @@ svg {
 .main-content .article-single h3 .link-icon-container {
   position: relative;
   left: -2rem;
-  margin-right: -1.5rem;
+  margin-right: -2rem;
   float: left;
 }
 
@@ -6033,10 +6026,27 @@ svg {
   margin-top: 2rem;
 }
 
+.flex-col-sm {
+  width: 100%;
+}
+
+@media screen and (max-width: 39.9375em) {
+  .flex-col-sm {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 40em) {
+  .flex-col-sm > * {
+    -ms-flex-item-align: stretch;
+        -ms-grid-row-align: stretch;
+        align-self: stretch;
+  }
+}
+
 .max-global {
   position: relative;
   width: 100%;
-  min-height: 100vh;
   background-color: #fff;
   z-index: 1;
 }
@@ -6044,7 +6054,12 @@ svg {
 @media screen and (min-width: 40em) {
   .max-global {
     max-width: 100%;
+    min-height: 100vh;
   }
+}
+
+.max-global > * {
+  position: relative;
 }
 
 .navbar section,
@@ -6719,12 +6734,6 @@ svg {
   z-index: 2;
 }
 
-@media screen and (max-width: 39.9375em) {
-  .icon-menu {
-    padding-bottom: 4em;
-  }
-}
-
 @media screen and (min-width: 40em) {
   .icon-menu {
     position: absolute;
@@ -6742,14 +6751,20 @@ svg {
   .icon-menu > nav {
     display: -ms-flexbox;
     display: flex;
-    position: absolute;
+  }
+}
+
+@media screen and (max-width: 39.9375em) {
+  .icon-menu > nav > div {
+    -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
   }
 }
 
 .icon-menu a {
   display: block;
   width: 100%;
-  padding: 1rem;
+  padding: 0.9em;
   border-bottom: 0;
   color: #fff;
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
@@ -6760,17 +6775,11 @@ svg {
   cursor: pointer;
 }
 
-@media screen and (max-width: 39.9375em) {
-  .icon-menu a {
-    -ms-flex: 1 1 auto;
-        flex: 1 1 auto;
-  }
-}
-
 @media screen and (min-width: 40em) {
   .icon-menu a {
     width: 100%;
     margin: 1rem 0 0;
+    padding: 1rem;
   }
 }
 
@@ -6836,6 +6845,10 @@ body {
 }
 
 .off-canvas-content {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: row;
+      flex-direction: row;
   min-height: 100vh;
   outline: 0;
   overflow-y: visible;
