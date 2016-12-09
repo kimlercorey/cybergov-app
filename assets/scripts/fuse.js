@@ -20,6 +20,7 @@
 ;(function (global) {
   'use strict'
 
+  /** @type {function(...*)} */
   function log () {
     console.log.apply(console, arguments)
   }
@@ -80,9 +81,20 @@
     matchAllTokens: false,
 
     // Regex used to separate words when searching. Only applicable when `tokenize` is `true`.
-    tokenSeparator: / +/g
+    tokenSeparator: / +/g,
+
+    // Minimum number of characters that must be matched before indices are returned
+    minMatchCharLen: 1,
+
+    // Continue to end of text even if perfect match is found before hand
+    findAllMatches: false
   }
 
+  /**
+   * @constructor
+   * @param {!Array} list
+   * @param {!Object<string, *>} options
+   */
   function Fuse (list, options) {
     var i
     var len
@@ -92,15 +104,17 @@
     this.list = list
     this.options = options = options || {}
 
-    // Add boolean type options
-    for (i = 0, keys = ['sort', 'shouldSort', 'verbose', 'tokenize'], len = keys.length; i < len; i++) {
-      key = keys[i]
-      this.options[key] = key in options ? options[key] : defaultOptions[key]
-    }
-    // Add all other options
-    for (i = 0, keys = ['searchFn', 'sortFn', 'keys', 'getFn', 'include', 'tokenSeparator'], len = keys.length; i < len; i++) {
-      key = keys[i]
-      this.options[key] = options[key] || defaultOptions[key]
+    for (key in defaultOptions) {
+      if (!defaultOptions.hasOwnProperty(key)) {
+        continue;
+      }
+      // Add boolean type options
+      if (typeof defaultOptions[key] === 'boolean') {
+        this.options[key] = key in options ? options[key] : defaultOptions[key];
+      // Add all other options
+      } else {
+        this.options[key] = options[key] || defaultOptions[key]
+      }
     }
   }
 
@@ -108,8 +122,8 @@
 
   /**
    * Sets a new list for Fuse to match against.
-   * @param {Array} list
-   * @return {Array} The newly set list
+   * @param {!Array} list
+   * @return {!Array} The newly set list
    * @public
    */
   Fuse.prototype.set = function (list) {
@@ -512,6 +526,8 @@
    *
    * Licensed under the Apache License, Version 2.0 (the "License")
    * you may not use this file except in compliance with the License.
+   *
+   * @constructor
    */
   function BitapSearcher (pattern, options) {
     options = options || {}
@@ -589,10 +605,10 @@
 
   /**
    * Compute and return the result of the search
-   * @param {String} text The text to search in
-   * @return {Object} Literal containing:
-   *                          {Boolean} isMatch Whether the text is a match or not
-   *                          {Decimal} score Overall score for the match
+   * @param {string} text The text to search in
+   * @return {{isMatch: boolean, score: number}} Literal containing:
+   *                          isMatch - Whether the text is a match or not
+   *                          score - Overall score for the match
    * @public
    */
   BitapSearcher.prototype.search = function (text) {
@@ -698,7 +714,11 @@
       // Use the result from this iteration as the maximum for the next.
       binMax = binMid
       start = Math.max(1, location - binMid + 1)
-      finish = Math.min(location + binMid, textLen) + this.patternLen
+      if (this.options.findAllMatches) {
+        finish = textLen;
+      } else {
+        finish = Math.min(location + binMid, textLen) + this.patternLen
+      }
 
       // Initialize the bit array
       bitArr = Array(finish + 2)
@@ -771,12 +791,16 @@
         start = i
       } else if (!match && start !== -1) {
         end = i - 1
-        matchedIndices.push([start, end])
+        if ((end - start) + 1 >= this.options.minMatchCharLen) {
+            matchedIndices.push([start, end])
+        }
         start = -1
       }
     }
     if (matchMask[i - 1]) {
-      matchedIndices.push([start, i - 1])
+      if ((i-1 - start) + 1 >= this.options.minMatchCharLen) {
+        matchedIndices.push([start, i - 1])
+      }
     }
     return matchedIndices
   }
@@ -797,4 +821,4 @@
     global.Fuse = Fuse
   }
 
-})(this)
+})(this);

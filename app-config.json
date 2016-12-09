@@ -7,7 +7,7 @@
   "viewPath": "assets/views/",
   "contentFileSuffix": ".json",
   "trustedHTML": [ "brief", "extended", "micro" ],
-  "navigationFile": "api/v1/nav.json",
+  "navigationFile": "api/v1/collections.json",
   "collectionsStateObjects": [ "collections", "sections", "articles" ],
   "cleaningObjects": [ "content", "more" ],
   "viewParams": { },

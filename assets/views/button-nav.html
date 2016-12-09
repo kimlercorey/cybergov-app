@@ -1,12 +1,12 @@
 <nav>
 
-  <button ng-repeat="state in applicationStates | navFilter: 'rightNav' | orderBy: 'rightNavOrder'" type="button" title="{{state.title}}" data-tooltip aria-haspopup="true" class="has-tip left" data-disable-hover="false">
-    <a ng-if="state.offCanvas" data-open="offCanvasRight" ng-click="viewParamsChange({ 'sideViewData': {'template': state.template + '.html', 'content': state.controller, 'data':[{'content': state.controller}]} })">
+  <div ng-repeat="state in applicationStates | navFilter: 'rightNav' | orderBy: 'rightNavOrder'">
+    <a ng-if="state.offCanvas" data-open="offCanvasRight" ng-click="viewParamsChange({ 'sideViewData': {'template': state.template + '.html', 'content': state.controller, 'data':[{'content': state.controller}]} })" title="{{state.title}}" data-tooltip aria-haspopup="true" class="has-tip left" data-disable-hover="false">
       <div ng-include="'assets/images/collection-icons/' + state.slug + '.svg'" title="{{state.title}}"></div>
     </a>
-    <a ng-if="!state.offCanvas" ui-sref="{{state.name}}">
+    <a ng-if="!state.offCanvas" ui-sref="{{state.name}}" title="{{state.title}}" data-tooltip aria-haspopup="true" class="has-tip left" data-disable-hover="false">
       <div ng-include="'assets/images/collection-icons/' + state.slug + '.svg'" title="{{state.title}}"></div>
     </a>
-  </button>
+  </div>
 
 </nav>

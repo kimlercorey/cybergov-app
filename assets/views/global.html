@@ -1,1 +1,3 @@
-<span ng-repeat="global in content | filter: {title: data.field}">{{global.value}}</span>
+<span ng-repeat="global in content | filter: {title: data.field}">
+  <span ng-bind-html="global.value"></span>
+</span>
