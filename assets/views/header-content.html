@@ -15,5 +15,5 @@
     <span ng-if="content" class="show-for-small-only header-icon header-icon-{{content.slug}}" ng-include="'assets/images/collection-icons/' + content.slug + '.svg'"></span>
     {{content.title}}
   </h2>
-  <p ng-bind-html="content.content.micro" class="header-long-content"></p>
+  <p ng-bind-html="content.content.brief" class="header-long-content"></p>
 </div>
